@@ -1,5 +1,6 @@
 package com.healthtracker.chw.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
 
     @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(com.healthtracker.chw.utils.LocaleHelper.onAttach(newBase));
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -45,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.dashboardFragment,
                 R.id.mapFragment,
-                R.id.analyticsFragment
-        ).setOpenableLayout(drawerLayout).build();
+                R.id.analyticsFragment).setOpenableLayout(drawerLayout).build();
 
         if (navController != null) {
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -54,11 +59,32 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupWithNavController(bottomNavigationView, navController);
         }
 
+        // Handle drawer menu item selection
+        if (navigationView != null) {
+            navigationView.setNavigationItemSelectedListener(item -> {
+                // Close drawer first
+                if (drawerLayout != null) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
+
+                // Handle logout separately
+                if (item.getItemId() == R.id.nav_logout) {
+                    handleLogout();
+                    return true;
+                }
+
+                // Let NavigationUI handle other menu items
+                if (navController != null) {
+                    return NavigationUI.onNavDestinationSelected(item, navController);
+                }
+                return false;
+            });
+        }
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close
-        );
+                R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
     }
@@ -114,5 +140,43 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    /**
+     * Handle logout - show confirmation dialog before logging out
+     */
+    private void handleLogout() {
+        // Show confirmation dialog
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Logout", (dialog, which) -> {
+                    performLogout();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    /**
+     * Perform the actual logout - clear session and return to login
+     */
+    private void performLogout() {
+        // Clear session
+        com.healthtracker.chw.utils.SessionManager sessionManager = new com.healthtracker.chw.utils.SessionManager(
+                this);
+        sessionManager.clearSession();
+
+        // Logout from Firebase
+        com.healthtracker.chw.services.AuthService authService = new com.healthtracker.chw.services.AuthService(this);
+        authService.logout();
+
+        // Navigate to login activity
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }
