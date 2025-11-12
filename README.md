@@ -58,7 +58,7 @@ By following **FHIR standards**, our system can integrate with existing Electron
 ---
 
 ### Team Members & Branch Policy
-| Name | Student ID | Branch |
+| Team | NAMES | Branch/Student ID |
 |------|------------|--------|
 | Team Leader | Koumba Esther | 25714 |
 | Member 1 | Uwizeye Magnifique | 26676 |
