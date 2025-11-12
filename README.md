@@ -44,6 +44,36 @@ This ensures **interoperability**, allowing hospitals or health authorities to a
 
 ---
 
+### System Objectives
+- Ensure **efficient tracking of donors, donations, and transfusions**  
+- Maintain **accurate and up-to-date blood stock information**  
+- Enable **interoperability between hospitals and blood banks** using FHIR APIs  
+- Provide **predictive analytics** to anticipate blood shortages  
+- Offer **secure and privacy-compliant handling** of sensitive health data  
+- Support **scalable integration** with existing EMRs and national health systems  
+
+---
+
+### System Components
+1. **Donor Management Module** – Handles registration, profile updates, and eligibility checks  
+2. **Donation Tracking Module** – Records donations, tracks blood type and volume, and logs events  
+3. **Blood Stock Dashboard** – Displays real-time blood availability and analytics  
+4. **Transfusion Management Module** – Links blood units to patients safely  
+5. **FHIR API Layer** – Exposes GET/POST endpoints to exchange data with other systems  
+6. **Notifications Module** *(future feature)* – Alerts eligible donors or hospital staff when blood is needed  
+
+---
+
+### Security & Privacy
+Since the system handles **personal health information**, we will implement:  
+- **Data Encryption:** All sensitive data is encrypted in the database and during API transfer (HTTPS/TLS)  
+- **Access Control:** Only authorized users can access or modify records  
+- **Audit Logs:** Track all actions for accountability  
+- **Data Minimization:** Store only necessary donor/patient info  
+- **FHIR Compliance:** Standardized resources reduce risk of misinterpretation or leaks  
+
+---
+
 ### Core Features
 1. **Donor Management** – create, update, and view donor profiles  
 2. **Donation Tracking** – log events with type, volume, and date  
@@ -65,8 +95,6 @@ This ensures **interoperability**, allowing hospitals or health authorities to a
 This workflow demonstrates **real-world, end-to-end interoperability** while remaining clear and implementable.
 
 ---
-
-
 
 ### Team Members & Branch Policy
 | Team | Name | Branch / Student ID |
