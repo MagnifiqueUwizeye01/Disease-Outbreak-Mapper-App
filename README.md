@@ -6,74 +6,92 @@
 ## 1. Concept Note
 
 ### Overview
-Blood donation is a critical part of healthcare systems. Hospitals, blood banks, and community drives need an organized way to track donors, donations, transfusions, and blood stock levels. Our project, **Blood Donation & Transfusion Tracker**, provides a lightweight, FHIR-compliant system to manage these processes efficiently while ensuring interoperability between systems.
+Blood donation is a cornerstone of healthcare systems. Hospitals, blood banks, and community drives require a **centralized and intelligent system** to track donors, donations, transfusions, and blood stock levels.  
+Our project, **Blood Donation & Transfusion Tracker**, provides a **FHIR-compliant platform** that ensures interoperability between hospitals and blood banks, while offering data-driven insights for effective decision-making.
 
 ---
 
 ### Problem Statement
-Currently, many hospitals and blood banks in Rwanda rely on fragmented spreadsheets, manual logs, or isolated software systems. This leads to:  
+In Rwanda, many hospitals and blood banks rely on **manual logs, spreadsheets, or isolated software**. This leads to:  
 - Difficulty tracking donor information and donation events  
 - Risk of running out of specific blood types  
-- Challenges in sharing information with other hospitals or health authorities
+- Delays or challenges in sharing data between hospitals and health authorities  
+- Limited insight into future blood stock needs  
 
 ---
 
 ### Proposed Solution
-Our system will allow hospitals and blood banks to:  
-- Register donors and maintain accurate donor profiles  
-- Log donation events and monitor blood stock levels by type and location  
-- Record transfusions and link them to patient records  
-- Share critical data with other institutions using **FHIR APIs**, ensuring standardization and interoperability  
+Our system will enable:  
+- **Donor Management** – register, update, and maintain accurate donor profiles  
+- **Donation Tracking** – log donations, including blood type, volume, and date  
+- **Blood Stock Monitoring** – real-time overview of stock by type and location  
+- **Transfusion Management** – link blood units to patient transfusions  
+- **FHIR-compliant API Integration** – share data across systems using standardized APIs  
+- **Predictive Analytics (Advanced Feature)** – estimate future blood demand and highlight potential shortages using past donation trends  
 
-By following **FHIR standards**, our system can integrate with existing Electronic Medical Records (EMRs) or national health systems without requiring major changes to their databases.
+By adhering to **FHIR standards**, our system can integrate seamlessly with existing EMRs or national health systems without modifying their databases. This makes our solution **scalable, interoperable, and future-ready**.
 
 ---
 
 ### How FHIR Fits In
-**FHIR (Fast Healthcare Interoperability Resources)** is a standard for exchanging healthcare information in a structured, universal way. Our project will use FHIR to:  
-- Represent donors and patients with the `Patient` resource  
-- Record donations using `Observation` or `Procedure` resources  
-- Track blood banks and hospitals with the `Organization` resource  
-- Enable GET and POST endpoints to share and receive data securely between systems  
+**FHIR (Fast Healthcare Interoperability Resources)** provides a standard structure for healthcare data exchange. Our project uses FHIR to:  
+- Represent donors and patients using the `Patient` resource  
+- Record donation events with `Observation` or `Procedure` resources  
+- Manage hospitals and blood banks via the `Organization` resource  
+- Enable secure **GET and POST requests** to exchange real-time data with external systems  
 
-
+This ensures **interoperability**, allowing hospitals or health authorities to access critical blood donation data safely and efficiently.
 
 ---
 
 ### Core Features
-1. **Donor Management** – register and update donor details  
-2. **Donation Tracking** – log donation events, blood type, and volume  
-3. **Blood Stock Overview** – track availability by type and location  
-4. **Transfusion Records** – link blood units to recipients  
-5. **FHIR-compliant API Endpoints** – simulate real healthcare interoperability  
+1. **Donor Management** – create, update, and view donor profiles  
+2. **Donation Tracking** – log events with type, volume, and date  
+3. **Blood Stock Dashboard** – visualize availability by type and location  
+4. **Transfusion Records** – link blood units to patient transfusions  
+5. **FHIR API Endpoints** – simulate healthcare interoperability  
+6. **Predictive Analytics** – forecast blood shortages and trends  
+7. **Notifications (Future Feature)** – alert eligible donors when a specific blood type is needed  
+
+---
+
+### Workflow Overview (Simulated Diagram)
+1. **Donor registers** → data stored as `Patient` resource in FHIR  
+2. **Donation recorded** → stored as `Observation`/`Procedure`  
+3. **Blood stock updated** → dashboard shows available units  
+4. **Hospital requests blood** → system checks availability and suggests donors  
+5. **FHIR API** → external systems can GET/POST donation and patient data  
+
+This workflow demonstrates **real-world, end-to-end interoperability** while remaining clear and implementable.
 
 ---
 
 ### Technologies
-- Backend: REST API with FHIR-compliant endpoints (JSON)  
-- Frontend: Simple web interface (HTML/CSS/JS or framework of choice)  
-- Database: Relational database (MySQL, PostgreSQL, or SQLite)  
-- GitLab for version control and branch management  
+- **Backend:** REST API with FHIR-compliant endpoints (JSON)  
+- **Frontend:** Interactive web interface (HTML/CSS/JS or framework of choice)  
+- **Database:** Relational (MySQL, PostgreSQL, or SQLite)  
+- **Analytics:** Simple predictive models for blood demand  
+- **Version Control:** GitLab with branch-based workflow  
 
 ---
 
 ### Team Members & Branch Policy
-| Team | NAMES | Branch/Student ID |
-|------|------------|--------|
+| Team | Name | Branch / Student ID |
+|------|------|-------------------|
 | Member 1 | Koumba Esther | 25714 |
 | Member 2 | Uwizeye Magnifique | 26676 |
 | Member 3 | Igizeneza Serge Benit | 27311 |
-| Member 4 | Numubyeyi Irumva Raissa|26325|
-| Member 5 | Tsamba Huberthe Marthina | 25156|
-| Member 6 | Mugisha Ben|25561|
-| Member 7 | Bimenyimana Prince|23036|
-| Member 8 |Akendengue Oguizi Vann Alex|26025|
-| Member 9 |Ishimwe Didace|26249|
+| Member 4 | Numubyeyi Irumva Raissa | 26325 |
+| Member 5 | Tsamba Huberthe Marthina | 25156 |
+| Member 6 | Mugisha Ben | 25561 |
+| Member 7 | Bimenyimana Prince | 23036 |
+| Member 8 | Akendengue Oguizi Vann Alex | 26025 |
+| Member 9 | Ishimwe Didace | 26249 |
 
 **Branch rules:**  
 - Each member works on their own branch (named by student ID)  
-- Merge Requests (MRs) are created to add changes to `main`  
-- Keeps `main` branch clean and organized  
+- Merge Requests (MRs) are created to merge changes to `main`  
+- Keeps `main` branch clean, organized, and reviewable  
 
 ---
 
