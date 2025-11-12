@@ -60,10 +60,15 @@ By following **FHIR standards**, our system can integrate with existing Electron
 ### Team Members & Branch Policy
 | Name | Student ID | Branch |
 |------|------------|--------|
-| Team Leader | <Your Name> | `<YourID>` |
-| Member 1 | <Name> | `<ID>` |
-| Member 2 | <Name> | `<ID>` |
-| ... | ... | ... |
+| Team Leader | Koumba Esther | 25714 |
+| Member 1 | Uwizeye Magnifique | 26676 |
+| Member 2 | Igizeneza Serge Benit | 27311 |
+| Member 3 | Numubyeyi Irumva Raissa|26325|
+| Member 4 | Tsamba Huberthe Marthina | 25156|
+| Member 5 | Mugisha Ben|25561|
+| Member 6 | Bimenyimana Prince|23036|
+| Member 7 |Akendengue Oguizi Vann Alex|26025|
+| Member 8 |Ishimwe Didace|26249|
 
 **Branch rules:**  
 - Each member works on their own branch (named by student ID)  
