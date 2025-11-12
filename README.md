@@ -66,14 +66,7 @@ This workflow demonstrates **real-world, end-to-end interoperability** while rem
 
 ---
 
-### Technologies
-- **Backend:** REST API with FHIR-compliant endpoints (JSON)  
-- **Frontend:** Interactive web interface (HTML/CSS/JS or framework of choice)  
-- **Database:** Relational (MySQL, PostgreSQL, or SQLite)  
-- **Analytics:** Simple predictive models for blood demand  
-- **Version Control:** GitLab with branch-based workflow  
 
----
 
 ### Team Members & Branch Policy
 | Team | Name | Branch / Student ID |
