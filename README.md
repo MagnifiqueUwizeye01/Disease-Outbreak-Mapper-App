@@ -1,93 +1,157 @@
-# final-project-group-bc
+#  Geospatial Disease Outbreak Mapper  
+**Project Repository:** `final-project-group-bc`
 
+---
 
+## 1. Concept Note
 
-## Getting started
+### Overview
+Public health emergencies often spread fast — and delayed reporting makes outbreaks even more dangerous.  
+Our project, **Geospatial Disease Outbreak Mapper**, enables Community Health Workers (CHWs) to instantly report suspected cases, while the system **automatically captures GPS location** and sends the data to a central server.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+This data is aggregated into **real-time outbreak maps**, helping the Ministry of Health respond faster to diseases like **cholera, measles, tuberculosis**, and more.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+---
 
-## Add your files
+### Problem Statement
+Traditional disease reporting in many areas still relies on:
+- Slow paper-based reporting  
+- Late submission by CHWs  
+- Inaccurate or missing location data  
+- Difficulty identifying outbreak clusters  
+- Delayed response by health authorities  
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+These issues cause **faster disease spread, higher mortality, and reduced visibility** into public health risks.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/uwizeyemagnifique/final-project-group-bc.git
-git branch -M main
-git push -uf origin main
-```
+---
 
-## Integrate with your tools
+### Proposed Solution
+Our system provides:
+- **CHW Mobile Reporting App** – CHW selects disease → system auto-captures GPS → sends to backend  
+- **Central Monitoring Dashboard** – real-time outbreak heatmaps and analytics  
+- **FHIR-Based Data Standardization** – ensures interoperability with hospital systems  
+- **Automated Cluster Detection** – identifies abnormal spikes or risky zones  
 
-- [ ] [Set up project integrations](https://gitlab.com/uwizeyemagnifique/final-project-group-bc/-/settings/integrations)
+The goal is to improve **speed**, **accuracy**, and **coordination** in disease surveillance.
 
-## Collaborate with your team
+---
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+## 2. How FHIR Fits In
+FHIR standardizes the healthcare data we store and share.  
+We use the following FHIR resources:
 
-## Test and Deploy
+| FHIR Resource | Purpose |
+|---------------|---------|
+| **Observation** | Stores the disease report (cholera, measles, dysentery, etc.) |
+| **Encounter** | Represents the CHW interaction with the patient |
+| **Location** | Auto-captured GPS coordinates |
+| **RiskAssessment** | Identifies risk level in specific areas |
+| **MeasureReport** | Aggregates outbreak summaries and analytics |
 
-Use the built-in continuous integration in GitLab.
+Using FHIR ensures compatibility with national healthcare systems and EMRs.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+---
 
-***
+## 3. System Objectives
+- Enable quick and accurate reporting of notifiable diseases  
+- Automatically capture patient or event location using GPS  
+- Provide a central dashboard for outbreak visualization  
+- Ensure interoperability using **FHIR standards**  
+- Improve early detection of disease clusters  
+- Maintain strong privacy and data protection  
+- Support national-scale real-time disease tracking  
 
-# Editing this README
+---
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## 4. System Components
 
-## Suggestions for a good README
+### 1. CHW Reporting App
+- Simple UI for disease reporting  
+- Auto-captures GPS coordinates  
+- Supports offline mode (future enhancement)
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+### 2. Backend API Server
+- Receives and validates reports  
+- Stores data as FHIR resources  
+- Provides APIs for dashboard and analytics
 
-## Name
-Choose a self-explaining name for your project.
+### 3. Outbreak Dashboard
+- Interactive map  
+- Heatmaps  
+- Case trends and time-based spread  
+- Risk scoring (using RiskAssessment)
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### 4. FHIR Data Layer
+- Converts submissions into standardized FHIR resources  
+- Ensures interoperability across platforms
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+---
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## 5. Security & Privacy
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Since the system handles sensitive health data, we implement:
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+- **HTTPS/TLS encryption** for all communication  
+- **FHIR-compliant data structures** with standardized security  
+- **Role-based access control**  
+- **GPS data protection** (precision reduction when needed)  
+- **Audit logs** for all submissions  
+- **Data minimization** – only essential information is stored  
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+---
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+## 6. Core Features
+1. **GPS Auto-Capture**  
+2. **Fast Disease Reporting Form**  
+3. **Real-Time Heatmap & Outbreak Map**  
+4. **Case Trends Dashboard**  
+5. **FHIR-Compatible System Design**  
+6. **Risk Assessment Engine**  
+7. **Offline Mode** *(future)*  
+8. **Predictive Alerts** *(future)*  
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+---
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## 7. Workflow Overview
+1. **CHW observes patient**  
+2. **Opens reporting app**  
+3. **Selects disease**  
+4. **GPS auto-captured**  
+5. **System converts report to FHIR resources**  
+    - `Observation`  
+    - `Encounter`  
+    - `Location`  
+6. **Backend processes and stores report**  
+7. **Dashboard updates in real time**  
+8. **Officials monitor trends and respond quickly**
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+---
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## 8. Team Members & Branch Policy
 
-## License
-For open source projects, say how it is licensed.
+| Team Member | Name | Branch / Student ID |
+|-------------|------|---------------------|
+| Member 1 | Koumba Esther | 25714 |
+| Member 2 | Uwizeye Magnifique | 26676 |
+| Member 3 | Igizeneza Serge Benit | 27311 |
+| Member 4 | Numubyeyi Irumva Raissa | 26325 |
+| Member 5 | Tsamba Huberthe Marthina | 25156 |
+| Member 6 | Mugisha Ben | 25561 |
+| Member 7 | Bimenyimana Prince | 23036 |
+| Member 8 | Akendengue Oguizi Vann Alex | 26025 |
+| Member 9 | Ishimwe Didace | 26249 |
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+### Branch Workflow Rules
+- Every member works **ONLY** in their personal branch (student ID)  
+- All changes must be merged into the **dev** branch first  
+- After review, **dev → main**  
+- The **main** branch must always remain clean and submission-ready  
+
+---
+
+## 9. Getting Started
+
+Clone the repository:
+```bash
+git clone https://gitlab.com/uwizeyemagnifique/final-project-group-bc.git
+cd final-project-group-bc
