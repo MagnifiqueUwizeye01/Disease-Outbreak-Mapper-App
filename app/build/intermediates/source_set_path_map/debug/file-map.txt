@@ -1,0 +1,8 @@
+com.healthmapper.chwapp-pngs-0 C:\Users\HP\AndroidStudioProjects\final-project-group-bc\app\build\generated\res\pngs\debug
+com.healthmapper.chwapp-resValues-1 C:\Users\HP\AndroidStudioProjects\final-project-group-bc\app\build\generated\res\resValues\debug
+com.healthmapper.chwapp-rs-2 C:\Users\HP\AndroidStudioProjects\final-project-group-bc\app\build\generated\res\rs\debug
+com.healthmapper.chwapp-mergeDebugResources-3 C:\Users\HP\AndroidStudioProjects\final-project-group-bc\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir
+com.healthmapper.chwapp-mergeDebugResources-4 C:\Users\HP\AndroidStudioProjects\final-project-group-bc\app\build\intermediates\incremental\debug\mergeDebugResources\stripped.dir
+com.healthmapper.chwapp-merged_res-5 C:\Users\HP\AndroidStudioProjects\final-project-group-bc\app\build\intermediates\merged_res\debug
+com.healthmapper.chwapp-debug-6 C:\Users\HP\AndroidStudioProjects\final-project-group-bc\app\src\debug\res
+com.healthmapper.chwapp-main-7 C:\Users\HP\AndroidStudioProjects\final-project-group-bc\app\src\main\res

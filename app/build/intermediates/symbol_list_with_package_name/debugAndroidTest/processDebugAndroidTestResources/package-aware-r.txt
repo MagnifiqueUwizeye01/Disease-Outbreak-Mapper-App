@@ -1,0 +1,3 @@
+com.healthmapper.chwapp.test
+style WhiteBackgroundDialogTheme
+style WhiteBackgroundTheme
