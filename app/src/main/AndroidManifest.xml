@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.healthmapper.chwapp">
+
+    <application
+        android:label="CHW Disease Reporter">
+
+        <!-- We'll add activities later when we create Profile and History screens -->
+
+    </application>
+
+</manifest>
