@@ -1,13 +1,6 @@
 package com.healthmapper.chwapp.data.entities;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-import androidx.annotation.NonNull;
-
-@Entity(tableName = "chw")
 public class CHW {
-    @PrimaryKey
-    @NonNull
     private String chwId;
     private String fullName;
     private String phoneNumber;
@@ -16,7 +9,7 @@ public class CHW {
     private String chwCode;
     private String password;
 
-    public CHW(@NonNull String chwId, String fullName, String phoneNumber,
+    public CHW(String chwId, String fullName, String phoneNumber,
                String email, String nationalId, String chwCode, String password) {
         this.chwId = chwId;
         this.fullName = fullName;
@@ -27,10 +20,12 @@ public class CHW {
         this.password = password;
     }
 
+    // Default constructor
+    public CHW() {}
+
     // Getters and Setters
-    @NonNull
     public String getChwId() { return chwId; }
-    public void setChwId(@NonNull String chwId) { this.chwId = chwId; }
+    public void setChwId(String chwId) { this.chwId = chwId; }
 
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }

@@ -12,6 +12,8 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -19,7 +21,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            debuggable true
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+        }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -31,17 +39,60 @@ android {
 }
 
 dependencies {
+    // Core Android UI components
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
 
-    // Database
-    implementation 'androidx.room:room-runtime:2.6.1'
-    annotationProcessor 'androidx.room:room-compiler:2.6.1'
+    // Database (Room) for CHW profiles and disease reports
+    implementation 'androidx.room:room-runtime:2.5.0'
+    implementation 'androidx.room:room-common:2.5.0'
+    annotationProcessor 'androidx.room:room-compiler:2.5.0'
 
+    // Lifecycle components for data management
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.6.2'
+
+    // GPS and Location services for disease outbreak mapping
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+    // Networking for FHIR data submission to backend
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    // JSON handling for FHIR standard compliance
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    // Image loading for profile avatars
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
+
+    // Permission handling for location access
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
+    // Date/time utilities for disease report timestamps
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.4.6'
+
+    // Work Manager for background sync
+    implementation 'androidx.work:work-runtime:2.8.1'
+
+    // Security for sensitive health data
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
+
+    // Testing dependencies
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'androidx.room:room-testing:2.5.0'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
 }

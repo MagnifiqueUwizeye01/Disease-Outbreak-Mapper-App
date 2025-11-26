@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FAFAFA">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#2E7D32"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CHW Profile"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Profile Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginBottom="32dp">
+
+                <!-- Profile Avatar -->
+                <TextView
+                    android:id="@+id/tvProfileInitials"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:gravity="center"
+                    android:textSize="36sp"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:background="#2E7D32"
+                    android:text="JD"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Community Health Worker"
+                    android:textColor="#757575"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <!-- Profile Form -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#FFFFFF"
+                android:padding="24dp"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Personal Information"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#212121"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Full Name -->
+                <EditText
+                    android:id="@+id/etFullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Full Name"
+                    android:inputType="textPersonName"
+                    android:enabled="false"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:background="#F5F5F5" />
+
+                <!-- Phone Number -->
+                <EditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Phone Number"
+                    android:inputType="phone"
+                    android:enabled="false"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:background="#F5F5F5" />
+
+                <!-- Email -->
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Email Address"
+                    android:inputType="textEmailAddress"
+                    android:enabled="false"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:background="#F5F5F5" />
+
+                <!-- National ID -->
+                <EditText
+                    android:id="@+id/etNationalId"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="National ID"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:background="#F5F5F5" />
+
+                <!-- CHW Code -->
+                <EditText
+                    android:id="@+id/etChwCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="CHW Code"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:background="#F5F5F5" />
+
+            </LinearLayout>
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Edit/Save/Cancel Buttons -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <Button
+                        android:id="@+id/btnEditProfile"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Edit Profile"
+                        android:layout_marginRight="8dp" />
+
+                    <Button
+                        android:id="@+id/btnSaveProfile"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Save Changes"
+                        android:enabled="false"
+                        android:layout_marginRight="8dp" />
+
+                    <Button
+                        android:id="@+id/btnCancelEdit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Cancel"
+                        android:enabled="false" />
+
+                </LinearLayout>
+
+                <!-- Logout Button -->
+                <Button
+                    android:id="@+id/btnLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Logout"
+                    android:textColor="#FFFFFF" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,2 @@
+rootProject.name = "CHW Disease Reporter"
+include ':app'
