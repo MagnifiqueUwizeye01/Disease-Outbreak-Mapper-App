@@ -7,7 +7,7 @@
 
     <!-- Circular background -->
     <path
-        android:fillColor="@color/medical_blue_primary"
+        android:fillColor="@color/medical_gold_dark"
         android:pathData="M12,2A10,10 0 1,0 22,12A10,10 0 0,0 12,2Z" />
 
     <!-- Medical cross -->

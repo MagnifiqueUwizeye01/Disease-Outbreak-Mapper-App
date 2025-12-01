@@ -28,14 +28,8 @@ public class DashboardFragment extends Fragment {
         final NavController navController = Navigation.findNavController(view);
 
         // Quick action chips
-        View chipReportNow = view.findViewById(R.id.chip_report_now);
         View chipHighRisk = view.findViewById(R.id.chip_high_risk);
         View chipSyncPending = view.findViewById(R.id.chip_sync_pending);
-
-        if (chipReportNow != null) {
-            chipReportNow.setOnClickListener(v ->
-                    navController.navigate(R.id.reportCaseFragment));
-        }
 
         if (chipHighRisk != null) {
             chipHighRisk.setOnClickListener(v ->
@@ -71,6 +65,20 @@ public class DashboardFragment extends Fragment {
         if (cardHistory != null) {
             cardHistory.setOnClickListener(v ->
                     navController.navigate(R.id.caseHistoryFragment));
+        }
+
+        // Stats cards (if they need click listeners)
+        View cardPendingReports = view.findViewById(R.id.card_pending_reports);
+        View cardHighRisk = view.findViewById(R.id.card_high_risk);
+
+        if (cardPendingReports != null) {
+            cardPendingReports.setOnClickListener(v ->
+                    navController.navigate(R.id.offlinePendingCasesFragment));
+        }
+
+        if (cardHighRisk != null) {
+            cardHighRisk.setOnClickListener(v ->
+                    navController.navigate(R.id.mapFragment));
         }
     }
 }

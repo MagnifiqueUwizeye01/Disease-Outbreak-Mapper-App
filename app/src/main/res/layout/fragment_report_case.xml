@@ -3,145 +3,383 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
-    android:padding="16dp">
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:padding="24dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Header -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Report New Case"
-            android:textColor="@color/text_primary"
-            android:textSize="22sp"
+            android:textColor="@color/medical_green_primary"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Complete the form to report a new disease case"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Case Form Card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/surface_card"
             app:cardCornerRadius="16dp"
-            app:cardElevation="4dp">
+            app:cardElevation="2dp"
+            app:strokeColor="@color/medical_green_light"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
+                <!-- Disease Type -->
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/ModernTextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Disease">
+                    android:layout_marginBottom="16dp"
+                    android:hint="Disease Type"
+                    app:startIconDrawable="@drawable/ic_report_case"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeColor="@color/medical_green_primary"
+                    app:hintTextColor="@color/medical_green_primary"
+                    app:startIconTint="@color/medical_green_primary">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:hint="Age">
-
-                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_disease_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:padding="12dp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Patient Age -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/ModernTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="Patient Age"
+                    app:startIconDrawable="@drawable/ic_person"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeColor="@color/medical_green_primary"
+                    app:hintTextColor="@color/medical_green_primary"
+                    app:startIconTint="@color/medical_green_primary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_patient_age"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:padding="12dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Gender -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Patient Gender"
+                    android:textColor="@color/medical_green_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:singleSelection="true"
+                    app:selectionRequired="true"
+                    app:chipSpacingHorizontal="8dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Male"
+                        android:textColor="@color/medical_green_primary"
+                        app:chipBackgroundColor="@color/medical_green_light"
+                        app:checkedIconVisible="true"
+                    />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Female"
+                        android:textColor="@color/medical_green_primary"
+                        app:chipBackgroundColor="@color/medical_green_light"
+                        app:checkedIconVisible="true"
+                    />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_other"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Other"
+                        android:textColor="@color/medical_green_primary"
+                        app:chipBackgroundColor="@color/medical_green_light"
+                        app:checkedIconVisible="true"
+                    />
+                </com.google.android.material.chip.ChipGroup>
+
+                <!-- Symptoms -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Symptoms"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@color/medical_green_primary"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginBottom="8dp" />
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/chip_symptoms"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:chipSpacingHorizontal="8dp"
+                    app:chipSpacingVertical="8dp">
 
                     <com.google.android.material.chip.Chip
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fever" />
+                        android:text="Fever"
+                        android:textColor="@color/white"
+                        app:chipBackgroundColor="@color/medical_green_primary"
+                    />
 
                     <com.google.android.material.chip.Chip
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cough" />
+                        android:text="Cough"
+                        android:textColor="@color/white"
+                        app:chipBackgroundColor="@color/medical_green_primary"
+                    />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Headache"
+                        android:textColor="@color/white"
+                        app:chipBackgroundColor="@color/medical_green_primary"
+                    />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nausea"
+                        android:textColor="@color/white"
+                        app:chipBackgroundColor="@color/medical_green_primary"
+                    />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rash"
+                        android:textColor="@color/white"
+                        app:chipBackgroundColor="@color/medical_green_primary"
+                    />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fatigue"
+                        android:textColor="@color/white"
+                        app:chipBackgroundColor="@color/medical_green_primary"
+                    />
                 </com.google.android.material.chip.ChipGroup>
 
+                <!-- Severity -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Severity"
-                    android:textColor="@color/text_primary"
+                    android:text="Case Severity"
+                    android:textColor="@color/medical_green_primary"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginBottom="8dp" />
 
-                <RadioGroup
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/medical_green_light"
+                    app:strokeWidth="1dp">
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
+                    <RadioGroup
+                        android:id="@+id/radio_severity"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Mild" />
+                        android:padding="16dp">
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Moderate" />
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/radio_mild"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Mild - Minor symptoms, no hospitalization"
+                            android:textColor="@color/text_primary" />
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Severe" />
-                </RadioGroup>
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/radio_moderate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Moderate - Requires medical attention"
+                            android:textColor="@color/text_primary" />
 
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/radio_severe"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Severe - Emergency, hospitalization needed"
+                            android:textColor="@color/text_primary" />
+                    </RadioGroup>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Location -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Location"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@color/medical_green_primary"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginBottom="8dp" />
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_location"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/surface_card"
+                    android:layout_height="120dp"
+                    android:layout_marginBottom="8dp"
                     app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp">
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/medical_green_light"
+                    app:strokeWidth="1dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="GPS preview / tap to capture"
-                        android:textColor="@color/text_secondary"
-                        android:layout_gravity="center" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_location_small"
+                            app:tint="@color/medical_green_primary"
+                            android:layout_marginEnd="12dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_location_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tap to capture GPS location"
+                                android:textColor="@color/medical_green_primary"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_location_coordinates"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Latitude, Longitude"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_my_location"
+                            app:tint="@color/medical_green_primary" />
+                    </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
+                <!-- Additional Notes -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/ModernTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Additional Notes (Optional)"
+                    app:startIconDrawable="@drawable/ic_message"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeColor="@color/medical_green_primary"
+                    app:hintTextColor="@color/medical_green_primary"
+                    app:startIconTint="@color/medical_green_primary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_notes"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:padding="12dp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Submit Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_submit_case"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Submit Case"
-            android:backgroundTint="@color/medical_blue_primary"
-            android:textColor="@color/text_on_primary" />
+            android:layout_height="50dp"
+            android:layout_marginTop="24dp"
+            android:text="Submit Case Report"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="@color/medical_green_primary"
+            android:textColor="@color/white"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_send"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconTint="@color/white" />
 
     </LinearLayout>
 
