@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <path android:fillColor="@color/medical_green_primary"
+        android:pathData="M60,20A40,40 0,1 1,20 60,40 40,0 1,1 60,20z"/>
+    <path android:fillColor="@color/white"
+        android:pathData="M75,50L65,50 65,40A5,5 0,0 0,55 40L55,50 45,50A5,5 0,0 0,40 55L40,65A5,5 0,0 0,45 70L55,70 55,80A5,5 0,0 0,60 85L60,85A5,5 0,0 0,65 80L65,70 75,70A5,5 0,0 0,80 65L80,55A5,5 0,0 0,75 50z"/>
+</vector>
