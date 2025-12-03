@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:orientation="vertical"
+        android:padding="16dp" android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Report Disease" android:textSize="20sp" android:paddingBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/spinner_disease"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/input_patient_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Patient name"/>
+
+        <EditText
+            android:id="@+id/input_patient_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Patient age"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/input_notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Notes (optional)"
+            android:minLines="3" android:gravity="top"/>
+
+        <Button
+            android:id="@+id/button_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit Report" android:layout_marginTop="12dp"/>
+
+    </LinearLayout>
+</ScrollView>
