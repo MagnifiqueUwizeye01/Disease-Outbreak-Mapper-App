@@ -62,6 +62,33 @@ dependencies {
     implementation("androidx.preference:preference:1.2.1")
     implementation(libs.activity)
 
+    // Room Database
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-rxjava3:2.6.1")
+    
+    // Annotation processor for Room (Java)
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+    // WorkManager for offline sync
+    implementation("androidx.work:work-runtime:2.9.0")
+
+    // Location Services
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
+    // Google Maps clustering
+    implementation("com.google.maps.android:android-maps-utils:3.8.2")
+
+    // Retrofit for REST API
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    // Note: WebSocket support is built into OkHttp 3.5+, no need for okhttp-ws
+
+    // JSON processing
+    implementation("com.google.code.gson:gson:2.10.1")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
