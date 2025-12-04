@@ -1,0 +1,54 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme with Material Design 3 - Medical Theme -->
+    <style name="Base.Theme.HealthTrack" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary colors (Medical Green) -->
+        <item name="colorPrimary">@color/medical_green_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/medical_green_light</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
+
+        <!-- Secondary colors (Gold) -->
+        <item name="colorSecondary">@color/medical_gold_primary</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryContainer">@color/medical_gold_light</item>
+        <item name="colorOnSecondaryContainer">@color/black</item>
+
+        <!-- Tertiary colors (Dark Green for accents) -->
+        <item name="colorTertiary">@color/medical_green_dark</item>
+        <item name="colorOnTertiary">@color/white</item>
+        <item name="colorTertiaryContainer">@color/medical_green_light</item>
+        <item name="colorOnTertiaryContainer">@color/black</item>
+
+        <!-- Surface colors -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorSurfaceVariant">@color/white</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+
+        <!-- Background -->
+        <item name="android:colorBackground">@color/white</item>
+        <item name="colorOnBackground">@color/black</item>
+
+        <!-- Error colors -->
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/medical_green_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Window background -->
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="Theme.HealthTrack" parent="Base.Theme.HealthTrack" />
+
+    <!-- Splash Screen Theme -->
+    <style name="Theme.HealthTrack.Splash" parent="Theme.HealthTrack">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+</resources>
