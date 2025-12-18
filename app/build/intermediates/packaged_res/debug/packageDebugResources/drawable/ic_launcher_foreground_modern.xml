@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Modern Medical Cross with Location Pin Design -->
+    
+    <!-- Main Medical Cross (Plus Sign) -->
+    <path
+        android:pathData="M54,30L54,18C54,15.8 52.2,14 50,14C47.8,14 46,15.8 46,18L46,30L34,30C31.8,30 30,31.8 30,34C30,36.2 31.8,38 34,38L46,38L46,50C46,52.2 47.8,54 50,54C52.2,54 54,52.2 54,50L54,38L66,38C68.2,38 70,36.2 70,34C70,31.8 68.2,30 66,30L54,30Z"
+        android:fillColor="@color/white"/>
+    
+    <!-- Location Pin - Bottom Center -->
+    <path
+        android:pathData="M54,70C60.1,70 65,65.1 65,59C65,52.9 60.1,48 54,48C47.9,48 43,52.9 43,59C43,65.1 47.9,70 54,70Z"
+        android:fillColor="@color/white"/>
+    
+    <!-- Pin Point -->
+    <path
+        android:pathData="M54,85L54,70L50,70L54,85L58,70L54,70Z"
+        android:fillColor="@color/white"/>
+    
+    <!-- Decorative Pulse Lines (Health Monitoring) -->
+    <path
+        android:pathData="M20,40L25,40L25,38L20,38Z"
+        android:fillColor="@color/medical_green_light"
+        android:fillAlpha="0.6"/>
+    <path
+        android:pathData="M83,40L88,40L88,38L83,38Z"
+        android:fillColor="@color/medical_green_light"
+        android:fillAlpha="0.6"/>
+    <path
+        android:pathData="M20,56L25,56L25,54L20,54Z"
+        android:fillColor="@color/medical_green_light"
+        android:fillAlpha="0.6"/>
+    <path
+        android:pathData="M83,56L88,56L88,54L83,54Z"
+        android:fillColor="@color/medical_green_light"
+        android:fillAlpha="0.6"/>
+</vector>
+

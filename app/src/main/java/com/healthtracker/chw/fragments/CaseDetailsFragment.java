@@ -18,16 +18,18 @@ import com.healthtracker.chw.models.Encounter;
 import com.healthtracker.chw.models.Patient;
 import com.healthtracker.chw.models.GPSLocation;
 import com.healthtracker.chw.models.RiskAssessment;
-import com.healthtracker.chw.services.SupabaseService;
+import com.healthtracker.chw.services.FHIRService;
+import com.healthtracker.chw.models.fhir.FHIRObservation;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class CaseDetailsFragment extends Fragment {
 
     private static final String ARG_CASE_ID = "case_id";
     
-    private SupabaseService supabaseService;
+    private FHIRService fhirService;
     
     // Views
     private TextView tvReportId;
@@ -58,8 +60,8 @@ public class CaseDetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_case_details, container, false);
         
-        // Initialize Supabase service
-        supabaseService = new SupabaseService(requireContext());
+        // Initialize FHIR service
+        fhirService = new FHIRService(requireContext());
         
         // Initialize views
         initializeViews(view);
@@ -110,10 +112,13 @@ public class CaseDetailsFragment extends Fragment {
     }
 
     private void loadCaseById(String reportId) {
-        supabaseService.getDiseaseReportById(reportId, new SupabaseService.ReportCallback() {
+        // Fetch observation from FHIR (reportId is actually observationId in FHIR)
+        fhirService.getObservationById(reportId, new FHIRService.ObservationCallback() {
             @Override
-            public void onSuccess(DiseaseReport report) {
+            public void onSuccess(FHIRObservation observation) {
                 requireActivity().runOnUiThread(() -> {
+                    // Convert FHIR observation to DiseaseReport for UI compatibility
+                    DiseaseReport report = convertFHIRObservationToDiseaseReport(observation);
                     displayCaseData(report);
                 });
             }
@@ -125,6 +130,75 @@ public class CaseDetailsFragment extends Fragment {
                 });
             }
         });
+    }
+    
+    /**
+     * Convert FHIR Observation to DiseaseReport for UI compatibility
+     * TODO: This is a temporary adapter - consider refactoring UI to work directly with FHIR resources
+     */
+    private DiseaseReport convertFHIRObservationToDiseaseReport(FHIRObservation observation) {
+        DiseaseReport report = new DiseaseReport();
+        report.setReportId(observation.getId());
+        
+        if (observation.getCode() != null && observation.getCode().getText() != null) {
+            report.setDiseaseType(observation.getCode().getText());
+        }
+        
+        if (observation.getEffectiveDateTime() != null) {
+            try {
+                java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.getDefault());
+                report.setReportDate(format.parse(observation.getEffectiveDateTime()));
+            } catch (Exception e) {
+                report.setReportDate(new Date());
+            }
+        } else {
+            report.setReportDate(new Date());
+        }
+        
+        report.setStatus(observation.getStatus() != null ? observation.getStatus() : "pending");
+        
+        // Create Encounter first
+        Encounter encounter = new Encounter();
+        if (observation.getEncounter() != null && observation.getEncounter().getReference() != null) {
+            encounter.setEncounterId(observation.getEncounter().getReference().replace("Encounter/", ""));
+            if (observation.getEffectiveDateTime() != null) {
+                try {
+                    java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.getDefault());
+                    encounter.setEncounterDate(format.parse(observation.getEffectiveDateTime()));
+                } catch (Exception e) {
+                    encounter.setEncounterDate(new Date());
+                }
+            }
+        }
+        
+        // Create Patient from subject reference
+        if (observation.getSubject() != null && observation.getSubject().getReference() != null) {
+            Patient patient = new Patient();
+            patient.setPatientId(observation.getSubject().getReference().replace("Patient/", ""));
+            encounter.setPatient(patient);
+        }
+        
+        report.setEncounter(encounter);
+        
+        // Create RiskAssessment from observation value
+        if (observation.getValueCodeableConcept() != null) {
+            RiskAssessment risk = new RiskAssessment();
+            risk.setLevel(observation.getValueCodeableConcept().getText());
+            risk.setDescription("Risk level: " + observation.getValueCodeableConcept().getText());
+            report.setRiskAssessment(risk);
+        }
+        
+        // Add observation details
+        if (observation.getValueString() != null && !observation.getValueString().isEmpty()) {
+            com.healthtracker.chw.models.Observation obs = new com.healthtracker.chw.models.Observation();
+            obs.setDetails(observation.getValueString());
+            obs.setTimestamp(report.getReportDate());
+            if (report.getEncounter() != null) {
+                report.getEncounter().addObservation(obs);
+            }
+        }
+        
+        return report;
     }
 
     private void displayCaseData(DiseaseReport report) {

@@ -21,7 +21,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.healthtracker.chw.R;
 import com.healthtracker.chw.services.GPSService;
-import com.healthtracker.chw.services.SupabaseService;
+import com.healthtracker.chw.services.FHIRService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,7 +71,7 @@ public class StepByStepReportFragment extends Fragment {
     private String createdLocationId;
     
     private GPSService gpsService;
-    private SupabaseService supabaseService;
+    private FHIRService fhirService;
 
     @Nullable
     @Override
@@ -85,7 +85,7 @@ public class StepByStepReportFragment extends Fragment {
         showStep(1);
         
         gpsService = new GPSService(requireContext());
-        supabaseService = new SupabaseService(requireContext());
+        fhirService = new FHIRService(requireContext());
         
         return view;
     }
@@ -307,8 +307,8 @@ public class StepByStepReportFragment extends Fragment {
         String encounterDate = dateTimeFormat.format(new Date());
         String dateOfBirth = dateFormat.format(new Date()); // Approximate
         
-        // Save to Supabase
-        supabaseService.saveDiseaseReport(
+        // Save to FHIR
+        fhirService.saveDiseaseReport(
             "Patient", // Patient name
             patientGender != null ? patientGender : "unknown",
             dateOfBirth,
@@ -325,11 +325,17 @@ public class StepByStepReportFragment extends Fragment {
             severity,
             notes, // Observation details
             notes, // Additional notes
-            new SupabaseService.SaveCallback() {
+            new FHIRService.SaveCallback() {
                 @Override
-                public void onSuccess(String reportId) {
+                public void onSuccess(String reportId, String locationId) {
                     requireActivity().runOnUiThread(() -> {
                         Toast.makeText(requireContext(), "Case report submitted successfully!", Toast.LENGTH_SHORT).show();
+                        
+                        // Refresh map with new location if available
+                        if (locationId != null && !locationId.isEmpty()) {
+                            refreshMapWithNewLocation(locationId, diseaseType, severity);
+                        }
+                        
                         if (getActivity() != null) {
                             getActivity().onBackPressed();
                         }
@@ -347,7 +353,7 @@ public class StepByStepReportFragment extends Fragment {
     }
     
     private void saveToLocalDatabase(String diseaseType, String symptoms, String severity, String notes) {
-        // This method is no longer needed - data is saved directly to Supabase
+        // This method is no longer needed - data is saved directly to FHIR
         // Keeping for compatibility but it does nothing
     }
 
@@ -370,6 +376,76 @@ public class StepByStepReportFragment extends Fragment {
         return null;
     }
 
+    /**
+     * Refresh map with new location after successful submission
+     */
+    private void refreshMapWithNewLocation(String locationId, String diseaseType, String severity) {
+        if (locationId == null || locationId.isEmpty()) {
+            android.util.Log.w("StepByStepReportFragment", "Location ID is null, cannot refresh map");
+            return;
+        }
+        
+        // Determine risk level from severity
+        String riskLevel = "low";
+        if (severity != null) {
+            String severityLower = severity.toLowerCase();
+            if (severityLower.contains("severe") || severityLower.contains("high")) {
+                riskLevel = "high";
+            } else if (severityLower.contains("moderate") || severityLower.contains("medium")) {
+                riskLevel = "medium";
+            }
+        }
+        
+        // Try to find MapFragment and refresh it
+        try {
+            if (getActivity() != null) {
+                androidx.fragment.app.FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                if (fragmentManager != null) {
+                    // Find NavHostFragment first
+                    androidx.navigation.fragment.NavHostFragment navHostFragment = 
+                        (androidx.navigation.fragment.NavHostFragment) fragmentManager.findFragmentById(com.healthtracker.chw.R.id.nav_host_fragment);
+                    
+                    if (navHostFragment != null) {
+                        // Get the child fragment manager from NavHostFragment
+                        androidx.fragment.app.FragmentManager childFragmentManager = navHostFragment.getChildFragmentManager();
+                        
+                        // Try to find MapFragment in the navigation graph
+                        com.healthtracker.chw.fragments.MapFragment mapFragment = 
+                            (com.healthtracker.chw.fragments.MapFragment) childFragmentManager.findFragmentById(com.healthtracker.chw.R.id.mapFragment);
+                        
+                        // If not found by ID, try to find by iterating through fragments
+                        if (mapFragment == null) {
+                            for (androidx.fragment.app.Fragment fragment : childFragmentManager.getFragments()) {
+                                if (fragment instanceof com.healthtracker.chw.fragments.MapFragment) {
+                                    mapFragment = (com.healthtracker.chw.fragments.MapFragment) fragment;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        if (mapFragment != null && mapFragment.isAdded() && mapFragment.isVisible()) {
+                            android.util.Log.d("StepByStepReportFragment", "Found visible MapFragment, adding new marker for Location: " + locationId);
+                            mapFragment.addLocationMarker(locationId, diseaseType, riskLevel);
+                        } else {
+                            // MapFragment exists but not visible - store location ID for later refresh
+                            android.util.Log.d("StepByStepReportFragment", "MapFragment not visible, storing location ID for refresh when map is opened");
+                            // Store in SharedPreferences so MapFragment can check on resume
+                            android.content.SharedPreferences prefs = getContext().getSharedPreferences("map_refresh", android.content.Context.MODE_PRIVATE);
+                            prefs.edit()
+                                .putString("pending_location_id", locationId)
+                                .putString("pending_disease_type", diseaseType)
+                                .putString("pending_risk_level", riskLevel)
+                                .apply();
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            android.util.Log.e("StepByStepReportFragment", "Error refreshing map", e);
+            // Don't fail the submission if map refresh fails
+        }
+    }
+    
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="20dp"
+    android:height="20dp"
+    android:viewportWidth="20"
+    android:viewportHeight="20">
+    <path android:fillColor="@color/medical_teal_primary"
+        android:pathData="M10,2A8,8 0,1 0,10 18,8 8,0 1,0 10,2zM10,16A6,6 0,1 1,10 4,6 6,0 1,1 10,16z"/>
+    <path android:fillColor="@color/medical_teal_primary"
+        android:pathData="M10,6L10,14M6,10L14,10" android:strokeWidth="2" android:strokeColor="@color/medical_teal_primary"/>
+</vector>
