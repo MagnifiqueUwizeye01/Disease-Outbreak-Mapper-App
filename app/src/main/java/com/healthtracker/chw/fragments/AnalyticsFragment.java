@@ -1,10 +1,10 @@
 package com.healthtracker.chw.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,371 +12,366 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.healthtracker.chw.R;
+import com.healthtracker.chw.data.local.AppDatabase;
+import com.healthtracker.chw.data.local.UnsyncedReport;
 import com.healthtracker.chw.models.DiseaseReport;
-import com.healthtracker.chw.models.RiskAssessment;
-import com.healthtracker.chw.services.SupabaseService;
+import com.healthtracker.chw.services.FHIRService;
+import com.healthtracker.chw.models.fhir.FHIRBundle;
+import com.healthtracker.chw.models.fhir.FHIRObservation;
+import com.healthtracker.chw.models.fhir.FHIRLocation;
 
-import com.healthtracker.chw.models.GPSLocation;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executors;
 
 public class AnalyticsFragment extends Fragment {
 
-    private SupabaseService supabaseService;
-    private LinearLayout weeklyChartContainer;
-    private LinearLayout diseaseLegendContainer;
-    private TextView tvLowRiskCount;
-    private TextView tvMediumRiskCount;
-    private TextView tvHighRiskCount;
-    private TextView tvTotalCases;
-    private TextView tvActiveZones;
+    private static final String TAG = "AnalyticsFragment";
+    private FHIRService fhirService;
+    private AppDatabase db;
+
+    // UI References
+    private TextView tvLowRiskCount, tvMediumRiskCount, tvHighRiskCount;
+    private TextView tvTotalCases, tvActiveZones;
+    private TextView[] weeklyCounts = new TextView[5];
+    private View[] weeklyBars = new View[5];
+    private View[] legendItems = new View[3];
+    private TextView[] legendTexts = new TextView[3];
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_analytics, container, false);
-        
-        supabaseService = new SupabaseService(requireContext());
-        
-        // Find views by traversing the view hierarchy
-        findViewsByTraversing(view);
-        
-        // Load analytics data
-        loadAnalyticsData();
-        
+
+        fhirService = new FHIRService(requireContext());
+        db = AppDatabase.getDatabase(requireContext());
+
+        initializeViews(view);
         return view;
     }
 
-    private void findViewsByTraversing(View rootView) {
-        // Get the ScrollView's child (LinearLayout)
-        ViewGroup scrollView = (ViewGroup) rootView;
-        if (scrollView.getChildCount() == 0) return;
-        
-        LinearLayout mainLayout = (LinearLayout) scrollView.getChildAt(0);
-        
-        // Find weekly chart container (first card after header)
-        if (mainLayout.getChildCount() > 1) {
-            View weeklyCard = mainLayout.getChildAt(1);
-            if (weeklyCard instanceof ViewGroup) {
-                ViewGroup cardContent = (ViewGroup) ((ViewGroup) weeklyCard).getChildAt(0);
-                if (cardContent instanceof LinearLayout && cardContent.getChildCount() > 1) {
-                    weeklyChartContainer = (LinearLayout) cardContent.getChildAt(1);
-                }
-            }
-        }
-        
-        // Find disease legend container (second card)
-        if (mainLayout.getChildCount() > 2) {
-            View diseaseCard = mainLayout.getChildAt(2);
-            if (diseaseCard instanceof ViewGroup) {
-                ViewGroup cardContent = (ViewGroup) ((ViewGroup) diseaseCard).getChildAt(0);
-                if (cardContent instanceof LinearLayout && cardContent.getChildCount() > 1) {
-                    LinearLayout chartRow = (LinearLayout) cardContent.getChildAt(1);
-                    if (chartRow.getChildCount() > 1) {
-                        diseaseLegendContainer = (LinearLayout) chartRow.getChildAt(1);
-                    }
-                }
-            }
-        }
-        
-        // Find risk level views (third card)
-        if (mainLayout.getChildCount() > 3) {
-            View riskCard = mainLayout.getChildAt(3);
-            if (riskCard instanceof ViewGroup) {
-                ViewGroup cardContent = (ViewGroup) ((ViewGroup) riskCard).getChildAt(0);
-                if (cardContent instanceof LinearLayout && cardContent.getChildCount() > 1) {
-                    LinearLayout riskLayout = (LinearLayout) cardContent.getChildAt(1);
-                    if (riskLayout.getChildCount() >= 3) {
-                        LinearLayout lowRisk = (LinearLayout) riskLayout.getChildAt(0);
-                        LinearLayout mediumRisk = (LinearLayout) riskLayout.getChildAt(1);
-                        LinearLayout highRisk = (LinearLayout) riskLayout.getChildAt(2);
-                        
-                        if (lowRisk.getChildCount() > 0) {
-                            tvLowRiskCount = (TextView) lowRisk.getChildAt(0);
-                        }
-                        if (mediumRisk.getChildCount() > 0) {
-                            tvMediumRiskCount = (TextView) mediumRisk.getChildAt(0);
-                        }
-                        if (highRisk.getChildCount() > 0) {
-                            tvHighRiskCount = (TextView) highRisk.getChildAt(0);
-                        }
-                    }
-                }
-            }
-        }
-        
-        // Find total cases and active zones (last LinearLayout)
-        for (int i = mainLayout.getChildCount() - 1; i >= 0; i--) {
-            View child = mainLayout.getChildAt(i);
-            if (child instanceof LinearLayout) {
-                LinearLayout statsRow = (LinearLayout) child;
-                if (statsRow.getChildCount() >= 2) {
-                    View totalCard = statsRow.getChildAt(0);
-                    View zonesCard = statsRow.getChildAt(1);
-                    
-                    if (totalCard instanceof ViewGroup) {
-                        ViewGroup totalCardContent = (ViewGroup) totalCard;
-                        if (totalCardContent.getChildCount() > 0) {
-                            LinearLayout totalContent = (LinearLayout) totalCardContent.getChildAt(0);
-                            if (totalContent.getChildCount() > 0) {
-                                tvTotalCases = (TextView) totalContent.getChildAt(0);
-                            }
-                        }
-                    }
-                    
-                    if (zonesCard instanceof ViewGroup) {
-                        ViewGroup zonesCardContent = (ViewGroup) zonesCard;
-                        if (zonesCardContent.getChildCount() > 0) {
-                            LinearLayout zonesContent = (LinearLayout) zonesCardContent.getChildAt(0);
-                            if (zonesContent.getChildCount() > 0) {
-                                tvActiveZones = (TextView) zonesContent.getChildAt(0);
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: Loading analytics data.");
+        loadAnalyticsData();
+    }
+
+    private void initializeViews(View view) {
+        // Stats
+        tvLowRiskCount = view.findViewById(R.id.tv_low_risk_count);
+        tvMediumRiskCount = view.findViewById(R.id.tv_medium_risk_count);
+        tvHighRiskCount = view.findViewById(R.id.tv_high_risk_count);
+        tvTotalCases = view.findViewById(R.id.tv_total_cases);
+        tvActiveZones = view.findViewById(R.id.tv_active_zones);
+
+        // Weekly Chart (Mon-Fri)
+        weeklyCounts[0] = view.findViewById(R.id.text_mon_count);
+        weeklyBars[0] = view.findViewById(R.id.bar_mon);
+        weeklyCounts[1] = view.findViewById(R.id.text_tue_count);
+        weeklyBars[1] = view.findViewById(R.id.bar_tue);
+        weeklyCounts[2] = view.findViewById(R.id.text_wed_count);
+        weeklyBars[2] = view.findViewById(R.id.bar_wed);
+        weeklyCounts[3] = view.findViewById(R.id.text_thu_count);
+        weeklyBars[3] = view.findViewById(R.id.bar_thu);
+        weeklyCounts[4] = view.findViewById(R.id.text_fri_count);
+        weeklyBars[4] = view.findViewById(R.id.bar_fri);
+
+        // Legend
+        legendItems[0] = view.findViewById(R.id.legend_item_1);
+        legendTexts[0] = view.findViewById(R.id.legend_text_1);
+        legendItems[1] = view.findViewById(R.id.legend_item_2);
+        legendTexts[1] = view.findViewById(R.id.legend_text_2);
+        legendItems[2] = view.findViewById(R.id.legend_item_3);
+        legendTexts[2] = view.findViewById(R.id.legend_text_3);
     }
 
     private void loadAnalyticsData() {
-        supabaseService.getAllDiseaseReports(new SupabaseService.ReportsCallback() {
+        // 1. Fetch Server Observations
+        fhirService.getAllObservations(new FHIRService.ObservationsCallback() {
             @Override
-            public void onSuccess(List<DiseaseReport> reports) {
-                requireActivity().runOnUiThread(() -> {
-                    AnalyticsData data = calculateAnalytics(reports);
-                    updateAnalyticsUI(data, reports);
-                });
+            public void onSuccess(FHIRBundle bundle) {
+                // Once we have server data, fetch local data and merge
+                fetchLocalAndMerge(bundle);
             }
-            
+
             @Override
             public void onError(String error) {
-                requireActivity().runOnUiThread(() -> {
-                    android.util.Log.e("AnalyticsFragment", "Error loading analytics: " + error);
-                    // Show empty data
-                    AnalyticsData emptyData = new AnalyticsData();
-                    updateAnalyticsUI(emptyData, new ArrayList<>());
-                });
+                Log.e(TAG, "Error fetching observations: " + error);
+                // Even if server fails, show local
+                fetchLocalAndMerge(null);
+            }
+        });
+
+        // 2. Fetch Locations (Active Zones) - Server Only (Local reports don't have
+        // location IDs yet)
+        // Improvement: We COULD count local lat/lon as zones too.
+        fhirService.getAllLocations(new FHIRService.LocationsCallback() {
+            @Override
+            public void onSuccess(FHIRBundle bundle) {
+                processLocations(bundle);
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "Error fetching locations: " + error);
             }
         });
     }
-    
-    private AnalyticsData calculateAnalytics(List<DiseaseReport> reports) {
-        AnalyticsData data = new AnalyticsData();
-        data.allReports = reports != null ? reports : new ArrayList<>();
-        data.totalCaseCount = data.allReports.size();
-        
-        // Count risk levels from risk assessments
-        Map<String, Integer> riskCounts = new HashMap<>();
-        riskCounts.put("low", 0);
-        riskCounts.put("medium", 0);
-        riskCounts.put("high", 0);
-        
-        // Count disease distribution
-        Map<String, Integer> diseaseCounts = new HashMap<>();
-        Set<String> uniqueZones = new HashSet<>();
-        
-        for (DiseaseReport report : data.allReports) {
-            // Count diseases
-            String diseaseType = report.getDiseaseType() != null ? report.getDiseaseType() : "Unknown";
-            diseaseCounts.put(diseaseType, diseaseCounts.getOrDefault(diseaseType, 0) + 1);
-            
-            // Count risk levels (from risk assessment if available)
-            if (report.getRiskAssessment() != null && report.getRiskAssessment().getLevel() != null) {
-                String level = report.getRiskAssessment().getLevel().toLowerCase();
-                if (level.contains("low")) riskCounts.put("low", riskCounts.get("low") + 1);
-                else if (level.contains("medium") || level.contains("moderate")) riskCounts.put("medium", riskCounts.get("medium") + 1);
-                else if (level.contains("high") || level.contains("severe")) riskCounts.put("high", riskCounts.get("high") + 1);
-            }
-            
-            // Count unique zones (from encounter location if available)
-            if (report.getEncounter() != null && report.getEncounter().getGpsLocation() != null) {
-                GPSLocation loc = report.getEncounter().getGpsLocation();
-                if (loc.getLatitude() != null && loc.getLongitude() != null) {
-                    // Create zone identifier (rounded coordinates)
-                    String zone = String.format(Locale.getDefault(), "%.2f,%.2f", 
-                        Math.round(loc.getLatitude() * 100.0) / 100.0,
-                        Math.round(loc.getLongitude() * 100.0) / 100.0);
-                    uniqueZones.add(zone);
+
+    private void fetchLocalAndMerge(FHIRBundle serverBundle) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            // Fetch local reports
+            List<UnsyncedReport> localReports = db.unsyncedReportDao().getAllReports();
+
+            requireActivity().runOnUiThread(() -> {
+                processMergedData(serverBundle, localReports);
+            });
+        });
+    }
+
+    private void processMergedData(FHIRBundle serverBundle, List<UnsyncedReport> localReports) {
+        if (!isAdded())
+            return;
+
+        List<DiseaseReport> mergedReports = new ArrayList<>();
+        Map<String, Integer> dCounts = new HashMap<>();
+
+        int low = 0;
+        int medium = 0;
+        int high = 0;
+
+        // Setup Zone Tracking for Local Data merging
+        // We will pass this to a shared zone counter if we want to merge local zones
+        // too
+        Set<String> localZones = new HashSet<>();
+
+        // -- PROCESS SERVER DATA --
+        if (serverBundle != null && serverBundle.getEntry() != null) {
+            for (FHIRBundle.Entry entry : serverBundle.getEntry()) {
+                if (entry.getResource() instanceof FHIRObservation) {
+                    FHIRObservation obs = (FHIRObservation) entry.getResource();
+
+                    // Disease Count
+                    String disease = "Unknown";
+                    if (obs.getCode() != null && obs.getCode().getText() != null) {
+                        disease = obs.getCode().getText();
+                    }
+                    dCounts.put(disease, dCounts.getOrDefault(disease, 0) + 1);
+
+                    // Risk Count
+                    String severity = "";
+                    if (obs.getValueCodeableConcept() != null && obs.getValueCodeableConcept().getText() != null) {
+                        severity = obs.getValueCodeableConcept().getText();
+                    } else if (obs.getValueString() != null) {
+                        severity = obs.getValueString();
+                    }
+
+                    String level = severity.toLowerCase();
+                    if (level.contains("high") || level.contains("severe"))
+                        high++;
+                    else if (level.contains("medium") || level.contains("moderate"))
+                        medium++;
+                    else if (level.contains("low") || level.contains("mild"))
+                        low++;
+                    // else ignore
+
+                    // Report List
+                    DiseaseReport report = new DiseaseReport();
+                    report.setDiseaseType(disease);
+                    if (obs.getEffectiveDateTime() != null) {
+                        report.setReportDate(new Date()); // Parsing todo
+                    } else {
+                        report.setReportDate(new Date());
+                    }
+                    mergedReports.add(report);
                 }
             }
         }
-        
-        data.lowRiskCount = riskCounts.get("low");
-        data.mediumRiskCount = riskCounts.get("medium");
-        data.highRiskCount = riskCounts.get("high");
-        data.activeZoneCount = uniqueZones.size();
-        
-        // Convert disease counts to list
-        data.diseaseDistribution = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : diseaseCounts.entrySet()) {
-            DiseaseCount dc = new DiseaseCount();
-            dc.disease_type = entry.getKey();
-            dc.count = entry.getValue();
-            data.diseaseDistribution.add(dc);
+
+        // -- PROCESS LOCAL DATA --
+        if (localReports != null) {
+            for (UnsyncedReport local : localReports) {
+                // Disease Count
+                String disease = local.diseaseType != null ? local.diseaseType : "Unknown";
+                dCounts.put(disease, dCounts.getOrDefault(disease, 0) + 1);
+
+                // Risk Count
+                String severity = local.severity != null ? local.severity.toLowerCase() : "";
+                if (severity.contains("high") || severity.contains("severe"))
+                    high++;
+                else if (severity.contains("medium") || severity.contains("moderate"))
+                    medium++;
+                else if (severity.contains("low") || severity.contains("mild"))
+                    low++;
+
+                // Zones (Local)
+                if (local.latitude != null && local.longitude != null) {
+                    String zoneKey = String.format(java.util.Locale.US, "%.2f,%.2f",
+                            Math.round(local.latitude * 100.0) / 100.0,
+                            Math.round(local.longitude * 100.0) / 100.0);
+                    localZones.add(zoneKey);
+                }
+
+                // Report List
+                DiseaseReport report = new DiseaseReport();
+                report.setDiseaseType(disease);
+                report.setReportDate(new Date(local.timestamp));
+                mergedReports.add(report);
+            }
         }
-        
-        return data;
+
+        // Update UI
+        tvTotalCases.setText(String.valueOf(mergedReports.size()));
+        tvLowRiskCount.setText(String.valueOf(low));
+        tvMediumRiskCount.setText(String.valueOf(medium));
+        tvHighRiskCount.setText(String.valueOf(high));
+
+        android.widget.Toast.makeText(getContext(),
+                "Analytics: " + mergedReports.size() + " total (S:" +
+                        (serverBundle != null && serverBundle.getEntry() != null ? serverBundle.getEntry().size() : 0) +
+                        " L:" + (localReports != null ? localReports.size() : 0) + ")",
+                android.widget.Toast.LENGTH_LONG).show();
+
+        updateWeeklyChart(mergedReports);
+
+        updateDiseaseDistribution(dCounts);
+
+        // Pass local zones to location processor if needed, but for now let's just
+        // update Active Zones
+        // by merging fetching server locations with these local ones.
+        // Ideally we should have merged them in one go.
+        // Let's store localZones for the processLocations callback to use if it comes
+        // later,
+        // OR better: trigger location processing passing these zones.
+        // For simplicity in this fragment structure, we'll wait for processLocations to
+        // be called by its callback.
+        // But wait, they are async.
+        // Hack: update Active Zones text view here adding what we have locally?
+        // No, that doubles counting if we don't know overlaps.
+        // Correct way: We need the server locations to merge.
+        // Lets just save localZones to a member variable and update in
+        // processLocations?
+        this.pendingLocalZones = localZones;
+        updateActiveZonesUI(); // Try update if server data already came
     }
 
-    private void updateAnalyticsUI(AnalyticsData data, List<DiseaseReport> reports) {
-        // Update risk levels
-        if (tvLowRiskCount != null) {
-            tvLowRiskCount.setText(String.valueOf(data.lowRiskCount));
+    private Set<String> pendingLocalZones = new HashSet<>();
+    private Set<String> serverZones = new HashSet<>();
+
+    private void processLocations(FHIRBundle bundle) {
+        if (!isAdded())
+            return;
+
+        serverZones.clear();
+        if (bundle != null && bundle.getEntry() != null) {
+            for (FHIRBundle.Entry entry : bundle.getEntry()) {
+                if (entry.getResource() instanceof FHIRLocation) {
+                    FHIRLocation loc = (FHIRLocation) entry.getResource();
+                    if (loc.getPosition() != null) {
+                        double lat = loc.getPosition().getLatitude();
+                        double lon = loc.getPosition().getLongitude();
+                        String zoneKey = String.format(java.util.Locale.US, "%.2f,%.2f",
+                                Math.round(lat * 100.0) / 100.0,
+                                Math.round(lon * 100.0) / 100.0);
+                        serverZones.add(zoneKey);
+                    }
+                }
+            }
         }
-        if (tvMediumRiskCount != null) {
-            tvMediumRiskCount.setText(String.valueOf(data.mediumRiskCount));
-        }
-        if (tvHighRiskCount != null) {
-            tvHighRiskCount.setText(String.valueOf(data.highRiskCount));
-        }
-        
-        // Update total cases and active zones
-        if (tvTotalCases != null) {
-            tvTotalCases.setText(String.valueOf(data.totalCaseCount));
-        }
-        if (tvActiveZones != null) {
-            tvActiveZones.setText(String.valueOf(data.activeZoneCount));
-        }
-        
-        // Update weekly chart
-        updateWeeklyChart(reports);
-        
-        // Update disease distribution
-        updateDiseaseDistribution(data.diseaseDistribution);
+
+        requireActivity().runOnUiThread(this::updateActiveZonesUI);
     }
-    
-    private static class AnalyticsData {
-        List<DiseaseReport> allReports = new ArrayList<>();
-        int lowRiskCount = 0;
-        int mediumRiskCount = 0;
-        int highRiskCount = 0;
-        int totalCaseCount = 0;
-        int activeZoneCount = 0;
-        List<DiseaseCount> diseaseDistribution = new ArrayList<>();
+
+    private void updateActiveZonesUI() {
+        Set<String> merged = new HashSet<>(serverZones);
+        merged.addAll(pendingLocalZones);
+        tvActiveZones.setText(String.valueOf(merged.size()));
     }
-    
-    private static class DiseaseCount {
-        String disease_type;
-        int count;
-    }
+
+    // --- UI Update Helpers ---
 
     private void updateWeeklyChart(List<DiseaseReport> reports) {
-        if (weeklyChartContainer == null || reports == null) return;
-        
-        // Calculate cases per day of week (last 7 days, Mon-Fri)
-        Calendar cal = Calendar.getInstance();
-        Map<Integer, Integer> dayCounts = new HashMap<>();
-        for (int i = 0; i < 5; i++) {
-            dayCounts.put(i, 0);
-        }
-        
-        Calendar weekAgo = Calendar.getInstance();
-        weekAgo.add(Calendar.DAY_OF_YEAR, -7);
-        
+        int total = reports.size();
+        int[] daily = new int[5]; // M T W T F
+
+        // Use current date as reference for week
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        java.util.Calendar now = java.util.Calendar.getInstance();
+
+        // Very basic simple "last 5 entries" or distribution if dates are not ideal
+        // If we have dates, use them.
         for (DiseaseReport report : reports) {
-            Date reportDate = report.getReportDate() != null ? report.getReportDate() : 
-                (report.getEncounter() != null && report.getEncounter().getEncounterDate() != null ? 
-                    report.getEncounter().getEncounterDate() : null);
-            
-            if (reportDate != null && reportDate.after(weekAgo.getTime())) {
-                cal.setTime(reportDate);
-                int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-                // Convert to 0-4 (Monday=0, Tuesday=1, ..., Friday=4)
-                // Calendar: Sunday=1, Monday=2, ..., Saturday=7
-                int adjustedDay = -1;
-                if (dayOfWeek == Calendar.MONDAY) adjustedDay = 0;
-                else if (dayOfWeek == Calendar.TUESDAY) adjustedDay = 1;
-                else if (dayOfWeek == Calendar.WEDNESDAY) adjustedDay = 2;
-                else if (dayOfWeek == Calendar.THURSDAY) adjustedDay = 3;
-                else if (dayOfWeek == Calendar.FRIDAY) adjustedDay = 4;
-                
-                if (adjustedDay >= 0) {
-                    dayCounts.put(adjustedDay, dayCounts.get(adjustedDay) + 1);
-                }
+            if (report.getReportDate() != null) {
+                cal.setTime(report.getReportDate());
+                // Only count current week? Or just day of week regardless?
+                // Let's just do day of week distribution for visual feedback
+                int day = cal.get(java.util.Calendar.DAY_OF_WEEK);
+                int idx = -1;
+                if (day == java.util.Calendar.MONDAY)
+                    idx = 0;
+                if (day == java.util.Calendar.TUESDAY)
+                    idx = 1;
+                if (day == java.util.Calendar.WEDNESDAY)
+                    idx = 2;
+                if (day == java.util.Calendar.THURSDAY)
+                    idx = 3;
+                if (day == java.util.Calendar.FRIDAY)
+                    idx = 4;
+                if (idx >= 0)
+                    daily[idx]++;
             }
         }
-        
-        // Find max value for scaling
-        int maxCount = 0;
-        for (Integer count : dayCounts.values()) {
-            if (count > maxCount) maxCount = count;
-        }
-        if (maxCount == 0) maxCount = 1; // Avoid division by zero
-        
-        // Update chart bars (Mon=0, Tue=1, Wed=2, Thu=3, Fri=4)
-        if (weeklyChartContainer.getChildCount() >= 5) {
-            for (int i = 0; i < 5; i++) {
-                View dayView = weeklyChartContainer.getChildAt(i);
-                if (dayView instanceof LinearLayout) {
-                    LinearLayout dayContainer = (LinearLayout) dayView;
-                    if (dayContainer.getChildCount() >= 3) {
-                        View bar = dayContainer.getChildAt(0);
-                        TextView countText = (TextView) dayContainer.getChildAt(1);
-                        
-                        int count = dayCounts.getOrDefault(i, 0);
-                        // Scale bar height (20dp to 100dp range)
-                        int barHeight = maxCount > 0 ? (int) (20 + (count * 80.0 / maxCount)) : 20;
-                        if (barHeight < 20) barHeight = 20;
-                        if (barHeight > 100) barHeight = 100;
-                        
-                        // Convert dp to pixels
-                        float density = getResources().getDisplayMetrics().density;
-                        int heightPx = (int) (barHeight * density);
-                        
-                        ViewGroup.LayoutParams params = bar.getLayoutParams();
-                        params.height = heightPx;
-                        bar.setLayoutParams(params);
-                        
-                        if (countText != null) {
-                            countText.setText(String.valueOf(count));
-                        }
-                    }
-                }
+
+        int max = 0;
+        for (int c : daily)
+            if (c > max)
+                max = c;
+        if (max == 0)
+            max = 1;
+
+        for (int i = 0; i < 5; i++) {
+            if (weeklyCounts[i] != null)
+                weeklyCounts[i].setText(String.valueOf(daily[i]));
+
+            if (weeklyBars[i] != null) {
+                // Scale height: 20dp to 100dp
+                int heightDp = 20 + (daily[i] * 80 / max);
+                float density = getResources().getDisplayMetrics().density;
+                weeklyBars[i].getLayoutParams().height = (int) (heightDp * density);
+                weeklyBars[i].requestLayout();
             }
         }
     }
 
-    private void updateDiseaseDistribution(List<DiseaseCount> distribution) {
-        if (diseaseLegendContainer == null || distribution == null || distribution.isEmpty()) return;
-        
-        // Calculate total
+    private void updateDiseaseDistribution(Map<String, Integer> distribution) {
         int total = 0;
-        for (DiseaseCount dc : distribution) {
-            total += dc.count;
+        for (int c : distribution.values())
+            total += c;
+        if (total == 0) {
+            // If 0, show placeholder or hide
+            for (View v : legendItems)
+                v.setVisibility(View.INVISIBLE);
+            return;
         }
-        if (total == 0) return;
-        
-        // Update legend text views
-        // The layout has 4 legend items, update them if we have data
-        if (diseaseLegendContainer.getChildCount() > 0) {
-            int index = 0;
-            for (DiseaseCount dc : distribution) {
-                if (index >= diseaseLegendContainer.getChildCount()) break;
-                
-                View legendItemView = diseaseLegendContainer.getChildAt(index);
-                if (legendItemView instanceof LinearLayout) {
-                    LinearLayout legendItem = (LinearLayout) legendItemView;
-                    if (legendItem.getChildCount() >= 2) {
-                        View textView = legendItem.getChildAt(1);
-                        if (textView instanceof TextView) {
-                            TextView text = (TextView) textView;
-                            int percentage = (int) ((dc.count * 100.0) / total);
-                            String diseaseName = dc.disease_type != null ? dc.disease_type : "Unknown";
-                            text.setText(String.format(Locale.getDefault(), "%s (%d%%)", diseaseName, percentage));
-                        }
-                    }
-                }
-                index++;
+
+        List<Map.Entry<String, Integer>> sorted = new ArrayList<>(distribution.entrySet());
+        sorted.sort((a, b) -> b.getValue().compareTo(a.getValue())); // Descending
+
+        for (int i = 0; i < 3; i++) {
+            if (i < sorted.size()) {
+                legendItems[i].setVisibility(View.VISIBLE);
+                Map.Entry<String, Integer> entry = sorted.get(i);
+                int pct = (int) (entry.getValue() * 100.0 / total);
+                legendTexts[i].setText(entry.getKey() + " (" + pct + "%)");
+            } else {
+                legendItems[i].setVisibility(View.INVISIBLE);
             }
         }
     }
