@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HealthTrack</string>
+    <string name="navigation_drawer_open">Ouvrir le menu de navigation</string>
+    <string name="navigation_drawer_close">Fermer le menu de navigation</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="menu_dashboard">Tableau de Bord</string>
+    <string name="menu_report_case">Signaler un Cas</string>
+    <string name="menu_outbreak_map">Carte des Épidémies</string>
+    <string name="menu_analytics">Tendances</string>
+    <string name="menu_case_history">Historique des Cas</string>
+    <string name="menu_profile">Mon Profil</string>
+    <string name="menu_help_support">Aide et Support</string>
+    <string name="menu_logout">Déconnexion</string>
+    <string name="welcome_chw">Bienvenue, ASC</string>
+    <string name="quick_actions">Actions Rapides</string>
+    <string name="latest_stats">Dernières Statistiques</string>
+    <string name="pending_reports">Rapports en Attente</string>
+    <string name="high_risk">Haut Risque</string>
+    <string name="medium_risk">Risque Moyen</string>
+    <string name="low_risk">Faible Risque</string>
+    <string name="sync_pending">Sync En Attente</string>
+    <string name="sync_now">Synchroniser</string>
+    <string name="syncing">Synchronisation...</string>
+    <string name="synced_successfully">Synchronisé avec succès</string>
+    <string name="sync_failed">Échec de la synchronisation</string>
+    <string name="report_new_case">Signaler Nouveau Cas</string>
+    <string name="view_outbreak_map">Voir Carte Épidémie</string>
+</resources>

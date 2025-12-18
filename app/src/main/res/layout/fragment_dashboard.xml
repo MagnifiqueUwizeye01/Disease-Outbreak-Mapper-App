@@ -32,112 +32,445 @@
                 android:id="@+id/tv_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+<<<<<<< HEAD
                 android:text="World and sport classes address in real time."
+=======
+                android:text="Monitoring public health and outbreaks in real time."
+>>>>>>> de27ee7 (Implement user authentication service and session management)
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
 
+<<<<<<< HEAD
         <!-- Stats Cards Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginBottom="20dp">
 
-            <!-- Pending Reports Card -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_pending_reports"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="6dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp"
-                app:strokeColor="@color/medical_green_light"
-                app:strokeWidth="1dp">
+            <!-- Row 1: Pending & High Risk -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="12dp">
+                <!-- Pending Reports Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_pending_reports"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/medical_green_light"
+                    app:strokeWidth="1dp">
 
-                    <ImageView
-                        android:id="@+id/icon_pending_reports"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:contentDescription="Pending Reports"
-                        android:src="@drawable/ic_pending_reports" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
 
-                    <TextView
-                        android:id="@+id/tv_pending_reports"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="12"
-                        android:textColor="@color/medical_green_primary"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        <ImageView
+                            android:id="@+id/icon_pending_reports"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:contentDescription="Pending"
+                            android:src="@drawable/ic_pending_reports"
+                            app:tint="@color/medical_green_primary" />
 
-                    <TextView
-                        android:id="@+id/tv_pending_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pending"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="11sp" />
+                        <TextView
+                            android:id="@+id/tv_pending_reports"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="0"
+                            android:textColor="@color/medical_green_primary"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pending Reports"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- High Risk Zones Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_high_risk"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="#FFCDD2"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:id="@+id/icon_high_risk"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_high_risk"
+                            android:contentDescription="High Risk"
+                            app:tint="#D32F2F" />
+
+                        <TextView
+                            android:id="@+id/tv_high_risk_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="0"
+                            android:textColor="#D32F2F"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="High Risk Zones"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Row 2: Medium & Low Risk -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Medium Risk Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_medium_risk"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/medical_gold_light"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_trends_analytics"
+                            android:contentDescription="Medium Risk"
+                            app:tint="@color/medical_gold_primary" />
+
+                        <TextView
+                            android:id="@+id/tv_medium_risk_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="0"
+                            android:textColor="@color/medical_gold_primary"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Medium Risk"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Low Risk Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_low_risk"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/medical_teal_light"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_sync"
+                            android:contentDescription="Low Risk"
+                            app:tint="@color/medical_teal_primary" />
+
+                        <TextView
+                            android:id="@+id/tv_low_risk_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="0"
+                            android:textColor="@color/medical_teal_primary"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Low Risk Zones"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+=======
+        <!-- Stats Grid (2x2) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp">
 
-            <!-- High Risk Zones Card -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_high_risk"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp"
-                app:strokeColor="@color/medical_gold_light"
-                app:strokeWidth="1dp">
+            <!-- Row 1: Pending & High Risk -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="12dp">
+                <!-- Pending Reports Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_pending_reports"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/medical_green_light"
+                    app:strokeWidth="1dp">
 
-                    <ImageView
-                        android:id="@+id/icon_high_risk"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_high_risk"
-                        android:contentDescription="High Risk Zones" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
 
-                    <TextView
-                        android:id="@+id/tv_high_risk_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="3"
-                        android:textColor="@color/medical_gold_primary"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="6dp" />
+                        <ImageView
+                            android:id="@+id/icon_pending_reports"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:contentDescription="Pending"
+                            android:src="@drawable/ic_pending_reports"
+                            app:tint="@color/medical_green_primary" />
 
-                    <TextView
-                        android:id="@+id/tv_high_risk_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="High Risk"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="11sp" />
+                        <TextView
+                            android:id="@+id/tv_pending_reports"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="0"
+                            android:textColor="@color/medical_green_primary"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
 
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pending Reports"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- High Risk Zones Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_high_risk"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="#FFCDD2"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:id="@+id/icon_high_risk"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_high_risk"
+                            android:contentDescription="High Risk"
+                            app:tint="#D32F2F" />
+
+                        <TextView
+                            android:id="@+id/tv_high_risk_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="0"
+                            android:textColor="#D32F2F"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="High Risk Zones"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Row 2: Medium & Low Risk -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Medium Risk Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_medium_risk"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/medical_gold_light"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_trends_analytics"
+                            android:contentDescription="Medium Risk"
+                            app:tint="@color/medical_gold_primary" />
+
+                        <TextView
+                            android:id="@+id/tv_medium_risk_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="0"
+                            android:textColor="@color/medical_gold_primary"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Medium Risk"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Low Risk Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_low_risk"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/medical_teal_light"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_sync"
+                            android:contentDescription="Low Risk"
+                            app:tint="@color/medical_teal_primary" />
+
+                        <TextView
+                            android:id="@+id/tv_low_risk_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="0"
+                            android:textColor="@color/medical_teal_primary"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Low Risk Zones"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         </LinearLayout>
 
         <!-- Quick Action Chips -->
@@ -146,7 +479,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+<<<<<<< HEAD
             app:singleLine="true"
+=======
+            app:singleLine="false"
+>>>>>>> de27ee7 (Implement user authentication service and session management)
             app:chipSpacingHorizontal="6dp">
 
             <com.google.android.material.chip.Chip
@@ -171,6 +508,31 @@
                 app:chipIconTint="@color/white"
                 app:chipStrokeColor="@color/medical_gold_primary" />
 
+<<<<<<< HEAD
+=======
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_medium_risk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medium Risk"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/medical_gold_primary"
+                app:chipIcon="@drawable/ic_trends_analytics"
+                app:chipIconTint="@color/white"
+                app:chipStrokeColor="@color/medical_gold_primary" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_low_risk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Low Risk"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/medical_teal_primary"
+                app:chipIcon="@drawable/ic_sync"
+                app:chipIconTint="@color/white"
+                app:chipStrokeColor="@color/medical_teal_primary" />
+
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         </com.google.android.material.chip.ChipGroup>
 
         <!-- Main Feature Cards -->

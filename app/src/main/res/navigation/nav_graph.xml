@@ -116,4 +116,21 @@
             app:popUpToInclusive="true" />
     </fragment>
 
+<<<<<<< HEAD
+=======
+    <!-- Update Account Info Fragment -->
+    <fragment
+        android:id="@+id/updateAccountInfoFragment"
+        android:name="com.healthtracker.chw.fragments.UpdateAccountInfoFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_update_account_info" />
+
+    <!-- Change Password Fragment -->
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.healthtracker.chw.fragments.ChangePasswordFragment"
+        android:label="Change Password"
+        tools:layout="@layout/fragment_change_password" />
+
+>>>>>>> de27ee7 (Implement user authentication service and session management)
 </navigation>

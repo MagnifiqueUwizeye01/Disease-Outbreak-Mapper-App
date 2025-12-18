@@ -1,26 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:fillViewport="true"
-    android:padding="24dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!-- Header -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Report New Disease Case"
-            android:textColor="@color/medical_green_primary"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,6 +16,35 @@
             android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:layout_marginBottom="24dp" />
+
+        <!-- Connection Mode Toggle -->
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggle_connection_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            app:checkedButton="@id/btn_mode_online">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_mode_online"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Online Mode"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:icon="@drawable/ic_sync" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_mode_offline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Offline Mode"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:icon="@drawable/ic_cloud_off" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <!-- Patient Information Card -->
         <com.google.android.material.card.MaterialCardView
@@ -627,8 +643,8 @@
                             app:tint="@color/medical_teal_primary" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
         <!-- Additional Notes Card -->
         <com.google.android.material.card.MaterialCardView
@@ -693,14 +709,8 @@
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:backgroundTint="@color/medical_green_primary"
-            android:textColor="@color/white"
-            app:cornerRadius="12dp"
-            app:icon="@drawable/ic_send"
-            app:iconGravity="textStart"
-            app:iconPadding="8dp"
-            app:iconTint="@color/white" />
+            android:paddingBottom="8dp" />
 
+        <!-- Add EditTexts, Buttons for reporting case -->
     </LinearLayout>
-
 </ScrollView>
