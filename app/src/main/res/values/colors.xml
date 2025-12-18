@@ -30,6 +30,16 @@
     <!-- Medical Theme Colors -->
     <color name="medical_green_primary">#2E7D32</color>
     <color name="medical_green_light">#C8E6C9</color>
+    <color name="medical_green_dark">#1B5E20</color>
     <color name="medical_teal_primary">#00796B</color>
     <color name="medical_teal_light">#B2DFDB</color>
+    <color name="medical_gold_primary">#FFC107</color>
+    <color name="medical_gold_dark">#FF8F00</color>
+
+    <!-- Additional Colors -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="text_hint">#9E9E9E</color>
+    <color name="gradient_start">#2E7D32</color>
+    <color name="gradient_mid">#4CAF50</color>
 </resources>
