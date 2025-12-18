@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "643444291954",
+    "project_id": "chw-disease-mapper",
+    "storage_bucket": "chw-disease-mapper.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:643444291954:android:53bf679c116de616d445eb",
+        "android_client_info": {
+          "package_name": "com.healthtracker.chw"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "REDACTED_FIREBASE_KEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

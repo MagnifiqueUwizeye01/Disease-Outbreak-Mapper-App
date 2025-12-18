@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <!-- Unified Dashboard -->
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.healthtracker.chw.fragments.DashboardFragment"
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_dashboard_to_report_case"
+            app:destination="@id/reportCaseFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_case_history"
+            app:destination="@id/caseHistoryFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_map"
+            app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_analytics"
+            app:destination="@id/analyticsFragment" />
+    </fragment>
+
+    <!-- Report Case Fragment -->
+    <fragment
+        android:id="@+id/reportCaseFragment"
+        android:name="com.healthtracker.chw.fragments.ReportCaseFragment"
+        android:label="Report Case"
+        tools:layout="@layout/fragment_report_case" />
+
+    <!-- Case History Fragment -->
+    <fragment
+        android:id="@+id/caseHistoryFragment"
+        android:name="com.healthtracker.chw.fragments.CaseHistoryFragment"
+        android:label="Case History"
+        tools:layout="@layout/fragment_case_history">
+        <action
+            android:id="@+id/action_case_history_to_details"
+            app:destination="@id/caseDetailsFragment" />
+    </fragment>
+
+    <!-- Case Details Fragment -->
+    <fragment
+        android:id="@+id/caseDetailsFragment"
+        android:name="com.healthtracker.chw.fragments.CaseDetailsFragment"
+        android:label="Case Details"
+        tools:layout="@layout/fragment_case_details" />
+
+    <!-- Map Fragment -->
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.healthtracker.chw.fragments.MapFragment"
+        android:label="Outbreak Map"
+        tools:layout="@layout/fragment_map">
+        <action
+            android:id="@+id/action_map_to_case_details"
+            app:destination="@id/caseDetailsFragment" />
+    </fragment>
+
+    <!-- Analytics Fragment -->
+    <fragment
+        android:id="@+id/analyticsFragment"
+        android:name="com.healthtracker.chw.fragments.AnalyticsFragment"
+        android:label="Analytics"
+        tools:layout="@layout/fragment_analytics" />
+
+    <!-- Settings Fragment -->
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.healthtracker.chw.fragments.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <!-- Profile Fragment -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.healthtracker.chw.fragments.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <!-- Offline Pending Cases Fragment -->
+    <fragment
+        android:id="@+id/offlinePendingCasesFragment"
+        android:name="com.healthtracker.chw.fragments.OfflinePendingCasesFragment"
+        android:label="Offline Pending Cases"
+        tools:layout="@layout/fragment_offline_pending_cases" />
+
+    <!-- Help & Support Fragment -->
+    <fragment
+        android:id="@+id/helpSupportFragment"
+        android:name="com.healthtracker.chw.fragments.HelpSupportFragment"
+        android:label="Help &amp; Support"
+        tools:layout="@layout/fragment_help_support" />
+
+    <!-- About Fragment -->
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.healthtracker.chw.fragments.AboutFragment"
+        android:label="About"
+        tools:layout="@layout/fragment_about" />
+
+    <!-- Login fragment remains in graph but is no longer start destination -->
+    <fragment
+        android:id="@+id/loginScreenFragment"
+        android:name="com.healthtracker.chw.fragments.LoginScreenFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_home"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/loginScreenFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Update Account Info Fragment -->
+    <fragment
+        android:id="@+id/updateAccountInfoFragment"
+        android:name="com.healthtracker.chw.fragments.UpdateAccountInfoFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_update_account_info" />
+
+    <!-- Change Password Fragment -->
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.healthtracker.chw.fragments.ChangePasswordFragment"
+        android:label="Change Password"
+        tools:layout="@layout/fragment_change_password" />
+
+</navigation>
