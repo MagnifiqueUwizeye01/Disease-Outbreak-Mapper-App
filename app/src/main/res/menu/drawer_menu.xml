@@ -14,47 +14,27 @@
 
         <item
             android:id="@+id/mapFragment"
-<<<<<<< HEAD
-            android:icon="@drawable/ic_home"
-=======
             android:icon="@drawable/ic_outbreak_map"
->>>>>>> de27ee7 (Implement user authentication service and session management)
             android:title="Outbreak Map" />
 
         <item
             android:id="@+id/analyticsFragment"
-<<<<<<< HEAD
-            android:icon="@drawable/ic_settings"
-=======
             android:icon="@drawable/ic_trends_analytics"
->>>>>>> de27ee7 (Implement user authentication service and session management)
             android:title="Case Trends &amp; Analytics" />
 
         <item
             android:id="@+id/caseHistoryFragment"
-<<<<<<< HEAD
-            android:icon="@drawable/ic_home"
-=======
             android:icon="@drawable/ic_history"
->>>>>>> de27ee7 (Implement user authentication service and session management)
             android:title="Submission History" />
 
         <item
             android:id="@+id/offlinePendingCasesFragment"
-<<<<<<< HEAD
-            android:icon="@drawable/ic_home"
-=======
             android:icon="@drawable/ic_pending_reports"
->>>>>>> de27ee7 (Implement user authentication service and session management)
             android:title="Offline Pending Cases" />
 
         <item
             android:id="@+id/profileFragment"
-<<<<<<< HEAD
-            android:icon="@drawable/ic_healthcare"
-=======
             android:icon="@drawable/ic_person"
->>>>>>> de27ee7 (Implement user authentication service and session management)
             android:title="Profile" />
 
         <item
@@ -64,31 +44,19 @@
 
         <item
             android:id="@+id/helpSupportFragment"
-<<<<<<< HEAD
-            android:icon="@drawable/ic_settings"
-=======
             android:icon="@drawable/ic_help_support"
->>>>>>> de27ee7 (Implement user authentication service and session management)
             android:title="Help &amp; Support" />
 
         <item
             android:id="@+id/aboutFragment"
-<<<<<<< HEAD
-            android:icon="@drawable/ic_settings"
-=======
             android:icon="@drawable/ic_info"
->>>>>>> de27ee7 (Implement user authentication service and session management)
             android:title="About App" />
     </group>
 
     <item
         android:id="@+id/nav_logout"
         android:title="Logout"
-<<<<<<< HEAD
-        android:icon="@drawable/ic_settings" />
-=======
         android:icon="@drawable/ic_logout" />
->>>>>>> de27ee7 (Implement user authentication service and session management)
 
 </menu>
 

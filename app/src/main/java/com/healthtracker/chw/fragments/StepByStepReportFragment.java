@@ -21,11 +21,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.healthtracker.chw.R;
 import com.healthtracker.chw.services.GPSService;
-<<<<<<< HEAD
-import com.healthtracker.chw.services.SupabaseService;
-=======
 import com.healthtracker.chw.services.FHIRService;
->>>>>>> de27ee7 (Implement user authentication service and session management)
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,11 +71,7 @@ public class StepByStepReportFragment extends Fragment {
     private String createdLocationId;
     
     private GPSService gpsService;
-<<<<<<< HEAD
-    private SupabaseService supabaseService;
-=======
     private FHIRService fhirService;
->>>>>>> de27ee7 (Implement user authentication service and session management)
 
     @Nullable
     @Override
@@ -93,11 +85,7 @@ public class StepByStepReportFragment extends Fragment {
         showStep(1);
         
         gpsService = new GPSService(requireContext());
-<<<<<<< HEAD
-        supabaseService = new SupabaseService(requireContext());
-=======
         fhirService = new FHIRService(requireContext());
->>>>>>> de27ee7 (Implement user authentication service and session management)
         
         return view;
     }
@@ -319,13 +307,8 @@ public class StepByStepReportFragment extends Fragment {
         String encounterDate = dateTimeFormat.format(new Date());
         String dateOfBirth = dateFormat.format(new Date()); // Approximate
         
-<<<<<<< HEAD
-        // Save to Supabase
-        supabaseService.saveDiseaseReport(
-=======
         // Save to FHIR
         fhirService.saveDiseaseReport(
->>>>>>> de27ee7 (Implement user authentication service and session management)
             "Patient", // Patient name
             patientGender != null ? patientGender : "unknown",
             dateOfBirth,
@@ -342,13 +325,6 @@ public class StepByStepReportFragment extends Fragment {
             severity,
             notes, // Observation details
             notes, // Additional notes
-<<<<<<< HEAD
-            new SupabaseService.SaveCallback() {
-                @Override
-                public void onSuccess(String reportId, String locationId) {
-                    requireActivity().runOnUiThread(() -> {
-                        Toast.makeText(requireContext(), "Case report submitted successfully!", Toast.LENGTH_SHORT).show();
-=======
             new FHIRService.SaveCallback() {
                 @Override
                 public void onSuccess(String reportId, String locationId) {
@@ -360,7 +336,6 @@ public class StepByStepReportFragment extends Fragment {
                             refreshMapWithNewLocation(locationId, diseaseType, severity);
                         }
                         
->>>>>>> de27ee7 (Implement user authentication service and session management)
                         if (getActivity() != null) {
                             getActivity().onBackPressed();
                         }
@@ -378,11 +353,7 @@ public class StepByStepReportFragment extends Fragment {
     }
     
     private void saveToLocalDatabase(String diseaseType, String symptoms, String severity, String notes) {
-<<<<<<< HEAD
-        // This method is no longer needed - data is saved directly to Supabase
-=======
         // This method is no longer needed - data is saved directly to FHIR
->>>>>>> de27ee7 (Implement user authentication service and session management)
         // Keeping for compatibility but it does nothing
     }
 
@@ -405,8 +376,6 @@ public class StepByStepReportFragment extends Fragment {
         return null;
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Refresh map with new location after successful submission
      */

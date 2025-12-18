@@ -6,11 +6,7 @@
         android:title="Home" />
     <item
         android:id="@+id/mapFragment"
-<<<<<<< HEAD
-        android:icon="@drawable/ic_home"
-=======
         android:icon="@drawable/ic_outbreak_map"
->>>>>>> de27ee7 (Implement user authentication service and session management)
         android:title="Map" />
     <item
         android:id="@+id/analyticsFragment"
