@@ -1,29 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.healthtracker.chw.app-mergeDebugResources-64:/values-v23/values-v23.xml",
+            "outputFile": "com.healthmapper.chwapp-mergeDebugResources-42:/values-v23/values-v23.xml",
             "map": [
                 {
-                    "source": "/Users/apple/.gradle/caches/8.13/transforms/944777b638e950e01b538fd50a5773cd/transformed/cardview-1.0.0/res/values-v23/values-v23.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endLines": "4",
-                        "endColumns": "12",
-                        "endOffsets": "200"
-                    },
-                    "to": {
-                        "startLines": "52",
-                        "startColumns": "4",
-                        "startOffsets": "3361",
-                        "endLines": "54",
-                        "endColumns": "12",
-                        "endOffsets": "3506"
-                    }
-                },
-                {
-                    "source": "/Users/apple/.gradle/caches/8.13/transforms/321e1aff1ea797c7c61338956e5e2f9f/transformed/appcompat-1.7.1/res/values-v23/values-v23.xml",
+                    "source": "C:\\Users\\HP\\.gradle\\caches\\8.10.2\\transforms\\9a3a396f4c715a047e661a895f24c282\\transformed\\appcompat-1.6.1\\res\\values-v23\\values-v23.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,20,34,35,36,39,43,44,45,46",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -42,7 +23,36 @@
                     }
                 },
                 {
-                    "source": "/Users/apple/.gradle/caches/8.13/transforms/147295b60740f19469a58666d04f8a84/transformed/material-1.13.0/res/values-v23/values-v23.xml",
+                    "source": "C:\\Users\\HP\\.gradle\\caches\\8.10.2\\transforms\\91463ea306fd668f095ae7b070649095\\transformed\\cardview-1.0.0\\res\\values-v23\\values-v23.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "4",
+                        "endColumns": "12",
+                        "endOffsets": "200"
+                    },
+                    "to": {
+                        "startLines": "52",
+                        "startColumns": "4",
+                        "startOffsets": "3361",
+                        "endLines": "54",
+                        "endColumns": "12",
+                        "endOffsets": "3506"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\HP\\.gradle\\caches\\8.10.2\\transforms\\51a4154510a652c87dd90ff45c8dba46\\transformed\\work-runtime-2.8.1\\res\\values-v23\\values-v23.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,121",
+                        "endColumns": "65,62",
+                        "endOffsets": "116,179"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\HP\\.gradle\\caches\\8.10.2\\transforms\\f9c14ed0f49bb2d6623e4862f8fd5324\\transformed\\material-1.11.0\\res\\values-v23\\values-v23.xml",
                     "from": {
                         "startLines": "2,5,9,13,16,19,22,25,28,32",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",
@@ -58,16 +68,6 @@
                         "endLines": "57,61,65,68,71,74,77,80,84,88",
                         "endColumns": "10,10,10,10,10,10,10,10,10,10",
                         "endOffsets": "3722,3864,4025,4235,4442,4649,4852,5054,5319,5592"
-                    }
-                },
-                {
-                    "source": "/Users/apple/.gradle/caches/8.13/transforms/e5dd8b17879eea0c472a9b1dd9ffc6e5/transformed/work-runtime-2.9.0/res/values-v23/values-v23.xml",
-                    "from": {
-                        "startLines": "2,3",
-                        "startColumns": "4,4",
-                        "startOffsets": "55,121",
-                        "endColumns": "65,62",
-                        "endOffsets": "116,179"
                     }
                 }
             ]

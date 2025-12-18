@@ -1,3 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Health Tracker</string>
+    <string name="app_name">CHW Disease Reporter</string>
+
+    <!-- Main Screen -->
+    <string name="welcome_title">Welcome to CHW Disease Reporter</string>
+    <string name="welcome_subtitle">Community Health Worker Portal</string>
+    <string name="btn_profile">CHW Profile</string>
+    <string name="btn_history">Reports History</string>
+    <string name="btn_new_report">New Disease Report</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_title">CHW Profile</string>
+    <string name="profile_personal_info">Personal Information</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_phone">Phone Number</string>
+    <string name="hint_email">Email Address</string>
+    <string name="hint_national_id">National ID</string>
+    <string name="hint_chw_code">CHW Code</string>
+    <string name="btn_edit_profile">Edit Profile</string>
+    <string name="btn_save_profile">Save Changes</string>
+    <string name="btn_cancel_edit">Cancel</string>
+    <string name="btn_logout">Logout</string>
+
+    <!-- History Screen -->
+    <string name="history_title">Reports History</string>
+    <string name="filter_all">All</string>
+    <string name="filter_pending">Pending</string>
+    <string name="filter_submitted">Submitted</string>
+    <string name="filter_draft">Draft</string>
+    <string name="empty_history">No reports found</string>
+    <string name="empty_history_message">You haven\'t submitted any disease reports yet.</string>
+
+    <!-- Disease Types -->
+    <string name="disease_cholera">Cholera</string>
+    <string name="disease_malaria">Malaria</string>
+    <string name="disease_tuberculosis">Tuberculosis</string>
+    <string name="disease_measles">Measles</string>
+    <string name="disease_other">Other</string>
+
+    <!-- Messages -->
+    <string name="msg_profile_updated">Profile updated successfully</string>
+    <string name="msg_report_saved">Report saved successfully</string>
+    <string name="msg_logout_success">Logout successful</string>
+    <string name="msg_login_success">Logged in successfully</string>
+
+    <!-- Errors -->
+    <string name="error_name_required">Name is required</string>
+    <string name="error_phone_required">Phone number is required</string>
+    <string name="error_network">Network connection required</string>
+    <string name="error_location">Location permission required</string>
 </resources>
