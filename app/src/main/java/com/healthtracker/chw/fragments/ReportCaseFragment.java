@@ -22,7 +22,15 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.healthtracker.chw.R;
 import android.content.SharedPreferences;
 import com.healthtracker.chw.services.GPSService;
+<<<<<<< HEAD
+import com.healthtracker.chw.services.SupabaseService;
+
+import org.json.JSONObject;
+
+import org.json.JSONObject;
+=======
 import com.healthtracker.chw.services.FHIRService;
+>>>>>>> de27ee7 (Implement user authentication service and session management)
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +48,18 @@ public class ReportCaseFragment extends Fragment {
 
     // Disease types for dropdown (FR001)
     private static final String[] DISEASE_TYPES = {
+<<<<<<< HEAD
+        "Malaria",
+        "Cholera",
+        "Dengue",
+        "Ebola",
+        "COVID-19",
+        "Tuberculosis",
+        "Measles",
+        "Yellow Fever",
+        "Meningitis",
+        "Other"
+=======
             "Malaria",
             "Cholera",
             "Dengue",
@@ -50,6 +70,7 @@ public class ReportCaseFragment extends Fragment {
             "Yellow Fever",
             "Meningitis",
             "Other"
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     };
 
     // UI Components - Patient Information
@@ -57,28 +78,47 @@ public class ReportCaseFragment extends Fragment {
     private TextInputEditText etDateOfBirth;
     private TextInputEditText etPatientAge;
     private ChipGroup chipGender;
+<<<<<<< HEAD
+    
+    // UI Components - Encounter Information
+    private TextInputEditText etEncounterDate;
+    private ChipGroup chipEncounterType;
+    
+=======
 
     // UI Components - Encounter Information
     private TextInputEditText etEncounterDate;
     private ChipGroup chipEncounterType;
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     // UI Components - Disease Report
     private android.widget.AutoCompleteTextView etDiseaseType;
     private TextInputEditText etReportDate;
     private ChipGroup chipSymptoms;
     private android.widget.RadioGroup radioSeverity;
     private TextInputEditText etObservationDetails;
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     // UI Components - Location
     private View cardLocation;
     private android.widget.TextView tvLocationStatus;
     private android.widget.TextView tvLocationCoordinates;
     private android.widget.TextView tvLocationAddress;
+<<<<<<< HEAD
+    
+    // UI Components - Additional
+    private TextInputEditText etNotes;
+    private MaterialButton btnSubmitCase;
+=======
 
     // UI Components - Additional
     private TextInputEditText etNotes;
     private MaterialButton btnSubmitCase;
     private com.google.android.material.button.MaterialButtonToggleGroup toggleConnectionMode; // Added
+>>>>>>> de27ee7 (Implement user authentication service and session management)
 
     // Data
     private Double capturedLatitude;
@@ -88,19 +128,44 @@ public class ReportCaseFragment extends Fragment {
 
     @Nullable
     @Override
+<<<<<<< HEAD
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_report_case, container, false);
+        
+=======
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_report_case, container, false);
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         initializeViews(view);
         setupDiseaseDropdown();
         setupLocationCapture();
         setupSubmitButton();
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         return view;
     }
 
     private void initializeViews(View view) {
+<<<<<<< HEAD
+        // Patient Information
+        etPatientName = view.findViewById(R.id.et_patient_name);
+
+        etDateOfBirth = view.findViewById(R.id.et_date_of_birth);
+        etPatientAge = view.findViewById(R.id.et_patient_age);
+        chipGender = view.findViewById(R.id.chip_gender);
+
+        // Encounter Information
+        etEncounterDate = view.findViewById(R.id.et_encounter_date);
+        chipEncounterType = view.findViewById(R.id.chip_encounter_type);
+
+        // Disease Report
+        etDiseaseType = (android.widget.AutoCompleteTextView) view.findViewById(R.id.et_disease_type);
+=======
         // Toggle Mode
         toggleConnectionMode = view.findViewById(R.id.toggle_connection_mode); // Added
 
@@ -137,22 +202,41 @@ public class ReportCaseFragment extends Fragment {
                         android.widget.Toast.LENGTH_LONG).show();
             }
         }
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         etReportDate = view.findViewById(R.id.et_report_date);
         chipSymptoms = view.findViewById(R.id.chip_symptoms);
         radioSeverity = view.findViewById(R.id.radio_severity);
         etObservationDetails = view.findViewById(R.id.et_observation_details);
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         // Location
         cardLocation = view.findViewById(R.id.card_location);
         tvLocationStatus = view.findViewById(R.id.tv_location_status);
         tvLocationCoordinates = view.findViewById(R.id.tv_location_coordinates);
         tvLocationAddress = view.findViewById(R.id.tv_location_address);
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         // Additional
         etNotes = view.findViewById(R.id.et_notes);
         btnSubmitCase = view.findViewById(R.id.btn_submit_case);
 
         gpsService = new GPSService(requireContext());
+<<<<<<< HEAD
+        
+        // Set current date/time for encounter and report date
+        setupDateFields();
+
+        // Setup chip selection listeners for visual feedback
+        setupChipSelections();
+    }
+    
+=======
 
         // Set current date/time for encounter and report date
         setupDateFields();
@@ -161,6 +245,7 @@ public class ReportCaseFragment extends Fragment {
         setupChipSelections();
     }
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     /**
      * Setup chip selection listeners to show visual feedback
      */
@@ -169,18 +254,47 @@ public class ReportCaseFragment extends Fragment {
         chipGender.setOnCheckedStateChangeListener((group, checkedIds) -> {
             // Visual feedback is automatic with Choice style
         });
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         // Encounter type chips - already handled by ChipGroup with singleSelection
         chipEncounterType.setOnCheckedStateChangeListener((group, checkedIds) -> {
             // Visual feedback is automatic with Choice style
         });
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         // Symptoms chips - multiple selection with Filter style
         chipSymptoms.setOnCheckedStateChangeListener((group, checkedIds) -> {
             // Visual feedback is automatic with Filter style
             // Selected chips will show checked state
         });
     }
+<<<<<<< HEAD
+    
+    private void setupDateFields() {
+        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd",
+                java.util.Locale.getDefault());
+        java.text.SimpleDateFormat dateTimeFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm",
+                java.util.Locale.getDefault());
+
+        // Set current date for report date
+        etReportDate.setText(dateFormat.format(new Date()));
+        etReportDate.setOnClickListener(v -> showDatePicker(etReportDate, dateFormat));
+
+        // Set current date/time for encounter date
+        etEncounterDate.setText(dateTimeFormat.format(new Date()));
+        etEncounterDate.setOnClickListener(v -> showDateTimePicker(etEncounterDate, dateTimeFormat));
+
+        // Setup date of birth picker
+        etDateOfBirth.setOnClickListener(v -> showDatePicker(etDateOfBirth, dateFormat));
+    }
+    
+=======
 
     private void setupDateFields() {
         java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd",
@@ -200,6 +314,7 @@ public class ReportCaseFragment extends Fragment {
         etDateOfBirth.setOnClickListener(v -> showDatePicker(etDateOfBirth, dateFormat));
     }
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     private void showDatePicker(TextInputEditText editText, java.text.SimpleDateFormat format) {
         java.util.Calendar calendar = java.util.Calendar.getInstance();
         try {
@@ -209,6 +324,16 @@ public class ReportCaseFragment extends Fragment {
         } catch (Exception e) {
             // Use current date
         }
+<<<<<<< HEAD
+        
+        new android.app.DatePickerDialog(requireContext(), (view, year, month, dayOfMonth) -> {
+            calendar.set(year, month, dayOfMonth);
+            editText.setText(format.format(calendar.getTime()));
+        }, calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH),
+                calendar.get(java.util.Calendar.DAY_OF_MONTH)).show();
+    }
+    
+=======
 
         new android.app.DatePickerDialog(requireContext(), (view, year, month, dayOfMonth) -> {
             calendar.set(year, month, dayOfMonth);
@@ -217,6 +342,7 @@ public class ReportCaseFragment extends Fragment {
                 calendar.get(java.util.Calendar.DAY_OF_MONTH)).show();
     }
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     private void showDateTimePicker(TextInputEditText editText, java.text.SimpleDateFormat format) {
         java.util.Calendar calendar = java.util.Calendar.getInstance();
         try {
@@ -226,7 +352,11 @@ public class ReportCaseFragment extends Fragment {
         } catch (Exception e) {
             // Use current date/time
         }
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         new android.app.DatePickerDialog(requireContext(), (dateView, year, month, dayOfMonth) -> {
             calendar.set(year, month, dayOfMonth);
             new android.app.TimePickerDialog(requireContext(), (timeView, hourOfDay, minute) -> {
@@ -234,8 +364,13 @@ public class ReportCaseFragment extends Fragment {
                 calendar.set(java.util.Calendar.MINUTE, minute);
                 editText.setText(format.format(calendar.getTime()));
             }, calendar.get(java.util.Calendar.HOUR_OF_DAY), calendar.get(java.util.Calendar.MINUTE), true).show();
+<<<<<<< HEAD
+        }, calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH), 
+           calendar.get(java.util.Calendar.DAY_OF_MONTH)).show();
+=======
         }, calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH),
                 calendar.get(java.util.Calendar.DAY_OF_MONTH)).show();
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     }
 
     /**
@@ -245,10 +380,18 @@ public class ReportCaseFragment extends Fragment {
     private void setupDiseaseDropdown() {
         // Create adapter for dropdown
         android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(
+<<<<<<< HEAD
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            DISEASE_TYPES
+        );
+        
+=======
                 requireContext(),
                 android.R.layout.simple_dropdown_item_1line,
                 DISEASE_TYPES);
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         etDiseaseType.setAdapter(adapter);
         etDiseaseType.setThreshold(1); // Show suggestions after 1 character
         etDiseaseType.setOnClickListener(v -> {
@@ -275,6 +418,13 @@ public class ReportCaseFragment extends Fragment {
      */
     private void captureGPSLocation() {
         // Check permissions
+<<<<<<< HEAD
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+=======
         if (ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(requireContext(),
@@ -282,6 +432,7 @@ public class ReportCaseFragment extends Fragment {
             requestPermissions(new String[] {
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
+>>>>>>> de27ee7 (Implement user authentication service and session management)
             }, LOCATION_PERMISSION_REQUEST_CODE);
             return;
         }
@@ -299,13 +450,22 @@ public class ReportCaseFragment extends Fragment {
                 if (isAdded() && getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
                         if (isAdded() && tvLocationStatus != null && tvLocationCoordinates != null) {
+<<<<<<< HEAD
+                    tvLocationStatus.setText("Location captured");
+                    tvLocationCoordinates.setText(String.format("%.6f, %.6f", latitude, longitude));
+=======
                             tvLocationStatus.setText("Location captured");
                             tvLocationCoordinates.setText(String.format("%.6f, %.6f", latitude, longitude));
+>>>>>>> de27ee7 (Implement user authentication service and session management)
                             if (tvLocationAddress != null && address != null) {
                                 tvLocationAddress.setText(address);
                             }
                         }
+<<<<<<< HEAD
+                });
+=======
                     });
+>>>>>>> de27ee7 (Implement user authentication service and session management)
                 }
             }
 
@@ -315,10 +475,17 @@ public class ReportCaseFragment extends Fragment {
                     getActivity().runOnUiThread(() -> {
                         if (isAdded() && getContext() != null) {
                             if (tvLocationStatus != null) {
+<<<<<<< HEAD
+                    tvLocationStatus.setText("Location capture failed");
+                            }
+                            if (tvLocationCoordinates != null) {
+                    tvLocationCoordinates.setText(error);
+=======
                                 tvLocationStatus.setText("Location capture failed");
                             }
                             if (tvLocationCoordinates != null) {
                                 tvLocationCoordinates.setText(error);
+>>>>>>> de27ee7 (Implement user authentication service and session management)
                             }
                             Toast.makeText(getContext(), "Location error: " + error, Toast.LENGTH_SHORT).show();
                         }
@@ -329,8 +496,12 @@ public class ReportCaseFragment extends Fragment {
     }
 
     @Override
+<<<<<<< HEAD
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+=======
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
             @NonNull int[] grantResults) {
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 captureGPSLocation();
@@ -362,7 +533,11 @@ public class ReportCaseFragment extends Fragment {
         if (capturedLatitude == null || capturedLongitude == null) {
             Toast.makeText(requireContext(), "Capturing location...", Toast.LENGTH_SHORT).show();
             captureGPSLocation();
+<<<<<<< HEAD
+            
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
             // Wait a bit and try again
             cardLocation.postDelayed(this::submitCaseReport, 2000);
             return;
@@ -382,7 +557,11 @@ public class ReportCaseFragment extends Fragment {
                 // Age is optional
             }
             String gender = getSelectedGender();
+<<<<<<< HEAD
+            
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
             // Get Encounter Information
             String encounterDate = etEncounterDate.getText().toString().trim();
             String encounterType = getSelectedEncounterType();
@@ -393,7 +572,11 @@ public class ReportCaseFragment extends Fragment {
             String symptoms = getSelectedSymptoms();
             String severity = getSelectedSeverity();
             String observationDetails = etObservationDetails.getText().toString().trim();
+<<<<<<< HEAD
+            
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
             // Get Additional Notes
             String notes = etNotes.getText().toString().trim();
 
@@ -401,7 +584,11 @@ public class ReportCaseFragment extends Fragment {
             String[] chwInfo = getCHWInfo();
             String chwName = chwInfo[0];
             String chwId = chwInfo[1];
+<<<<<<< HEAD
+            
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
             // Get symptoms as list
             List<String> symptomsList = getSelectedSymptomsList();
             if (symptomsList.isEmpty()) {
@@ -414,11 +601,24 @@ public class ReportCaseFragment extends Fragment {
                 Toast.makeText(requireContext(), "Patient name is required", Toast.LENGTH_SHORT).show();
                 return;
             }
+<<<<<<< HEAD
+            
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
             if (diseaseType == null || diseaseType.isEmpty()) {
                 Toast.makeText(requireContext(), "Disease type is required", Toast.LENGTH_SHORT).show();
                 return;
             }
+<<<<<<< HEAD
+            
+            if (capturedLatitude == null || capturedLongitude == null) {
+                Toast.makeText(requireContext(), "GPS location is required. Please capture location first.",
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+            
+=======
 
             if (capturedLatitude == null || capturedLongitude == null) {
                 Toast.makeText(requireContext(), "GPS location is required. Please capture location first.",
@@ -426,11 +626,21 @@ public class ReportCaseFragment extends Fragment {
                 return;
             }
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
             // Disable submit button to prevent multiple submissions
             if (btnSubmitCase != null) {
                 btnSubmitCase.setEnabled(false);
                 btnSubmitCase.setText("Submitting...");
             }
+<<<<<<< HEAD
+            
+            // Show loading message
+            if (isAdded() && getContext() != null) {
+                Toast.makeText(getContext(), "Saving report to FHIR server...", Toast.LENGTH_SHORT).show();
+            }
+            
+            saveToSupabase(patientName, gender, dateOfBirth, patientAge, chwName, chwId,
+=======
 
             // Show loading message
             if (isAdded() && getContext() != null) {
@@ -438,6 +648,7 @@ public class ReportCaseFragment extends Fragment {
             }
 
             saveToFHIR(patientName, gender, dateOfBirth, patientAge, chwName, chwId,
+>>>>>>> de27ee7 (Implement user authentication service and session management)
                     capturedLatitude, capturedLongitude, capturedAddress,
                     encounterDate, encounterType, diseaseType, symptomsList, severity,
                     observationDetails, notes);
@@ -499,12 +710,18 @@ public class ReportCaseFragment extends Fragment {
      */
     private String getSelectedGender() {
         int selectedId = chipGender.getCheckedChipId();
+<<<<<<< HEAD
+        if (selectedId == R.id.chip_male) return "male";
+        if (selectedId == R.id.chip_female) return "female";
+        if (selectedId == R.id.chip_other) return "other";
+=======
         if (selectedId == R.id.chip_male)
             return "male";
         if (selectedId == R.id.chip_female)
             return "female";
         if (selectedId == R.id.chip_other)
             return "other";
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         return null;
     }
 
@@ -513,6 +730,70 @@ public class ReportCaseFragment extends Fragment {
      */
     private String getSelectedEncounterType() {
         int selectedId = chipEncounterType.getCheckedChipId();
+<<<<<<< HEAD
+        if (selectedId == R.id.chip_encounter_home) return "home";
+        if (selectedId == R.id.chip_encounter_clinic) return "clinic";
+        if (selectedId == R.id.chip_encounter_emergency) return "emergency";
+        return "home"; // Default
+    }
+    
+    /**
+     * Build Encounter FHIR resource
+     */
+    private JSONObject buildEncounterResource(String encounterId, String patientId, String locationId, 
+                                               String encounterDate, String encounterType) {
+        try {
+            JSONObject encounter = new JSONObject();
+            encounter.put("resourceType", "Encounter");
+            encounter.put("id", encounterId);
+            encounter.put("status", "finished");
+            encounter.put("class", new JSONObject().put("code", "AMB"));
+            
+            // Subject (Patient)
+            encounter.put("subject", new JSONObject().put("reference", "Patient/" + patientId));
+            
+            // Location
+            encounter.put("location", new org.json.JSONArray().put(
+                new JSONObject()
+                    .put("location", new JSONObject().put("reference", "Location/" + locationId))
+            ));
+            
+            // Period
+            if (!TextUtils.isEmpty(encounterDate)) {
+                try {
+                    java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault());
+                    Date date = format.parse(encounterDate);
+                    java.text.SimpleDateFormat isoFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", java.util.Locale.US);
+                    isoFormat.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+                    encounter.put("period", new JSONObject()
+                        .put("start", isoFormat.format(date))
+                        .put("end", isoFormat.format(date))
+                    );
+                } catch (Exception e) {
+                    // Use current date
+                    java.text.SimpleDateFormat isoFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", java.util.Locale.US);
+                    isoFormat.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+                    String now = isoFormat.format(new Date());
+                    encounter.put("period", new JSONObject().put("start", now).put("end", now));
+                }
+            }
+            
+            // Type
+            encounter.put("type", new org.json.JSONArray().put(
+                new JSONObject().put("coding", new org.json.JSONArray().put(
+                    new JSONObject()
+                        .put("system", "http://terminology.hl7.org/CodeSystem/v3-ActCode")
+                        .put("code", encounterType)
+                        .put("display", encounterType.substring(0, 1).toUpperCase() + encounterType.substring(1) + " Visit")
+                ))
+            ));
+            
+            return encounter;
+        } catch (Exception e) {
+            return new JSONObject();
+        }
+    }
+=======
         if (selectedId == R.id.chip_encounter_home)
             return "home";
         if (selectedId == R.id.chip_encounter_clinic)
@@ -521,6 +802,7 @@ public class ReportCaseFragment extends Fragment {
             return "emergency";
         return "home"; // Default
     }
+>>>>>>> de27ee7 (Implement user authentication service and session management)
 
     /**
      * Get selected symptoms as List
@@ -531,6 +813,15 @@ public class ReportCaseFragment extends Fragment {
             View child = chipSymptoms.getChildAt(i);
             if (child instanceof Chip) {
                 Chip chip = (Chip) child;
+<<<<<<< HEAD
+            if (chip.isChecked()) {
+                symptoms.add(chip.getText().toString());
+            }
+        }
+        return symptoms;
+    }
+    
+=======
                 if (chip.isChecked()) {
                     symptoms.add(chip.getText().toString());
                 }
@@ -539,6 +830,7 @@ public class ReportCaseFragment extends Fragment {
         return symptoms;
     }
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     /**
      * Get selected symptoms as String
      */
@@ -546,16 +838,27 @@ public class ReportCaseFragment extends Fragment {
         List<String> symptoms = getSelectedSymptomsList();
         return symptoms.isEmpty() ? "" : String.join(", ", symptoms);
     }
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     /**
      * Get CHW information from SharedPreferences or use defaults
      */
     private String[] getCHWInfo() {
+<<<<<<< HEAD
+        SharedPreferences prefs = requireContext().getSharedPreferences("app_prefs", android.content.Context.MODE_PRIVATE);
+        String chwName = prefs.getString("chw_name", "CHW User");
+        String chwId = prefs.getString("chw_id", "chw_" + System.currentTimeMillis());
+        
+=======
         SharedPreferences prefs = requireContext().getSharedPreferences("app_prefs",
                 android.content.Context.MODE_PRIVATE);
         String chwName = prefs.getString("chw_name", "CHW User");
         String chwId = prefs.getString("chw_id", "chw_" + System.currentTimeMillis());
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         // If not set, try to get from auth token or user info
         if ("CHW User".equals(chwName)) {
             String userId = prefs.getString("user_id", null);
@@ -563,8 +866,13 @@ public class ReportCaseFragment extends Fragment {
                 chwId = userId;
             }
         }
+<<<<<<< HEAD
+        
+        return new String[]{chwName, chwId};
+=======
 
         return new String[] { chwName, chwId };
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     }
 
     /**
@@ -572,16 +880,35 @@ public class ReportCaseFragment extends Fragment {
      */
     private String getSelectedSeverity() {
         int selectedId = radioSeverity.getCheckedRadioButtonId();
+<<<<<<< HEAD
+        if (selectedId == R.id.radio_mild) return "mild";
+        if (selectedId == R.id.radio_moderate) return "moderate";
+        if (selectedId == R.id.radio_severe) return "severe";
+=======
         if (selectedId == R.id.radio_mild)
             return "mild";
         if (selectedId == R.id.radio_moderate)
             return "moderate";
         if (selectedId == R.id.radio_severe)
             return "severe";
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         return null;
     }
 
     /**
+<<<<<<< HEAD
+     * Save data to Supabase using model classes
+     */
+    private void saveToFHIR(String patientName, String gender, String dateOfBirth, Integer patientAge,
+            String chwName, String chwId,
+            Double latitude, Double longitude, String address,
+            String encounterDate, String encounterType,
+            String diseaseType, List<String> symptoms, String severity,
+            String observationDetails, String notes) {
+        // Check if fragment is still attached
+        if (!isAdded() || getContext() == null) {
+            android.util.Log.w("ReportCaseFragment", "Fragment not attached, cannot save to Supabase");
+=======
      * Save data to FHIR server using FHIR-compliant resources
      */
     private void saveToFHIR(String patientName, String gender, String dateOfBirth, Integer patientAge,
@@ -593,13 +920,18 @@ public class ReportCaseFragment extends Fragment {
         // Check if fragment is still attached
         if (!isAdded() || getContext() == null) {
             android.util.Log.w("ReportCaseFragment", "Fragment not attached, cannot save to FHIR");
+>>>>>>> de27ee7 (Implement user authentication service and session management)
             if (btnSubmitCase != null) {
                 btnSubmitCase.setEnabled(true);
                 btnSubmitCase.setText("Submit Case Report");
             }
             return;
         }
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         // Capture context before entering background thread
         final android.content.Context context = getContext();
         if (context == null) {
@@ -610,11 +942,59 @@ public class ReportCaseFragment extends Fragment {
             }
             return;
         }
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         // Ensure we're not on main thread for service initialization
         // Use ExecutorService for better thread management
         java.util.concurrent.ExecutorService executor = java.util.concurrent.Executors.newSingleThreadExecutor();
         android.os.Handler mainHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+<<<<<<< HEAD
+        
+        executor.execute(() -> {
+            try {
+                // Initialize FHIR service on background thread
+                FHIRService fhirService = new FHIRService(context);
+
+                // Check Toggle State
+                boolean isOfflineMode = false;
+                if (toggleConnectionMode != null) {
+                    isOfflineMode = (toggleConnectionMode.getCheckedButtonId() == R.id.btn_mode_offline);
+                }
+
+                FHIRService.SaveCallback callback = new FHIRService.SaveCallback() {
+                    @Override
+                    public void onSuccess(String reportId, String locationId) {
+                        mainHandler.post(() -> {
+                            if (!isAdded() || getActivity() == null || getContext() == null) {
+                                return;
+                            }
+                            try {
+                                boolean isPending = reportId.startsWith("PENDING-SYNC");
+                                String successMsg;
+                                if (isPending) {
+                                    String reason = "Unknown";
+                                    if (reportId.contains(":")) {
+                                        reason = reportId.substring(reportId.indexOf(":") + 1);
+                                    }
+
+                                    // Custom message based on intention
+                                    if (reason.contains("Manual")) {
+                                        successMsg = "✅ Report Saved (Offline Mode)\n\nQueued locally as requested.";
+                                    } else {
+                                        // It was intended to be Online, but failed
+                                        successMsg = "✅ Report Saved (Offline Mode)\n\nConnection failed (" + reason
+                                                + "), but report is safely queued.";
+                                    }
+                                } else {
+                                    successMsg = "✅ Report Saved & Submitted!\n\nID: " + reportId;
+                                }
+                                Toast.makeText(getContext(), successMsg, Toast.LENGTH_LONG).show();
+                                
+                                // Re-enable submit button
+=======
 
         executor.execute(() -> {
             try {
@@ -655,10 +1035,79 @@ public class ReportCaseFragment extends Fragment {
                                     successMsg = "✅ Report Saved & Submitted!\n\nID: " + reportId;
                                 }
                                 Toast.makeText(getContext(), successMsg, Toast.LENGTH_LONG).show();
+>>>>>>> de27ee7 (Implement user authentication service and session management)
                                 if (btnSubmitCase != null) {
                                     btnSubmitCase.setEnabled(true);
                                     btnSubmitCase.setText("Submit Case Report");
                                 }
+<<<<<<< HEAD
+                                
+                                // Clear form
+                                clearForm();
+
+                                // Prepare Map Data
+                                refreshMapWithNewLocation(locationId, diseaseType, severity);
+
+                                // Navigate to MapFragment
+                                androidx.navigation.fragment.NavHostFragment.findNavController(ReportCaseFragment.this)
+                                        .navigate(com.healthtracker.chw.R.id.mapFragment);
+
+                            } catch (Exception e) {
+                                android.util.Log.e("ReportCaseFragment", "Error UI", e);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        mainHandler.post(() -> {
+                            if (!isAdded() || getActivity() == null || getContext() == null) {
+                                return;
+                            }
+                            android.util.Log.e("ReportCaseFragment", "❌ Error: " + error);
+                            if (btnSubmitCase != null) {
+                                btnSubmitCase.setEnabled(true);
+                                btnSubmitCase.setText("Submit Case Report");
+                            }
+
+                            // Show Alert
+                            new android.app.AlertDialog.Builder(getContext())
+                                    .setTitle("❌ Submission Failed")
+                                    .setMessage(formatErrorMessage(error))
+                                    .setPositiveButton("OK", null)
+                                    .show();
+                        });
+                    }
+                };
+
+                // Branch Logic
+                // Branch Logic
+                if (isOfflineMode) {
+                    fhirService.submitReportOffline(
+                            patientName, gender, dateOfBirth, patientAge,
+                            chwName, chwId,
+                            latitude, longitude, address,
+                            encounterDate, encounterType,
+                            diseaseType, symptoms, severity,
+                            observationDetails, notes,
+                            callback);
+                } else {
+                    // Start Online Mode - FORCE network attempt
+                    fhirService.saveDiseaseReport(
+                            patientName, gender, dateOfBirth, patientAge,
+                            chwName, chwId,
+                            latitude, longitude, address,
+                            encounterDate, encounterType,
+                            diseaseType, symptoms, severity,
+                            observationDetails, notes,
+                            callback, true); // Force network attempt
+                }
+            } catch (Exception e) {
+                mainHandler.post(() -> {
+                    if (btnSubmitCase != null) {
+                        btnSubmitCase.setEnabled(true);
+                    }
+=======
                                 clearForm();
 
                                 // Prepare Map Data
@@ -724,11 +1173,16 @@ public class ReportCaseFragment extends Fragment {
                         btnSubmitCase.setEnabled(true);
                     }
                     Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+>>>>>>> de27ee7 (Implement user authentication service and session management)
                 });
             }
         });
     }
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     /**
      * Format error message for user-friendly display
      */
@@ -736,6 +1190,56 @@ public class ReportCaseFragment extends Fragment {
         if (error == null || error.isEmpty()) {
             return "An unknown error occurred while saving the report. Please try again.";
         }
+<<<<<<< HEAD
+        
+        String lowerError = error.toLowerCase();
+
+        // Network errors
+        if (lowerError.contains("network") || lowerError.contains("connection") ||
+                lowerError.contains("timeout") || lowerError.contains("unreachable")) {
+            return "❌ Network Error\n\n" +
+                    "Unable to connect to the server. Please check your internet connection and try again.\n\n" +
+                    "Details: " + error;
+        }
+
+        // Authentication errors
+        if (lowerError.contains("unauthorized") || lowerError.contains("401") ||
+                lowerError.contains("forbidden") || lowerError.contains("403")) {
+            return "❌ Authentication Error\n\n" +
+                    "Your session has expired or you don't have permission to submit reports.\n\n" +
+                    "Please log in again or contact your administrator.\n\n" +
+                    "Details: " + error;
+        }
+
+        // Server errors
+        if (lowerError.contains("500") || lowerError.contains("502") ||
+                lowerError.contains("503") || lowerError.contains("server error")) {
+            return "❌ Server Error\n\n" +
+                    "The server is currently experiencing issues. Please try again in a few moments.\n\n" +
+                    "Details: " + error;
+        }
+
+        // Validation errors
+        if (lowerError.contains("validation") || lowerError.contains("invalid") ||
+                lowerError.contains("required") || lowerError.contains("constraint")) {
+            return "❌ Validation Error\n\n" +
+                    "Some of the data you entered is invalid. Please check your form and try again.\n\n" +
+                    "Details: " + error;
+        }
+
+        // Database errors
+        if (lowerError.contains("database") || lowerError.contains("sql") ||
+                lowerError.contains("duplicate") || lowerError.contains("constraint")) {
+            return "❌ Database Error\n\n" +
+                    "There was an issue saving your data. The report may have already been submitted.\n\n" +
+                    "Details: " + error;
+        }
+
+        // Generic error
+        return "❌ Error Saving Report\n\n" +
+               "An error occurred while saving your report:\n\n" + error +
+               "\n\nPlease check your data and try again. If the problem persists, contact support.";
+=======
 
         String lowerError = error.toLowerCase();
 
@@ -784,6 +1288,7 @@ public class ReportCaseFragment extends Fragment {
         return "❌ Error Saving Report\n\n" +
                 "An error occurred while saving your report:\n\n" + error +
                 "\n\nPlease check your data and try again. If the problem persists, contact support.";
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     }
 
     /**
@@ -795,6 +1300,22 @@ public class ReportCaseFragment extends Fragment {
         etDateOfBirth.setText("");
         etPatientAge.setText("");
         chipGender.clearCheck();
+<<<<<<< HEAD
+        
+        // Encounter Information
+        java.text.SimpleDateFormat dateTimeFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm",
+                java.util.Locale.getDefault());
+        etEncounterDate.setText(dateTimeFormat.format(new Date()));
+        chipEncounterType.clearCheck();
+
+        // Disease Report
+        etDiseaseType.setText("");
+        etDiseaseType.dismissDropDown();
+        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd",
+                java.util.Locale.getDefault());
+        etReportDate.setText(dateFormat.format(new Date()));
+        
+=======
 
         // Encounter Information
         java.text.SimpleDateFormat dateTimeFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm",
@@ -809,11 +1330,20 @@ public class ReportCaseFragment extends Fragment {
                 java.util.Locale.getDefault());
         etReportDate.setText(dateFormat.format(new Date()));
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         // Clear symptoms chips
         for (int i = 0; i < chipSymptoms.getChildCount(); i++) {
             View child = chipSymptoms.getChildAt(i);
             if (child instanceof Chip) {
                 Chip chip = (Chip) child;
+<<<<<<< HEAD
+            chip.setChecked(false);
+        }
+
+        radioSeverity.clearCheck();
+        etObservationDetails.setText("");
+        
+=======
                 chip.setChecked(false);
             }
         }
@@ -821,6 +1351,7 @@ public class ReportCaseFragment extends Fragment {
         radioSeverity.clearCheck();
         etObservationDetails.setText("");
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         // Location
         capturedLatitude = null;
         capturedLongitude = null;
@@ -830,11 +1361,17 @@ public class ReportCaseFragment extends Fragment {
         if (tvLocationAddress != null) {
             tvLocationAddress.setText("");
         }
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         // Additional Notes
         etNotes.setText("");
     }
 
+<<<<<<< HEAD
+=======
     /**
      * Refresh map with new location after successful submission
      */
@@ -909,6 +1446,7 @@ public class ReportCaseFragment extends Fragment {
         }
     }
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
     @Override
     public void onDestroyView() {
         super.onDestroyView();

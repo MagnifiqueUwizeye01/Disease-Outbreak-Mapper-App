@@ -116,6 +116,8 @@
             app:popUpToInclusive="true" />
     </fragment>
 
+<<<<<<< HEAD
+=======
     <!-- Update Account Info Fragment -->
     <fragment
         android:id="@+id/updateAccountInfoFragment"
@@ -130,4 +132,5 @@
         android:label="Change Password"
         tools:layout="@layout/fragment_change_password" />
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
 </navigation>

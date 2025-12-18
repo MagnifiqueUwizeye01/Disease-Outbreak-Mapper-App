@@ -1,11 +1,17 @@
 package com.healthtracker.chw.fragments;
 
+<<<<<<< HEAD
+=======
 import android.content.SharedPreferences;
+>>>>>>> de27ee7 (Implement user authentication service and session management)
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+<<<<<<< HEAD
+=======
 import android.widget.TextView;
+>>>>>>> de27ee7 (Implement user authentication service and session management)
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +20,20 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.healthtracker.chw.R;
+<<<<<<< HEAD
+
+public class DashboardFragment extends Fragment {
+
+    private TextView tvPendingReports;
+    private TextView tvHighRiskCount;
+    private TextView tvMediumRiskCount;
+    private TextView tvLowRiskCount;
+    private FHIRService fhirService;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+=======
 import com.healthtracker.chw.services.FHIRService;
 import com.healthtracker.chw.utils.SessionManager;
 
@@ -32,6 +52,7 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
@@ -39,6 +60,8 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+<<<<<<< HEAD
+=======
         // Initialize services
         fhirService = new FHIRService(requireContext());
 
@@ -54,6 +77,7 @@ public class DashboardFragment extends Fragment {
         // Load dashboard stats
         loadDashboardStats();
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         final NavController navController = Navigation.findNavController(view);
 
         // Quick action chips
@@ -61,6 +85,15 @@ public class DashboardFragment extends Fragment {
         View chipSyncPending = view.findViewById(R.id.chip_sync_pending);
 
         if (chipHighRisk != null) {
+<<<<<<< HEAD
+            chipHighRisk.setOnClickListener(v ->
+                    navController.navigate(R.id.mapFragment));
+        }
+
+        if (chipSyncPending != null) {
+            chipSyncPending.setOnClickListener(v ->
+                    navController.navigate(R.id.offlinePendingCasesFragment));
+=======
             chipHighRisk.setOnClickListener(v -> {
                 Bundle args = new Bundle();
                 args.putString("risk_filter", "HIGH");
@@ -88,6 +121,7 @@ public class DashboardFragment extends Fragment {
                 args.putString("risk_filter", "LOW");
                 navController.navigate(R.id.mapFragment, args);
             });
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         }
 
         // Main cards
@@ -97,6 +131,58 @@ public class DashboardFragment extends Fragment {
         View cardHistory = view.findViewById(R.id.card_history);
 
         if (cardReportCase != null) {
+<<<<<<< HEAD
+            cardReportCase.setOnClickListener(v ->
+                    navController.navigate(R.id.reportCaseFragment));
+        }
+
+        if (cardOutbreakMap != null) {
+            cardOutbreakMap.setOnClickListener(v -> navController.navigate(R.id.mapFragment));
+        }
+
+        if (cardTrends != null) {
+            cardTrends.setOnClickListener(v -> navController.navigate(R.id.analyticsFragment));
+        }
+
+        if (cardHistory != null) {
+            cardHistory.setOnClickListener(v -> navController.navigate(R.id.caseHistoryFragment));
+        }
+
+        // Stats cards
+        View cardPendingReports = view.findViewById(R.id.card_pending_reports);
+        View cardHighRisk = view.findViewById(R.id.card_high_risk);
+        View cardMediumRisk = view.findViewById(R.id.card_medium_risk);
+        View cardLowRisk = view.findViewById(R.id.card_low_risk);
+
+        if (cardPendingReports != null) {
+            cardPendingReports.setOnClickListener(v -> navController.navigate(R.id.offlinePendingCasesFragment));
+        }
+
+        if (cardHighRisk != null) {
+            cardHighRisk.setOnClickListener(v -> {
+                Bundle args = new Bundle();
+                args.putString("risk_filter", "HIGH");
+                navController.navigate(R.id.mapFragment, args);
+            });
+        }
+
+        if (cardMediumRisk != null) {
+            cardMediumRisk.setOnClickListener(v -> {
+                Bundle args = new Bundle();
+                args.putString("risk_filter", "MEDIUM");
+                navController.navigate(R.id.mapFragment, args);
+            });
+        }
+
+        if (cardLowRisk != null) {
+            cardLowRisk.setOnClickListener(v -> {
+                Bundle args = new Bundle();
+                args.putString("risk_filter", "LOW");
+                navController.navigate(R.id.mapFragment, args);
+            });
+        }
+    }
+=======
             cardReportCase.setOnClickListener(v -> navController.navigate(R.id.reportCaseFragment));
         }
 
@@ -331,4 +417,5 @@ public class DashboardFragment extends Fragment {
         // Refresh stats when fragment becomes visible
         loadDashboardStats();
     }
+>>>>>>> de27ee7 (Implement user authentication service and session management)
 }

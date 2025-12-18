@@ -43,6 +43,11 @@
     <string name="role_health_official">Health Official</string>
     <string name="select_role">Select Role</string>
 
+<<<<<<< HEAD
+    <!-- Drawer accessibility strings -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+=======
     <!-- Firebase Google Sign-In Web Client ID -->
     <string name="default_web_client_id">834950027430-7qch4k9m19m9sj98imeb6g87ogbv23i3.apps.googleusercontent.com</string>
 
@@ -70,4 +75,5 @@
     <string name="synced_successfully">Synced Successfully</string>
     <string name="sync_failed">Sync Failed</string>
     <string name="view_outbreak_map">View Outbreak Map</string>
+>>>>>>> de27ee7 (Implement user authentication service and session management)
 </resources>

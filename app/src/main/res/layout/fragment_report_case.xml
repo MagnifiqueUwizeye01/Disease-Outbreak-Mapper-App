@@ -30,6 +30,8 @@
             android:textSize="14sp"
             android:layout_marginBottom="24dp" />
 
+<<<<<<< HEAD
+=======
         <!-- Connection Mode Toggle -->
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggle_connection_mode"
@@ -59,6 +61,7 @@
                 app:icon="@drawable/ic_cloud_off" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
+>>>>>>> de27ee7 (Implement user authentication service and session management)
         <!-- Patient Information Card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -656,8 +659,13 @@
                             app:tint="@color/medical_teal_primary" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+<<<<<<< HEAD
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+=======
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+>>>>>>> de27ee7 (Implement user authentication service and session management)
 
         <!-- Additional Notes Card -->
         <com.google.android.material.card.MaterialCardView
