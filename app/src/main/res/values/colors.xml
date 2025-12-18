@@ -26,4 +26,10 @@
     <color name="error">#F44336</color>
     <color name="success">#4CAF50</color>
     <color name="warning">#FF9800</color>
+
+    <!-- Medical Theme Colors -->
+    <color name="medical_green_primary">#2E7D32</color>
+    <color name="medical_green_light">#C8E6C9</color>
+    <color name="medical_teal_primary">#00796B</color>
+    <color name="medical_teal_light">#B2DFDB</color>
 </resources>
