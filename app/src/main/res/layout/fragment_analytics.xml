@@ -110,7 +110,7 @@
                         android:orientation="vertical"
                         android:gravity="bottom|center_horizontal">
 
-                         <TextView
+                        <TextView
                             android:id="@+id/text_tue_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
                         android:orientation="vertical"
                         android:gravity="bottom|center_horizontal">
 
-                         <TextView
+                        <TextView
                             android:id="@+id/text_wed_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -170,7 +170,7 @@
                         android:orientation="vertical"
                         android:gravity="bottom|center_horizontal">
 
-                         <TextView
+                        <TextView
                             android:id="@+id/text_thu_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -200,7 +200,7 @@
                         android:orientation="vertical"
                         android:gravity="bottom|center_horizontal">
 
-                         <TextView
+                        <TextView
                             android:id="@+id/text_fri_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -317,9 +317,9 @@
                         android:orientation="vertical"
                         android:gravity="center_vertical"
                         android:paddingStart="16dp">
-                        
+
                         <!-- Items will be added dynamically or updated -->
-                         <LinearLayout
+                        <LinearLayout
                             android:id="@+id/legend_item_1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -339,7 +339,7 @@
                                 android:textColor="@color/text_primary"
                                 android:textSize="12sp" />
                         </LinearLayout>
-                         <LinearLayout
+                        <LinearLayout
                             android:id="@+id/legend_item_2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
