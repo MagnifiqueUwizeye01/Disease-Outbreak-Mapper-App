@@ -1,124 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white"
-    android:padding="24dp">
+    android:layout_height="match_parent">
 
-    <!-- Header -->
     <LinearLayout
+        android:id="@+id/containerOfflineCases"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="24dp">
+        android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Offline Pending Cases"
-            android:textColor="@color/medical_green_primary"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reports stored locally will sync automatically when online"
-            android:textColor="@color/text_secondary"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp" />
+        <!-- Offline cases will be added dynamically here -->
     </LinearLayout>
 
-    <!-- Sync Status Card -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="2dp"
-        app:strokeColor="@color/medical_gold_light"
-        app:strokeWidth="1dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="20dp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_sync"
-                app:tint="@color/medical_gold_primary"
-                android:layout_marginEnd="16dp" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Waiting for Connection"
-                    android:textColor="@color/medical_gold_primary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="3 reports pending sync"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    android:layout_marginTop="4dp" />
-            </LinearLayout>
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="OFFLINE"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/medical_gold_primary" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Pending Cases List -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pending Cases"
-        android:textColor="@color/medical_green_primary"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="12dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_offline_cases"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="16dp" />
-
-    <!-- Sync Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_sync_now"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Try to Sync Now"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:backgroundTint="@color/medical_teal_primary"
-        android:textColor="@color/white"
-        app:cornerRadius="12dp"
-        app:icon="@drawable/ic_refresh"
-        app:iconGravity="textStart"
-        app:iconPadding="8dp"
-        app:iconTint="@color/white" />
-
-</LinearLayout>
+</ScrollView>
