@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent">@color/medical_gold_primary</color>
+    <color name="accent_dark">@color/medical_gold_dark</color>
+    <color name="background">@color/white</color>
+    <color name="background_dark">#101820</color>
+    <color name="background_light">#FFFFFF</color>
+    <color name="background_white">#FFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="divider">#E0E0E0</color>
+    <color name="error">#D32F2F</color>
+    <color name="gradient_end">@color/medical_gold_primary</color>
+    <color name="gradient_mid">@color/medical_teal_primary</color>
+    <color name="gradient_start">@color/medical_green_dark</color>
+    <color name="info">#2E7D32</color>
+    <color name="medical_cream">@color/white</color>
+    <color name="medical_dark_teal">@color/medical_teal_primary</color>
+    <color name="medical_gold_dark">#FF8F00</color>
+    <color name="medical_gold_light">#FFF8E1</color>
+    <color name="medical_gold_primary">#FFA000</color>
+    <color name="medical_green_dark">#1B5E20</color>
+    <color name="medical_green_light">#E8F5E9</color>
+    <color name="medical_green_primary">#2E7D32</color>
+    <color name="medical_light_teal">@color/medical_teal_light</color>
+    <color name="medical_medium_teal">@color/medical_teal_primary</color>
+    <color name="medical_teal_dark">#00A040</color>
+    <color name="medical_teal_light">#C6F7DA</color>
+    <color name="medical_teal_primary">#00C851</color>
+    <color name="medical_vibrant_teal">@color/medical_teal_primary</color>
+    <color name="primary">@color/medical_green_primary</color>
+    <color name="primary_dark">@color/medical_green_dark</color>
+    <color name="primary_light">@color/medical_green_light</color>
+    <color name="secondary">@color/medical_teal_primary</color>
+    <color name="secondary_dark">@color/medical_teal_dark</color>
+    <color name="secondary_light">@color/medical_teal_light</color>
+    <color name="success">#2E7D32</color>
+    <color name="surface">@color/white</color>
+    <color name="surface_card">#FFFFFF</color>
+    <color name="surface_dark">#161F29</color>
+    <color name="text_hint">#9E9E9E</color>
+    <color name="text_medical">@color/medical_green_primary</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_primary">#000000</color>
+    <color name="text_primary_dark">#FFFFFF</color>
+    <color name="text_secondary">#424242</color>
+    <color name="text_secondary_dark">#B0BEC5</color>
+    <color name="warning">#FFA000</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="about">About</string>
+    <string name="about_text">This app allows Community Health Workers to report disease outbreaks.</string>
+    <string name="action_settings">Settings</string>
+    <string name="age">Age</string>
+    <string name="app_name">CHW Disease Reporter</string>
+    <string name="app_version">App Version: 1.0 - Group BC</string>
+    <string name="capture_location">Capture Location</string>
+    <string name="cough">Cough</string>
+    <string name="date_of_onset">Date of Onset</string>
+    <string name="default_web_client_id">834950027430-7qch4k9m19m9sj98imeb6g87ogbv23i3.apps.googleusercontent.com</string>
+    <string name="diarrhea">Diarrhea</string>
+    <string name="disease_label">Disease</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_password">Password must be at least 4 characters</string>
+    <string name="female">Female</string>
+    <string name="fever">Fever</string>
+    <string name="gcm_defaultSenderId" translatable="false">643444291954</string>
+    <string name="gender">Gender</string>
+    <string name="google_api_key" translatable="false">REDACTED_FIREBASE_KEY</string>
+    <string name="google_app_id" translatable="false">1:643444291954:android:53bf679c116de616d445eb</string>
+    <string name="google_crash_reporting_api_key" translatable="false">REDACTED_FIREBASE_KEY</string>
+    <string name="google_storage_bucket" translatable="false">chw-disease-mapper.firebasestorage.app</string>
+    <string name="headache">Headache</string>
+    <string name="high_risk">High Risk</string>
+    <string name="home_title">Disease Outbreak Reporter</string>
+    <string name="latest_stats">Latest Stats</string>
+    <string name="latitude">Latitude: %s</string>
+    <string name="logging_in">Logging in…</string>
+    <string name="login_button">LOGIN</string>
+    <string name="login_title">CHW Login</string>
+    <string name="logout">Logout</string>
+    <string name="longitude">Longitude: %s</string>
+    <string name="low_risk">Low Risk</string>
+    <string name="male">Male</string>
+    <string name="medium_risk">Medium Risk</string>
+    <string name="menu_analytics">Analytics</string>
+    <string name="menu_case_history">Case History</string>
+    <string name="menu_dashboard">Dashboard</string>
+    <string name="menu_help_support">Help &amp; Support</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_outbreak_map">Outbreak Map</string>
+    <string name="menu_profile">My Profile</string>
+    <string name="menu_report_case">Report Case</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_report">Report</string>
+    <string name="nav_settings">Settings</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="other">Other</string>
+    <string name="password">Password</string>
+    <string name="patient_name">Patient Name</string>
+    <string name="pending_reports">Pending Reports: %d</string>
+    <string name="project_id" translatable="false">chw-disease-mapper</string>
+    <string name="quick_actions">Quick Actions</string>
+    <string name="rash">Rash</string>
+    <string name="remember_me">Remember me</string>
+    <string name="report_new_case">Report New Case</string>
+    <string name="report_saved">Report saved offline</string>
+    <string name="role_chw">Community Health Worker (CHW)</string>
+    <string name="role_health_official">Health Official</string>
+    <string name="select_role">Select Role</string>
+    <string name="server_url">Server URL</string>
+    <string name="submit_report">SUBMIT REPORT</string>
+    <string name="symptoms">Symptoms</string>
+    <string name="sync_failed">Sync Failed</string>
+    <string name="sync_now">Try to Sync Now</string>
+    <string name="sync_pending">Sync Pending</string>
+    <string name="synced_successfully">Synced Successfully</string>
+    <string name="syncing">Syncing...</string>
+    <string name="username">Username</string>
+    <string name="view_outbreak_map">View Outbreak Map</string>
+    <string name="vomiting">Vomiting</string>
+    <string name="welcome_chw">Welcome, CHW</string>
+    <style name="Base.Theme.HealthTrack" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        <item name="colorPrimary">@color/medical_green_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/medical_green_light</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
+
+        
+        <item name="colorSecondary">@color/medical_gold_primary</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryContainer">@color/medical_gold_light</item>
+        <item name="colorOnSecondaryContainer">@color/black</item>
+
+        
+        <item name="colorTertiary">@color/medical_green_dark</item>
+        <item name="colorOnTertiary">@color/white</item>
+        <item name="colorTertiaryContainer">@color/medical_green_light</item>
+        <item name="colorOnTertiaryContainer">@color/black</item>
+
+        
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorSurfaceVariant">@color/white</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+
+        
+        <item name="android:colorBackground">@color/white</item>
+        <item name="colorOnBackground">@color/black</item>
+
+        
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/white</item>
+
+        
+        <item name="android:statusBarColor">@color/medical_green_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+    <style name="ModernTextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeColor">@color/medical_green_primary</item>
+        <item name="hintTextColor">@color/medical_green_primary</item>
+        <item name="android:textColorHint">@color/medical_green_primary</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+    </style>
+    <style name="Theme.HealthTrack" parent="Base.Theme.HealthTrack"/>
+    <style name="Theme.HealthTrack.Splash" parent="Theme.HealthTrack">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+</resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/dashboardFragment"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
+
+        <item
+            android:id="@+id/reportCaseFragment"
+            android:icon="@drawable/ic_add_circle"
+            android:title="Report New Case" />
+
+        <item
+            android:id="@+id/mapFragment"
+            android:icon="@drawable/ic_outbreak_map"
+            android:title="Outbreak Map" />
+
+        <item
+            android:id="@+id/analyticsFragment"
+            android:icon="@drawable/ic_trends_analytics"
+            android:title="Case Trends &amp; Analytics" />
+
+        <item
+            android:id="@+id/caseHistoryFragment"
+            android:icon="@drawable/ic_history"
+            android:title="Submission History" />
+
+        <item
+            android:id="@+id/offlinePendingCasesFragment"
+            android:icon="@drawable/ic_pending_reports"
+            android:title="Offline Pending Cases" />
+
+        <item
+            android:id="@+id/profileFragment"
+            android:icon="@drawable/ic_person"
+            android:title="Profile" />
+
+        <item
+            android:id="@+id/settingsFragment"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings" />
+
+        <item
+            android:id="@+id/helpSupportFragment"
+            android:icon="@drawable/ic_help_support"
+            android:title="Help &amp; Support" />
+
+        <item
+            android:id="@+id/aboutFragment"
+            android:icon="@drawable/ic_info"
+            android:title="About App" />
+    </group>
+
+    <item
+        android:id="@+id/nav_logout"
+        android:title="Logout"
+        android:icon="@drawable/ic_logout" />
+
+</menu>
+
