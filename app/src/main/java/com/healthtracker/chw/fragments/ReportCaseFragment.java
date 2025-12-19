@@ -23,6 +23,7 @@ import com.healthtracker.chw.R;
 import android.content.SharedPreferences;
 import com.healthtracker.chw.services.GPSService;
 import com.healthtracker.chw.services.FHIRService;
+import com.healthtracker.chw.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,13 +79,13 @@ public class ReportCaseFragment extends Fragment {
     // UI Components - Additional
     private TextInputEditText etNotes;
     private MaterialButton btnSubmitCase;
-    private com.google.android.material.button.MaterialButtonToggleGroup toggleConnectionMode; // Added
 
     // Data
     private Double capturedLatitude;
     private Double capturedLongitude;
     private String capturedAddress;
     private GPSService gpsService;
+    private SessionManager sessionManager;
 
     @Nullable
     @Override
@@ -97,12 +98,153 @@ public class ReportCaseFragment extends Fragment {
         setupLocationCapture();
         setupSubmitButton();
 
+        if (getArguments() != null && getArguments().getBoolean("is_edit_mode", false)) {
+            String reportId = getArguments().getString("report_id");
+            if (reportId != null) {
+                loadReportData(reportId);
+            }
+        }
+
+        // Enable options menu for back button handling
+        setHasOptionsMenu(true);
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Force back arrow
+        if (getActivity() instanceof androidx.appcompat.app.AppCompatActivity) {
+            androidx.appcompat.app.ActionBar actionBar = ((androidx.appcompat.app.AppCompatActivity) getActivity())
+                    .getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setDisplayShowHomeEnabled(true);
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull android.view.MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private String editingReportId;
+
+    private void loadReportData(String reportId) {
+        try {
+            if (reportId.startsWith("LOCAL-")) {
+                int id = Integer.parseInt(reportId.replace("LOCAL-", ""));
+                editingReportId = reportId; // Store full ID
+
+                new Thread(() -> {
+                    com.healthtracker.chw.data.local.UnsyncedReportDao dao = com.healthtracker.chw.data.local.AppDatabase
+                            .getDatabase(requireContext()).unsyncedReportDao();
+
+                    // Ideally we should have getById in DAO
+                    java.util.List<com.healthtracker.chw.data.local.UnsyncedReport> all = dao.getAllReports();
+                    com.healthtracker.chw.data.local.UnsyncedReport target = null;
+                    for (com.healthtracker.chw.data.local.UnsyncedReport r : all) {
+                        if (r.id == id) {
+                            target = r;
+                            break;
+                        }
+                    }
+
+                    if (target != null) {
+                        final com.healthtracker.chw.data.local.UnsyncedReport data = target;
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(() -> preFillForm(data));
+                        }
+                    }
+                }).start();
+            }
+        } catch (Exception e) {
+            android.util.Log.e("ReportCaseFragment", "Error loading report", e);
+        }
+    }
+
+    private void preFillForm(com.healthtracker.chw.data.local.UnsyncedReport data) {
+        if (btnSubmitCase != null)
+            btnSubmitCase.setText("Update Case Report");
+
+        etPatientName.setText(data.patientName);
+        etDateOfBirth.setText(data.dateOfBirth);
+        if (data.patientAge != null)
+            etPatientAge.setText(String.valueOf(data.patientAge));
+
+        if ("male".equalsIgnoreCase(data.gender))
+            chipGender.check(R.id.chip_male);
+        else if ("female".equalsIgnoreCase(data.gender))
+            chipGender.check(R.id.chip_female);
+        else if ("other".equalsIgnoreCase(data.gender))
+            chipGender.check(R.id.chip_other);
+
+        etEncounterDate.setText(data.encounterDate);
+
+        if ("home".equalsIgnoreCase(data.encounterType))
+            chipEncounterType.check(R.id.chip_encounter_home);
+        else if ("clinic".equalsIgnoreCase(data.encounterType))
+            chipEncounterType.check(R.id.chip_encounter_clinic);
+        else if ("emergency".equalsIgnoreCase(data.encounterType))
+            chipEncounterType.check(R.id.chip_encounter_emergency);
+
+        etDiseaseType.setText(data.diseaseType);
+        // We'd need to dismiss dropdown if it shows
+
+        // Severity
+        if ("mild".equalsIgnoreCase(data.severity))
+            radioSeverity.check(R.id.radio_mild);
+        else if ("moderate".equalsIgnoreCase(data.severity))
+            radioSeverity.check(R.id.radio_moderate);
+        else if ("severe".equalsIgnoreCase(data.severity))
+            radioSeverity.check(R.id.radio_severe);
+
+        etObservationDetails.setText(data.observationDetails);
+        etNotes.setText(data.notes);
+
+        // Location
+        this.capturedLatitude = data.latitude;
+        this.capturedLongitude = data.longitude;
+        this.capturedAddress = data.address;
+
+        if (capturedLatitude != null && capturedLongitude != null) {
+            tvLocationStatus.setText("Location captured (Saved)");
+            tvLocationCoordinates.setText(String.format("%.6f, %.6f", capturedLatitude, capturedLongitude));
+            if (capturedAddress != null)
+                tvLocationAddress.setText(capturedAddress);
+        }
+
+        // Symptoms check
+        try {
+            java.lang.reflect.Type listType = new com.google.gson.reflect.TypeToken<java.util.List<String>>() {
+            }.getType();
+            List<String> symptoms = new com.google.gson.Gson().fromJson(data.symptomsJson, listType);
+            if (symptoms != null) {
+                // We need to match chip text.
+                for (int i = 0; i < chipSymptoms.getChildCount(); i++) {
+                    View child = chipSymptoms.getChildAt(i);
+                    if (child instanceof Chip) {
+                        Chip chip = (Chip) child;
+                        if (symptoms.contains(chip.getText().toString())) {
+                            chip.setChecked(true);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
     }
 
     private void initializeViews(View view) {
         // Toggle Mode
-        toggleConnectionMode = view.findViewById(R.id.toggle_connection_mode); // Added
 
         // Patient Information
         etPatientName = view.findViewById(R.id.et_patient_name);
@@ -190,17 +332,67 @@ public class ReportCaseFragment extends Fragment {
 
         // Set current date for report date
         etReportDate.setText(dateFormat.format(new Date()));
-        etReportDate.setOnClickListener(v -> showDatePicker(etReportDate, dateFormat));
+        // Report date cannot be in the future
+        etReportDate.setOnClickListener(v -> showDatePicker(etReportDate, dateFormat, System.currentTimeMillis()));
 
         // Set current date/time for encounter date
         etEncounterDate.setText(dateTimeFormat.format(new Date()));
-        etEncounterDate.setOnClickListener(v -> showDateTimePicker(etEncounterDate, dateTimeFormat));
+        // Encounter date is locked to "now" - read only
+        etEncounterDate.setFocusable(false);
+        etEncounterDate.setClickable(false);
+        etEncounterDate.setLongClickable(false);
 
         // Setup date of birth picker
-        etDateOfBirth.setOnClickListener(v -> showDatePicker(etDateOfBirth, dateFormat));
+        // Birthday cannot be in the future
+        etDateOfBirth.setOnClickListener(v -> showDatePicker(etDateOfBirth, dateFormat, System.currentTimeMillis()));
+
+        // Add listener to auto-calculate age when DOB changes
+        etDateOfBirth.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(android.text.Editable s) {
+                calculateAndSetAge(s.toString());
+            }
+        });
     }
 
-    private void showDatePicker(TextInputEditText editText, java.text.SimpleDateFormat format) {
+    private void calculateAndSetAge(String dateOfBirthStr) {
+        if (TextUtils.isEmpty(dateOfBirthStr))
+            return;
+
+        try {
+            java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd",
+                    java.util.Locale.getDefault());
+            Date dob = dateFormat.parse(dateOfBirthStr);
+            if (dob != null) {
+                java.util.Calendar dobCal = java.util.Calendar.getInstance();
+                dobCal.setTime(dob);
+
+                java.util.Calendar nowCal = java.util.Calendar.getInstance();
+
+                int age = nowCal.get(java.util.Calendar.YEAR) - dobCal.get(java.util.Calendar.YEAR);
+                if (nowCal.get(java.util.Calendar.DAY_OF_YEAR) < dobCal.get(java.util.Calendar.DAY_OF_YEAR)) {
+                    age--;
+                }
+
+                if (age < 0)
+                    age = 0; // Handle edge case if future date somehow slipped through
+
+                etPatientAge.setText(String.valueOf(age));
+            }
+        } catch (Exception e) {
+            // Ignore parsing errors
+        }
+    }
+
+    private void showDatePicker(TextInputEditText editText, java.text.SimpleDateFormat format, long maxDate) {
         java.util.Calendar calendar = java.util.Calendar.getInstance();
         try {
             if (!TextUtils.isEmpty(editText.getText())) {
@@ -210,14 +402,21 @@ public class ReportCaseFragment extends Fragment {
             // Use current date
         }
 
-        new android.app.DatePickerDialog(requireContext(), (view, year, month, dayOfMonth) -> {
-            calendar.set(year, month, dayOfMonth);
-            editText.setText(format.format(calendar.getTime()));
-        }, calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH),
-                calendar.get(java.util.Calendar.DAY_OF_MONTH)).show();
+        android.app.DatePickerDialog dialog = new android.app.DatePickerDialog(requireContext(),
+                (view, year, month, dayOfMonth) -> {
+                    calendar.set(year, month, dayOfMonth);
+                    editText.setText(format.format(calendar.getTime()));
+                }, calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH),
+                calendar.get(java.util.Calendar.DAY_OF_MONTH));
+
+        if (maxDate > 0) {
+            dialog.getDatePicker().setMaxDate(maxDate);
+        }
+
+        dialog.show();
     }
 
-    private void showDateTimePicker(TextInputEditText editText, java.text.SimpleDateFormat format) {
+    private void showDateTimePicker(TextInputEditText editText, java.text.SimpleDateFormat format, long maxDate) {
         java.util.Calendar calendar = java.util.Calendar.getInstance();
         try {
             if (!TextUtils.isEmpty(editText.getText())) {
@@ -227,15 +426,34 @@ public class ReportCaseFragment extends Fragment {
             // Use current date/time
         }
 
-        new android.app.DatePickerDialog(requireContext(), (dateView, year, month, dayOfMonth) -> {
-            calendar.set(year, month, dayOfMonth);
-            new android.app.TimePickerDialog(requireContext(), (timeView, hourOfDay, minute) -> {
-                calendar.set(java.util.Calendar.HOUR_OF_DAY, hourOfDay);
-                calendar.set(java.util.Calendar.MINUTE, minute);
-                editText.setText(format.format(calendar.getTime()));
-            }, calendar.get(java.util.Calendar.HOUR_OF_DAY), calendar.get(java.util.Calendar.MINUTE), true).show();
-        }, calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH),
-                calendar.get(java.util.Calendar.DAY_OF_MONTH)).show();
+        android.app.DatePickerDialog dateDialog = new android.app.DatePickerDialog(requireContext(),
+                (dateView, year, month, dayOfMonth) -> {
+                    calendar.set(year, month, dayOfMonth);
+
+                    new android.app.TimePickerDialog(requireContext(), (timeView, hourOfDay, minute) -> {
+                        calendar.set(java.util.Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(java.util.Calendar.MINUTE, minute);
+
+                        // Validate if selected time is in future relative to now (if date is today)
+                        if (maxDate > 0 && calendar.getTimeInMillis() > maxDate) {
+                            Toast.makeText(requireContext(), "Future time not allowed", Toast.LENGTH_SHORT).show();
+                            // Reset to now or just don't set? prefer showing user feedback
+                            // For now, let's just clamp it or leave it, but best to warn
+                            calendar.setTimeInMillis(maxDate); // Clamp to max
+                        }
+
+                        editText.setText(format.format(calendar.getTime()));
+                    }, calendar.get(java.util.Calendar.HOUR_OF_DAY), calendar.get(java.util.Calendar.MINUTE), true)
+                            .show();
+
+                }, calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH),
+                calendar.get(java.util.Calendar.DAY_OF_MONTH));
+
+        if (maxDate > 0) {
+            dateDialog.getDatePicker().setMaxDate(maxDate);
+        }
+
+        dateDialog.show();
     }
 
     /**
@@ -401,6 +619,7 @@ public class ReportCaseFragment extends Fragment {
             String[] chwInfo = getCHWInfo();
             String chwName = chwInfo[0];
             String chwId = chwInfo[1];
+            String chwEmail = chwInfo[2];
 
             // Get symptoms as list
             List<String> symptomsList = getSelectedSymptomsList();
@@ -437,7 +656,7 @@ public class ReportCaseFragment extends Fragment {
                 Toast.makeText(getContext(), "Saving report to FHIR server...", Toast.LENGTH_SHORT).show();
             }
 
-            saveToFHIR(patientName, gender, dateOfBirth, patientAge, chwName, chwId,
+            saveToFHIR(patientName, gender, dateOfBirth, patientAge, chwName, chwId, chwEmail,
                     capturedLatitude, capturedLongitude, capturedAddress,
                     encounterDate, encounterType, diseaseType, symptomsList, severity,
                     observationDetails, notes);
@@ -551,20 +770,23 @@ public class ReportCaseFragment extends Fragment {
      * Get CHW information from SharedPreferences or use defaults
      */
     private String[] getCHWInfo() {
-        SharedPreferences prefs = requireContext().getSharedPreferences("app_prefs",
-                android.content.Context.MODE_PRIVATE);
-        String chwName = prefs.getString("chw_name", "CHW User");
-        String chwId = prefs.getString("chw_id", "chw_" + System.currentTimeMillis());
-
-        // If not set, try to get from auth token or user info
-        if ("CHW User".equals(chwName)) {
-            String userId = prefs.getString("user_id", null);
-            if (userId != null) {
-                chwId = userId;
-            }
+        if (sessionManager == null) {
+            sessionManager = new SessionManager(requireContext());
         }
 
-        return new String[] { chwName, chwId };
+        String chwName = sessionManager.getUserName();
+        if (chwName == null)
+            chwName = "CHW User";
+
+        String chwId = sessionManager.getUserId();
+        if (chwId == null)
+            chwId = "chw_" + System.currentTimeMillis();
+
+        String chwEmail = sessionManager.getUserEmail();
+        if (chwEmail == null)
+            chwEmail = "unknown@example.com";
+
+        return new String[] { chwName, chwId, chwEmail };
     }
 
     /**
@@ -585,7 +807,7 @@ public class ReportCaseFragment extends Fragment {
      * Save data to FHIR server using FHIR-compliant resources
      */
     private void saveToFHIR(String patientName, String gender, String dateOfBirth, Integer patientAge,
-            String chwName, String chwId,
+            String chwName, String chwId, String chwEmail,
             Double latitude, Double longitude, String address,
             String encounterDate, String encounterType,
             String diseaseType, List<String> symptoms, String severity,
@@ -621,12 +843,6 @@ public class ReportCaseFragment extends Fragment {
                 // Initialize FHIR service on background thread
                 FHIRService fhirService = new FHIRService(context);
 
-                // Check Toggle State
-                boolean isOfflineMode = false;
-                if (toggleConnectionMode != null) {
-                    isOfflineMode = (toggleConnectionMode.getCheckedButtonId() == R.id.btn_mode_offline);
-                }
-
                 FHIRService.SaveCallback callback = new FHIRService.SaveCallback() {
                     @Override
                     public void onSuccess(String reportId, String locationId) {
@@ -636,8 +852,11 @@ public class ReportCaseFragment extends Fragment {
                             }
                             try {
                                 boolean isPending = reportId.startsWith("PENDING-SYNC");
+                                boolean isUpdate = reportId.startsWith("PENDING-UPDATE");
                                 String successMsg;
-                                if (isPending) {
+                                if (isUpdate) {
+                                    successMsg = "✅ Report Updated Successfully (Offline Mode)";
+                                } else if (isPending) {
                                     String reason = "Unknown";
                                     if (reportId.contains(":")) {
                                         reason = reportId.substring(reportId.indexOf(":") + 1);
@@ -698,20 +917,22 @@ public class ReportCaseFragment extends Fragment {
 
                 // Branch Logic
                 // Branch Logic
-                if (isOfflineMode) {
-                    fhirService.submitReportOffline(
+                if (editingReportId != null && editingReportId.startsWith("LOCAL-")) {
+                    int id = Integer.parseInt(editingReportId.replace("LOCAL-", ""));
+                    fhirService.updateReportOffline(
+                            id,
                             patientName, gender, dateOfBirth, patientAge,
-                            chwName, chwId,
+                            chwName, chwId, chwEmail,
                             latitude, longitude, address,
                             encounterDate, encounterType,
                             diseaseType, symptoms, severity,
                             observationDetails, notes,
                             callback);
                 } else {
-                    // Start Online Mode - FORCE network attempt
+                    // Standard Submission - Try Online, Fallback handled by service/callback
                     fhirService.saveDiseaseReport(
                             patientName, gender, dateOfBirth, patientAge,
-                            chwName, chwId,
+                            chwName, chwId, chwEmail,
                             latitude, longitude, address,
                             encounterDate, encounterType,
                             diseaseType, symptoms, severity,

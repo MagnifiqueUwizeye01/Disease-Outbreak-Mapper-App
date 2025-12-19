@@ -27,10 +27,7 @@
             android:icon="@drawable/ic_history"
             android:title="Submission History" />
 
-        <item
-            android:id="@+id/offlinePendingCasesFragment"
-            android:icon="@drawable/ic_pending_reports"
-            android:title="Offline Pending Cases" />
+
 
         <item
             android:id="@+id/profileFragment"

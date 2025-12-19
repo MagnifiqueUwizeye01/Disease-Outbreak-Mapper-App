@@ -16,6 +16,7 @@ public class UnsyncedReport {
     // CHW Info
     public String chwName;
     public String chwId;
+    public String chwEmail;
 
     // Location
     public Double latitude;

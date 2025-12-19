@@ -38,6 +38,20 @@ public class MainActivity extends AppCompatActivity {
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Validating Session
+        com.healthtracker.chw.utils.SessionManager sessionManager = new com.healthtracker.chw.utils.SessionManager(
+                this);
+        if (!sessionManager.isLoggedIn() || sessionManager.getUserEmail() == null
+                || sessionManager.getUserEmail().trim().isEmpty()) {
+            // Invalid session or missing email - force logout/login
+            sessionManager.clearSession();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -49,9 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 : null;
 
         appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.dashboardFragment,
-                R.id.mapFragment,
-                R.id.analyticsFragment).setOpenableLayout(drawerLayout).build();
+                R.id.dashboardFragment).setOpenableLayout(drawerLayout).build();
 
         if (navController != null) {
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -82,11 +94,33 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar,
+                this, drawerLayout,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Validating Session on every resume to ensure data consistency
+        com.healthtracker.chw.utils.SessionManager sessionManager = new com.healthtracker.chw.utils.SessionManager(
+                this);
+        // Debug Log
+        android.util.Log.d("MainActivity", "Checking session. LoggedIn: " + sessionManager.isLoggedIn() + ", Email: "
+                + sessionManager.getUserEmail());
+
+        if (!sessionManager.isLoggedIn() || sessionManager.getUserEmail() == null
+                || sessionManager.getUserEmail().trim().isEmpty()) {
+            android.util.Log.w("MainActivity", "Invalid session, redirecting to login");
+            // Invalid session or missing email - force logout/login
+            sessionManager.clearSession();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -118,6 +152,25 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = navHostFragment != null
                 ? navHostFragment.getNavController()
                 : null;
+
+        if (id == android.R.id.home) {
+            // If we are not at the top-level destination (Dashboard), treat the home/up
+            // button
+            // as a back button to ensure we return to the previous state ("where we was").
+            // logic: check if up can be navigated, otherwise toggle drawer
+            // actually, NavigationUI.navigateUp handles this, but since the user reported
+            // issues,
+            // we will explicitly force popBackStack or onBackPressed behavior if it's an
+            // arrow.
+
+            // We know dashboardFragment is the only top-level, so if we are elsewhere, it's
+            // an arrow.
+            if (navController != null && navController.getCurrentDestination() != null
+                    && navController.getCurrentDestination().getId() != R.id.dashboardFragment) {
+                onBackPressed(); // This ensures "back from where we was" behavior
+                return true;
+            }
+        }
 
         if (navController != null) {
             if (id == R.id.action_profile) {

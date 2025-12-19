@@ -11,10 +11,18 @@ import com.healthtracker.chw.models.fhir.FHIRLocation;
 import com.healthtracker.chw.models.fhir.FHIRObservation;
 import com.healthtracker.chw.models.fhir.FHIRPatient;
 import com.healthtracker.chw.models.fhir.FHIRRiskAssessment;
+import com.healthtracker.chw.models.DiseaseReport;
+import com.healthtracker.chw.models.Encounter;
+import com.healthtracker.chw.models.Patient;
+import com.healthtracker.chw.models.GPSLocation;
+import com.healthtracker.chw.models.RiskAssessment;
+import com.healthtracker.chw.models.Observation;
+import com.healthtracker.chw.models.MeasureReport;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList; // Added import
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -81,14 +89,14 @@ public class FHIRService {
 
     public void saveDiseaseReport(
             String patientName, String gender, String dateOfBirth, Integer patientAge,
-            String chwName, String chwId,
+            String chwName, String chwId, String chwEmail,
             Double latitude, Double longitude, String address,
             String encounterDate, String encounterType,
             String diseaseType, List<String> symptoms, String severity,
             String observationDetails, String notes,
             SaveCallback callback) {
         // Default: Do NOT force network (respect isNetworkAvailable)
-        saveDiseaseReport(patientName, gender, dateOfBirth, patientAge, chwName, chwId,
+        saveDiseaseReport(patientName, gender, dateOfBirth, patientAge, chwName, chwId, chwEmail,
                 latitude, longitude, address, encounterDate, encounterType,
                 diseaseType, symptoms, severity, observationDetails, notes,
                 callback, false);
@@ -96,7 +104,7 @@ public class FHIRService {
 
     public void saveDiseaseReport(
             String patientName, String gender, String dateOfBirth, Integer patientAge,
-            String chwName, String chwId,
+            String chwName, String chwId, String chwEmail,
             Double latitude, Double longitude, String address,
             String encounterDate, String encounterType,
             String diseaseType, List<String> symptoms, String severity,
@@ -111,20 +119,20 @@ public class FHIRService {
         if ((!skipCheck && !isNetworkAvailable()) || apiService == null) {
             String reason = apiService == null ? "API Service Init Failed" : "No Internet";
             saveReportLocally(patientName, gender, dateOfBirth, patientAge,
-                    chwName, chwId, latitude, longitude, address,
+                    chwName, chwId, chwEmail, latitude, longitude, address,
                     encounterDate, encounterType, diseaseType, symptoms, severity,
                     observationDetails, notes, callback, reason, true); // true = schedule sync
             return;
         }
 
-        submitReportInternal(patientName, gender, dateOfBirth, patientAge, chwName, chwId,
+        submitReportInternal(patientName, gender, dateOfBirth, patientAge, chwName, chwId, chwEmail,
                 latitude, longitude, address, encounterDate, encounterType,
                 diseaseType, symptoms, severity, observationDetails, notes, callback, true); // true = allow fallback
     }
 
     public void submitReportOffline(
             String patientName, String gender, String dateOfBirth, Integer patientAge,
-            String chwName, String chwId,
+            String chwName, String chwId, String chwEmail,
             Double latitude, Double longitude, String address,
             String encounterDate, String encounterType,
             String diseaseType, List<String> symptoms, String severity,
@@ -132,9 +140,54 @@ public class FHIRService {
             SaveCallback callback) {
 
         saveReportLocally(patientName, gender, dateOfBirth, patientAge,
-                chwName, chwId, latitude, longitude, address,
+                chwName, chwId, chwEmail, latitude, longitude, address,
                 encounterDate, encounterType, diseaseType, symptoms, severity,
                 observationDetails, notes, callback, "Manual Offline Mode", false); // false = DO NOT schedule sync
+    }
+
+    public void updateReportOffline(
+            int existingId,
+            String patientName, String gender, String dateOfBirth, Integer patientAge,
+            String chwName, String chwId, String chwEmail,
+            Double latitude, Double longitude, String address,
+            String encounterDate, String encounterType,
+            String diseaseType, List<String> symptoms, String severity,
+            String observationDetails, String notes,
+            SaveCallback callback) {
+
+        new Thread(() -> {
+            try {
+                UnsyncedReport report = new UnsyncedReport();
+                report.id = existingId;
+                report.patientName = patientName;
+                report.gender = gender;
+                report.dateOfBirth = dateOfBirth;
+                report.patientAge = patientAge;
+                report.chwName = chwName;
+                report.chwId = chwId;
+                report.chwEmail = chwEmail;
+                report.latitude = latitude;
+                report.longitude = longitude;
+                report.address = address;
+                report.encounterDate = encounterDate;
+                report.encounterType = encounterType;
+                report.diseaseType = diseaseType;
+                report.symptomsJson = new Gson().toJson(symptoms);
+                report.severity = severity;
+                report.observationDetails = observationDetails;
+                report.notes = notes;
+                report.timestamp = System.currentTimeMillis();
+
+                unsyncedReportDao.update(report);
+
+                if (callback != null)
+                    callback.onSuccess("PENDING-UPDATE", "UPDATED");
+            } catch (Exception e) {
+                Log.e(TAG, "Error updating locally", e);
+                if (callback != null)
+                    callback.onError("Failed to update report: " + e.getMessage());
+            }
+        }).start();
     }
 
     /**
@@ -143,7 +196,7 @@ public class FHIRService {
      */
     public void submitReportForSync(
             String patientName, String gender, String dateOfBirth, Integer patientAge,
-            String chwName, String chwId,
+            String chwName, String chwId, String chwEmail,
             Double latitude, Double longitude, String address,
             String encounterDate, String encounterType,
             String diseaseType, List<String> symptoms, String severity,
@@ -153,14 +206,14 @@ public class FHIRService {
         // Even if network check fails, we try anyway because SyncWorker checks network
         // constraint.
         // Or we just proceed to internal logic which will fail gracefully via callback.
-        submitReportInternal(patientName, gender, dateOfBirth, patientAge, chwName, chwId,
+        submitReportInternal(patientName, gender, dateOfBirth, patientAge, chwName, chwId, chwEmail,
                 latitude, longitude, address, encounterDate, encounterType, diseaseType, symptoms,
                 severity, observationDetails, notes, callback, false); // false = NO fallback
     }
 
     private void submitReportInternal(
             String patientName, String gender, String dateOfBirth, Integer patientAge,
-            String chwName, String chwId,
+            String chwName, String chwId, String chwEmail,
             Double latitude, Double longitude, String address,
             String encounterDate, String encounterType,
             String diseaseType, List<String> symptoms, String severity,
@@ -172,11 +225,12 @@ public class FHIRService {
                 if (patientName == null || diseaseType == null)
                     throw new IllegalArgumentException("Missing required fields");
 
-                String patientId = "patient-" + UUID.randomUUID().toString();
-                String locationId = "location-" + UUID.randomUUID().toString();
-                String encounterId = "encounter-" + UUID.randomUUID().toString();
-                String observationId = "observation-" + UUID.randomUUID().toString();
-                String riskAssessmentId = "riskassessment-" + UUID.randomUUID().toString();
+                // Pass NULL as ID to let server assign it
+                String patientId = null;
+                String locationId = null;
+                String encounterId = null;
+                String observationId = null;
+                String riskAssessmentId = null;
 
                 String formattedBirthDate = formatDate(dateOfBirth);
                 String formattedEncounterDate = formatDateTime(encounterDate);
@@ -187,7 +241,7 @@ public class FHIRService {
                     if (allowFallback) {
                         Log.i(TAG, "Saving locally due to error.");
                         saveReportLocally(patientName, gender, dateOfBirth, patientAge,
-                                chwName, chwId, latitude, longitude, address,
+                                chwName, chwId, chwEmail, latitude, longitude, address,
                                 encounterDate, encounterType, diseaseType, symptoms, severity,
                                 observationDetails, notes, callback, "API Error: " + error, true);
                     } else {
@@ -196,40 +250,62 @@ public class FHIRService {
                     }
                 };
 
-                FHIRPatient patient = createFHIRPatient(patientId, patientName, gender, formattedBirthDate);
+                // Ensure gender is lowercase
+                String normalizedGender = gender != null ? gender.toLowerCase(Locale.ROOT) : "unknown";
+
+                FHIRPatient patient = createFHIRPatient(patientId, patientName, normalizedGender, formattedBirthDate);
                 savePatient(patient, (savedPatient) -> {
-                    String finalPatientId = savedPatient.getId() != null ? savedPatient.getId() : patientId;
+                    // Use server-assigned ID
+                    String finalPatientId = savedPatient.getId();
+                    if (finalPatientId == null) {
+                        errorHandler.onError("Server did not return Patient ID");
+                        return;
+                    }
                     String patientReference = "Patient/" + finalPatientId;
 
                     FHIRLocation location = createFHIRLocation(locationId, address, latitude, longitude);
                     saveLocation(location, (savedLocation) -> {
-                        String finalLocationId = savedLocation.getId() != null ? savedLocation.getId() : locationId;
+                        String finalLocationId = savedLocation.getId();
+                        if (finalLocationId == null) {
+                            // Ideally handled, but for location we can proceed or fail. Let's fail safe.
+                            finalLocationId = "unknown";
+                        }
                         String locationReference = "Location/" + finalLocationId;
 
                         FHIREncounter encounter = createFHIREncounter(encounterId, encounterType,
                                 patientReference, locationReference, formattedEncounterDate);
                         saveEncounter(encounter, (savedEncounter) -> {
-                            String finalEncounterId = savedEncounter.getId() != null ? savedEncounter.getId()
-                                    : encounterId;
+                            String finalEncounterId = savedEncounter.getId();
+                            if (finalEncounterId == null) {
+                                errorHandler.onError("Server did not return Encounter ID");
+                                return;
+                            }
                             String encounterReference = "Encounter/" + finalEncounterId;
 
                             FHIRObservation observation = createFHIRObservation(observationId, diseaseType,
                                     patientReference, encounterReference, formattedEffectiveDateTime,
-                                    severity, symptoms, observationDetails);
+                                    severity, symptoms, observationDetails, chwId, chwName);
                             saveObservation(observation, (savedObservation) -> {
-                                String finalObservationId = savedObservation.getId() != null ? savedObservation.getId()
-                                        : observationId;
+                                String finalObservationId = savedObservation.getId();
+                                if (finalObservationId == null)
+                                    finalObservationId = "unknown";
 
                                 String riskDescription = buildRiskDescription(severity, symptoms, notes);
                                 FHIRRiskAssessment riskAssessment = createFHIRRiskAssessment(riskAssessmentId,
                                         patientReference, encounterReference, severity, riskDescription);
 
+                                // Use final variables for callback
+                                String callbackLocationId = locationReference; // Use reference as ID for now or just ID
+                                String callbackReportId = finalObservationId;
+
                                 saveRiskAssessment(riskAssessment, (savedRisk) -> {
                                     if (callback != null)
-                                        callback.onSuccess(finalObservationId, finalLocationId);
+                                        callback.onSuccess(callbackReportId, callbackLocationId);
                                 }, (e) -> {
+                                    // Even if risk assessment fails, we might consider the report "saved" enough?
+                                    // But let's stick to success path.
                                     if (callback != null)
-                                        callback.onSuccess(finalObservationId, finalLocationId);
+                                        callback.onSuccess(callbackReportId, callbackLocationId);
                                 });
                             }, errorHandler);
                         }, errorHandler);
@@ -240,7 +316,7 @@ public class FHIRService {
                 Log.e(TAG, "Error submitting report", e);
                 if (allowFallback) {
                     saveReportLocally(patientName, gender, dateOfBirth, patientAge,
-                            chwName, chwId, latitude, longitude, address,
+                            chwName, chwId, chwEmail, latitude, longitude, address,
                             encounterDate, encounterType, diseaseType, symptoms, severity,
                             observationDetails, notes, callback, "Exception: " + e.getMessage(), true);
                 } else {
@@ -252,7 +328,7 @@ public class FHIRService {
     }
 
     private void saveReportLocally(String patientName, String gender, String dateOfBirth, Integer patientAge,
-            String chwName, String chwId, Double latitude, Double longitude, String address,
+            String chwName, String chwId, String chwEmail, Double latitude, Double longitude, String address,
             String encounterDate, String encounterType, String diseaseType, List<String> symptoms, String severity,
             String observationDetails, String notes, SaveCallback callback, String reason, boolean scheduleSync) { // Added
                                                                                                                    // scheduleSync
@@ -266,6 +342,7 @@ public class FHIRService {
                 report.patientAge = patientAge;
                 report.chwName = chwName;
                 report.chwId = chwId;
+                report.chwEmail = chwEmail;
                 report.latitude = latitude;
                 report.longitude = longitude;
                 report.address = address;
@@ -418,11 +495,17 @@ public class FHIRService {
     // --- HELPER METHODS & CLASSES ---
 
     private String formatDate(String d) {
+        if (d == null || d.trim().isEmpty()) {
+            return null;
+        }
         return d;
     }
 
     private String formatDateTime(String dt) {
-        return dt != null ? dt : formatDateTimeISO(new Date());
+        if (dt == null || dt.trim().isEmpty()) {
+            return formatDateTimeISO(new Date());
+        }
+        return dt;
     }
 
     private String formatDateTimeISO(Date d) {
@@ -436,7 +519,9 @@ public class FHIRService {
     }
 
     private FHIRPatient createFHIRPatient(String id, String name, String gender, String birthDate) {
-        return new FHIRPatient(id, name, gender != null ? gender : "unknown", birthDate);
+        // Birthdate should be null if not provided
+        String validBirthDate = (birthDate != null && !birthDate.isEmpty()) ? birthDate : null;
+        return new FHIRPatient(id, name, gender != null ? gender : "unknown", validBirthDate);
     }
 
     private FHIRLocation createFHIRLocation(String id, String address, Double lat, Double lon) {
@@ -448,8 +533,18 @@ public class FHIRService {
     }
 
     private FHIRObservation createFHIRObservation(String id, String disease, String patRef, String encRef, String date,
-            String sev, List<String> sym, String det) {
-        return new FHIRObservation(id, "final", disease, patRef, encRef, date, sev, sym, det);
+            String sev, List<String> sym, String det, String chwId, String chwName) {
+        // Create performer list
+        List<FHIRObservation.Reference> performers = new ArrayList<>();
+        if (chwId != null) {
+            FHIRObservation.Reference ref = new FHIRObservation.Reference();
+            ref.setReference("Practitioner/" + chwId);
+            ref.setDisplay(chwName != null ? chwName : "CHW");
+            performers.add(ref);
+        }
+        FHIRObservation obs = new FHIRObservation(id, "final", disease, patRef, encRef, date, sev, sym, det);
+        obs.setPerformer(performers);
+        return obs;
     }
 
     private FHIRRiskAssessment createFHIRRiskAssessment(String id, String patRef, String encRef, String level,
@@ -458,13 +553,19 @@ public class FHIRService {
     }
 
     // --- INTERNAL SAVE WRAPPERS ---
+    // --- INTERNAL SAVE WRAPPERS ---
     private void savePatient(FHIRPatient p, ResourceCallback<FHIRPatient> cb, ErrorCallback eb) {
         apiService.createPatient(p).enqueue(new Callback<FHIRPatient>() {
             public void onResponse(Call<FHIRPatient> c, Response<FHIRPatient> r) {
                 if (r.isSuccessful())
                     cb.onSuccess(r.body());
-                else
-                    eb.onError("HTTP " + r.code());
+                else {
+                    try {
+                        eb.onError("HTTP " + r.code() + ": " + r.errorBody().string());
+                    } catch (Exception e) {
+                        eb.onError("HTTP " + r.code());
+                    }
+                }
             }
 
             public void onFailure(Call<FHIRPatient> c, Throwable t) {
@@ -478,8 +579,13 @@ public class FHIRService {
             public void onResponse(Call<FHIRLocation> c, Response<FHIRLocation> r) {
                 if (r.isSuccessful())
                     cb.onSuccess(r.body());
-                else
-                    eb.onError("HTTP " + r.code());
+                else {
+                    try {
+                        eb.onError("HTTP " + r.code() + ": " + r.errorBody().string());
+                    } catch (Exception e) {
+                        eb.onError("HTTP " + r.code());
+                    }
+                }
             }
 
             public void onFailure(Call<FHIRLocation> c, Throwable t) {
@@ -493,8 +599,13 @@ public class FHIRService {
             public void onResponse(Call<FHIREncounter> c, Response<FHIREncounter> r) {
                 if (r.isSuccessful())
                     cb.onSuccess(r.body());
-                else
-                    eb.onError("HTTP " + r.code());
+                else {
+                    try {
+                        eb.onError("HTTP " + r.code() + ": " + r.errorBody().string());
+                    } catch (Exception e) {
+                        eb.onError("HTTP " + r.code());
+                    }
+                }
             }
 
             public void onFailure(Call<FHIREncounter> c, Throwable t) {
@@ -508,8 +619,13 @@ public class FHIRService {
             public void onResponse(Call<FHIRObservation> c, Response<FHIRObservation> r) {
                 if (r.isSuccessful())
                     cb.onSuccess(r.body());
-                else
-                    eb.onError("HTTP " + r.code());
+                else {
+                    try {
+                        eb.onError("HTTP " + r.code() + ": " + r.errorBody().string());
+                    } catch (Exception e) {
+                        eb.onError("HTTP " + r.code());
+                    }
+                }
             }
 
             public void onFailure(Call<FHIRObservation> c, Throwable t) {
@@ -523,14 +639,198 @@ public class FHIRService {
             public void onResponse(Call<FHIRRiskAssessment> c, Response<FHIRRiskAssessment> r) {
                 if (r.isSuccessful())
                     cb.onSuccess(r.body());
-                else
-                    eb.onError("HTTP " + r.code());
+                else {
+                    try {
+                        eb.onError("HTTP " + r.code() + ": " + r.errorBody().string());
+                    } catch (Exception e) {
+                        eb.onError("HTTP " + r.code());
+                    }
+                }
             }
 
             public void onFailure(Call<FHIRRiskAssessment> c, Throwable t) {
                 eb.onError(t.getMessage());
             }
         });
+    }
+
+    // --- UNIFIED FETCH LOGIC ---
+
+    public void getDiseaseReport(String id, DiseaseReportCallback callback) {
+        if (id == null) {
+            callback.onError("ID cannot be null");
+            return;
+        }
+
+        if (id.startsWith("LOCAL-")) {
+            // Fetch from local DB
+            new Thread(() -> {
+                try {
+                    int localId = Integer.parseInt(id.replace("LOCAL-", ""));
+                    UnsyncedReport localReport = null;
+                    List<UnsyncedReport> reports = unsyncedReportDao.getAllReports();
+                    for (UnsyncedReport r : reports) {
+                        if (r.id == localId) {
+                            localReport = r;
+                            break;
+                        }
+                    }
+
+                    if (localReport != null) {
+                        DiseaseReport report = convertLocalReportToDiseaseReport(localReport);
+                        if (callback != null) {
+                            callback.onSuccess(report);
+                        }
+                    } else {
+                        if (callback != null) {
+                            callback.onError("Local report not found: " + id);
+                        }
+                    }
+                } catch (Exception e) {
+                    if (callback != null) {
+                        callback.onError("Error fetching local report: " + e.getMessage());
+                    }
+                }
+            }).start();
+        } else {
+            // Fetch from FHIR Server
+            getObservationById(id, new ObservationCallback() {
+                @Override
+                public void onSuccess(FHIRObservation observation) {
+                    try {
+                        DiseaseReport report = convertFHIRObservationToDiseaseReport(observation);
+                        callback.onSuccess(report);
+                    } catch (Exception e) {
+                        callback.onError("Error validating FHIR data: " + e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    callback.onError(error);
+                }
+            });
+        }
+    }
+
+    private DiseaseReport convertLocalReportToDiseaseReport(UnsyncedReport local) {
+        DiseaseReport report = new DiseaseReport();
+        report.setReportId("LOCAL-" + local.id);
+        report.setDiseaseType(local.diseaseType);
+        report.setStatus("pending-sync");
+
+        try {
+            report.setReportDate(new Date(local.timestamp));
+        } catch (Exception e) {
+            report.setReportDate(new Date());
+        }
+
+        Encounter encounter = new Encounter();
+        encounter.setEncounterId("LOCAL-ENC-" + local.id);
+        encounter.setEncounterType(local.encounterType);
+
+        Patient patient = new Patient();
+        patient.setPatientId("LOCAL-PAT-" + local.id);
+        patient.setName(local.patientName);
+        patient.setGender(local.gender);
+        if (local.dateOfBirth != null) {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                patient.setDateOfBirth(format.parse(local.dateOfBirth));
+            } catch (Exception e) {
+            }
+        }
+        encounter.setPatient(patient);
+
+        if (local.latitude != null && local.longitude != null) {
+            GPSLocation location = new GPSLocation();
+            location.setLatitude(local.latitude);
+            location.setLongitude(local.longitude);
+            location.setAddress(local.address);
+            encounter.setGpsLocation(location);
+        }
+
+        if (local.observationDetails != null) {
+            Observation obs = new Observation();
+            obs.setDetails(local.observationDetails);
+            obs.setTimestamp(report.getReportDate());
+            encounter.addObservation(obs);
+        }
+
+        report.setEncounter(encounter);
+
+        RiskAssessment risk = new RiskAssessment();
+        risk.setLevel(local.severity);
+        risk.setDescription("Severity: " + local.severity + ". Notes: " + local.notes);
+        report.setRiskAssessment(risk);
+
+        return report;
+    }
+
+    private DiseaseReport convertFHIRObservationToDiseaseReport(FHIRObservation observation) {
+        DiseaseReport report = new DiseaseReport();
+        report.setReportId(observation.getId());
+
+        if (observation.getCode() != null && observation.getCode().getText() != null) {
+            report.setDiseaseType(observation.getCode().getText());
+        }
+
+        if (observation.getEffectiveDateTime() != null) {
+            try {
+                java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",
+                        java.util.Locale.getDefault());
+                report.setReportDate(format.parse(observation.getEffectiveDateTime()));
+            } catch (Exception e) {
+                report.setReportDate(new Date());
+            }
+        } else {
+            report.setReportDate(new Date());
+        }
+
+        report.setStatus(observation.getStatus() != null ? observation.getStatus() : "pending");
+
+        Encounter encounter = new Encounter();
+        if (observation.getEncounter() != null && observation.getEncounter().getReference() != null) {
+            encounter.setEncounterId(observation.getEncounter().getReference().replace("Encounter/", ""));
+            if (observation.getEffectiveDateTime() != null) {
+                try {
+                    java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",
+                            java.util.Locale.getDefault());
+                    encounter.setEncounterDate(format.parse(observation.getEffectiveDateTime()));
+                } catch (Exception e) {
+                    encounter.setEncounterDate(new Date());
+                }
+            }
+        }
+
+        if (observation.getSubject() != null && observation.getSubject().getReference() != null) {
+            Patient patient = new Patient();
+            patient.setPatientId(observation.getSubject().getReference().replace("Patient/", ""));
+            if (observation.getSubject().getDisplay() != null) {
+                patient.setName(observation.getSubject().getDisplay());
+            }
+            encounter.setPatient(patient);
+        }
+
+        report.setEncounter(encounter);
+
+        if (observation.getValueCodeableConcept() != null) {
+            RiskAssessment risk = new RiskAssessment();
+            risk.setLevel(observation.getValueCodeableConcept().getText());
+            risk.setDescription("Risk level: " + observation.getValueCodeableConcept().getText());
+            report.setRiskAssessment(risk);
+        }
+
+        if (observation.getValueString() != null && !observation.getValueString().isEmpty()) {
+            Observation obs = new Observation();
+            obs.setDetails(observation.getValueString());
+            obs.setTimestamp(report.getReportDate());
+            if (report.getEncounter() != null) {
+                report.getEncounter().addObservation(obs);
+            }
+        }
+
+        return report;
     }
 
     // --- INTERFACES ---
@@ -573,6 +873,12 @@ public class FHIRService {
 
     public interface ObservationCallback {
         void onSuccess(FHIRObservation observation);
+
+        void onError(String error);
+    }
+
+    public interface DiseaseReportCallback {
+        void onSuccess(DiseaseReport report);
 
         void onError(String error);
     }

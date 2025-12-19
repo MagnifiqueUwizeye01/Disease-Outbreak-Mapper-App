@@ -57,6 +57,9 @@ public class OfflinePendingCasesFragment extends Fragment {
         setupRecyclerView();
         setupSyncButton();
 
+        // Enable options menu for back button handling
+        setHasOptionsMenu(true);
+
         return view;
     }
 
@@ -64,6 +67,27 @@ public class OfflinePendingCasesFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadReports();
+
+        // Force back arrow
+        if (getActivity() instanceof androidx.appcompat.app.AppCompatActivity) {
+            androidx.appcompat.app.ActionBar actionBar = ((androidx.appcompat.app.AppCompatActivity) getActivity())
+                    .getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setDisplayShowHomeEnabled(true);
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull android.view.MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupRecyclerView() {
@@ -127,7 +151,7 @@ public class OfflinePendingCasesFragment extends Fragment {
 
                     fhirService.submitReportForSync(
                             report.patientName, report.gender, report.dateOfBirth, report.patientAge,
-                            report.chwName, report.chwId,
+                            report.chwName, report.chwId, report.chwEmail,
                             report.latitude, report.longitude, report.address,
                             report.encounterDate, report.encounterType,
                             report.diseaseType, symptoms, report.severity,

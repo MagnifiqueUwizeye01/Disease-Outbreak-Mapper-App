@@ -12,22 +12,23 @@ import java.util.List;
 public class FHIRRiskAssessment {
     @SerializedName("resourceType")
     private String resourceType = "RiskAssessment";
-    
+
     @SerializedName("id")
     private String id;
-    
+
     @SerializedName("status")
-    private String status; // registered | preliminary | final | amended | corrected | entered-in-error | cancelled
-    
+    private String status; // registered | preliminary | final | amended | corrected | entered-in-error |
+                           // cancelled
+
     @SerializedName("subject")
     private Reference subject; // Reference to Patient
-    
+
     @SerializedName("encounter")
     private Reference encounter; // Reference to Encounter
-    
+
     @SerializedName("basis")
     private List<Reference> basis; // References to Observations or other resources
-    
+
     @SerializedName("prediction")
     private List<Prediction> prediction;
 
@@ -36,32 +37,33 @@ public class FHIRRiskAssessment {
         this.prediction = new ArrayList<>();
     }
 
-    public FHIRRiskAssessment(String id, String status, String patientReference, 
-                             String encounterReference, String riskLevel, String explanation) {
+    public FHIRRiskAssessment(String id, String status, String patientReference,
+            String encounterReference, String riskLevel, String explanation) {
         this();
         this.id = id;
         this.resourceType = "RiskAssessment";
         this.status = status != null ? status : "final";
-        
+
         // Set subject (Patient reference)
         this.subject = new Reference();
         this.subject.setReference(patientReference);
-        
+
         // Set encounter reference
         this.encounter = new Reference();
         this.encounter.setReference(encounterReference);
-        
+
         // Set prediction (risk level)
         Prediction pred = new Prediction();
         CodeableConcept outcome = new CodeableConcept();
         Coding outcomeCoding = new Coding();
-        outcomeCoding.setSystem("http://snomed.info/sct");
+        outcomeCoding.setSystem("http://healthtracker.org/data/risk");
         outcomeCoding.setCode(riskLevel != null ? riskLevel.toLowerCase() : "low");
-        outcomeCoding.setDisplay(riskLevel != null ? riskLevel.substring(0, 1).toUpperCase() + riskLevel.substring(1) : "Low");
+        outcomeCoding.setDisplay(
+                riskLevel != null ? riskLevel.substring(0, 1).toUpperCase() + riskLevel.substring(1) : "Low");
         outcome.getCoding().add(outcomeCoding);
         outcome.setText(riskLevel != null ? riskLevel : "Low Risk");
         pred.setOutcome(outcome);
-        
+
         // Set probability (risk score based on level)
         if (riskLevel != null) {
             if (riskLevel.equalsIgnoreCase("severe") || riskLevel.equalsIgnoreCase("high")) {
@@ -74,12 +76,12 @@ public class FHIRRiskAssessment {
         } else {
             pred.setProbabilityDecimal(0.2);
         }
-        
+
         // Set explanation
         if (explanation != null && !explanation.isEmpty()) {
             pred.setRationale(explanation);
         }
-        
+
         this.prediction.add(pred);
     }
 
@@ -144,7 +146,7 @@ public class FHIRRiskAssessment {
     public static class Reference {
         @SerializedName("reference")
         private String reference;
-        
+
         @SerializedName("display")
         private String display;
 
@@ -168,10 +170,10 @@ public class FHIRRiskAssessment {
     public static class Prediction {
         @SerializedName("outcome")
         private CodeableConcept outcome;
-        
+
         @SerializedName("probabilityDecimal")
         private Double probabilityDecimal;
-        
+
         @SerializedName("rationale")
         private String rationale;
 
@@ -203,7 +205,7 @@ public class FHIRRiskAssessment {
     public static class CodeableConcept {
         @SerializedName("coding")
         private List<Coding> coding;
-        
+
         @SerializedName("text")
         private String text;
 
@@ -231,10 +233,10 @@ public class FHIRRiskAssessment {
     public static class Coding {
         @SerializedName("system")
         private String system;
-        
+
         @SerializedName("code")
         private String code;
-        
+
         @SerializedName("display")
         private String display;
 
@@ -263,4 +265,3 @@ public class FHIRRiskAssessment {
         }
     }
 }
-

@@ -28,10 +28,10 @@ public class RegisterFragment extends Fragment {
     private TextInputEditText etConfirmPassword;
     private MaterialButton btnRegister;
     private TextView tvLogin;
-    
+
     private AuthService authService;
     private SessionManager sessionManager;
-    
+
     // For Google Sign-In completion
     private String googleUid = null;
     private String googleEmail = null;
@@ -43,21 +43,21 @@ public class RegisterFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_register_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         // Initialize services
         authService = new AuthService(requireContext());
         sessionManager = new SessionManager(requireContext());
-        
+
         initializeViews(view);
         setupClickListeners();
-        
+
         // Check if coming from Google Sign-In
         Bundle args = getArguments();
         if (args != null) {
@@ -123,61 +123,98 @@ public class RegisterFragment extends Fragment {
         if (googleUid != null && !googleUid.isEmpty()) {
             // Complete Google registration
             authService.completeGoogleRegistration(googleUid, email, fullName, phone, chwCode,
-                new AuthService.RegistrationCallback() {
-                    @Override
-                    public void onSuccess(String userId, String userEmail, String name, String chwCode, String phone) {
-                        // Don't save session - user needs to login
-                        runOnUiThread(() -> {
-                            Toast.makeText(requireContext(), 
-                                "Registration successful! Please login to continue.", 
-                                Toast.LENGTH_LONG).show();
-                            navigateToLogin();
-                        });
-                    }
+                    new AuthService.RegistrationCallback() {
+                        @Override
+                        public void onSuccess(String userId, String userEmail, String name, String chwCode,
+                                String phone) {
+                            // Save user locally in SQLite
+                            new Thread(() -> {
+                                try {
+                                    com.healthtracker.chw.data.local.User localUser = new com.healthtracker.chw.data.local.User(
+                                            userId,
+                                            name,
+                                            userEmail,
+                                            "CHW", // Default role or fetch if available
+                                            phone);
+                                    com.healthtracker.chw.data.local.AppDatabase.getDatabase(requireContext())
+                                            .userDao()
+                                            .insert(localUser);
+                                } catch (Exception e) {
+                                    android.util.Log.e("RegisterFragment", "Error saving user locally", e);
+                                }
+                            }).start();
 
-                    @Override
-                    public void onError(String error) {
-                        runOnUiThread(() -> {
-                            if (btnRegister != null) {
-                                btnRegister.setEnabled(true);
-                                btnRegister.setText("Register");
-                            }
-                            Toast.makeText(requireContext(), "Registration failed: " + error, Toast.LENGTH_LONG).show();
-                        });
-                    }
-                });
+                            // Don't save session - user needs to login
+                            runOnUiThread(() -> {
+                                Toast.makeText(requireContext(),
+                                        "Registration successful! Please login to continue.",
+                                        Toast.LENGTH_LONG).show();
+                                navigateToLogin();
+                            });
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            runOnUiThread(() -> {
+                                if (btnRegister != null) {
+                                    btnRegister.setEnabled(true);
+                                    btnRegister.setText("Register");
+                                }
+                                Toast.makeText(requireContext(), "Registration failed: " + error, Toast.LENGTH_LONG)
+                                        .show();
+                            });
+                        }
+                    });
         } else {
             // Regular email/password registration
             authService.register(email, password, fullName, phone, chwCode,
-                new AuthService.RegistrationCallback() {
-                    @Override
-                    public void onSuccess(String userId, String userEmail, String name, String chwCode, String phone) {
-                        // Don't save session - user needs to login
-                        runOnUiThread(() -> {
-                            Toast.makeText(requireContext(), 
-                                "Registration successful! Please login to continue.", 
-                                Toast.LENGTH_LONG).show();
-                            navigateToLogin();
-                        });
-                    }
+                    new AuthService.RegistrationCallback() {
+                        @Override
+                        public void onSuccess(String userId, String userEmail, String name, String chwCode,
+                                String phone) {
+                            // Save user locally in SQLite
+                            new Thread(() -> {
+                                try {
+                                    com.healthtracker.chw.data.local.User localUser = new com.healthtracker.chw.data.local.User(
+                                            userId,
+                                            name,
+                                            userEmail,
+                                            "CHW",
+                                            phone);
+                                    com.healthtracker.chw.data.local.AppDatabase.getDatabase(requireContext())
+                                            .userDao()
+                                            .insert(localUser);
+                                } catch (Exception e) {
+                                    android.util.Log.e("RegisterFragment", "Error saving user locally", e);
+                                }
+                            }).start();
 
-                    @Override
-                    public void onError(String error) {
-                        runOnUiThread(() -> {
-                            if (btnRegister != null) {
-                                btnRegister.setEnabled(true);
-                                btnRegister.setText("Register");
-                            }
-                            String errorMessage = formatErrorMessage(error);
-                            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show();
-                        });
-                    }
-                });
+                            // Don't save session - user needs to login
+                            runOnUiThread(() -> {
+                                Toast.makeText(requireContext(),
+                                        "Registration successful! Please login to continue.",
+                                        Toast.LENGTH_LONG).show();
+                                navigateToLogin();
+                            });
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            runOnUiThread(() -> {
+                                if (btnRegister != null) {
+                                    btnRegister.setEnabled(true);
+                                    btnRegister.setText("Register");
+                                }
+                                String errorMessage = formatErrorMessage(error);
+                                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show();
+                            });
+                        }
+                    });
         }
     }
 
-    private boolean validateInputs(String fullName, String phone, String email, 
-                                  String chwCode, String password, String confirmPassword) {
+    private boolean validateInputs(String fullName, String phone, String email,
+            String chwCode, String password, String confirmPassword) {
         boolean isValid = true;
 
         if (TextUtils.isEmpty(fullName)) {
@@ -252,8 +289,8 @@ public class RegisterFragment extends Fragment {
 
     private void navigateToMainActivity() {
         if (getActivity() != null) {
-            android.content.Intent intent = new android.content.Intent(getActivity(), 
-                com.healthtracker.chw.activities.MainActivity.class);
+            android.content.Intent intent = new android.content.Intent(getActivity(),
+                    com.healthtracker.chw.activities.MainActivity.class);
             startActivity(intent);
             getActivity().finish();
         }
@@ -261,9 +298,10 @@ public class RegisterFragment extends Fragment {
 
     private void navigateToLogin() {
         if (getActivity() != null) {
-            android.content.Intent intent = new android.content.Intent(getActivity(), 
-                com.healthtracker.chw.activities.LoginActivity.class);
-            intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            android.content.Intent intent = new android.content.Intent(getActivity(),
+                    com.healthtracker.chw.activities.LoginActivity.class);
+            intent.setFlags(
+                    android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             getActivity().finish();
         }
@@ -279,9 +317,9 @@ public class RegisterFragment extends Fragment {
         if (error == null || error.isEmpty()) {
             return "Registration failed. Please try again.";
         }
-        
+
         String lowerError = error.toLowerCase();
-        
+
         if (lowerError.contains("invalid") && lowerError.contains("chw code")) {
             return "Invalid or inactive CHW Code. Please check your code and try again.";
         } else if (lowerError.contains("email-already-in-use")) {
@@ -293,7 +331,7 @@ public class RegisterFragment extends Fragment {
         } else if (lowerError.contains("network")) {
             return "Network error. Please check your internet connection.";
         }
-        
+
         return error;
     }
 

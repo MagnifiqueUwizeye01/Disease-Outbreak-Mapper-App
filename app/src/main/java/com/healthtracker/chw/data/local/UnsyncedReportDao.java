@@ -23,4 +23,17 @@ public interface UnsyncedReportDao {
 
     @Delete
     void delete(UnsyncedReport report);
+
+    @androidx.room.Update
+    void update(UnsyncedReport report);
+
+    // User Isolation Queries
+    @Query("SELECT * FROM unsynced_reports WHERE chwId = :chwId ORDER BY timestamp ASC")
+    List<UnsyncedReport> getReportsByChwId(String chwId);
+
+    @Query("SELECT COUNT(*) FROM unsynced_reports WHERE chwId = :chwId")
+    int getCountByChwId(String chwId);
+
+    @Query("SELECT * FROM unsynced_reports WHERE chwId = :chwId OR chwEmail = :chwEmail ORDER BY timestamp ASC")
+    List<UnsyncedReport> getReportsByChwIdOrEmail(String chwId, String chwEmail);
 }

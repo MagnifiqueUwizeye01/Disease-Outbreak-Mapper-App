@@ -21,13 +21,17 @@ import java.util.Locale;
 public class CaseHistoryAdapter extends RecyclerView.Adapter<CaseHistoryAdapter.CaseViewHolder> {
 
     private List<DiseaseReport> cases;
-    private OnCaseClickListener listener;
+    private OnCaseActionListener listener;
 
-    public interface OnCaseClickListener {
+    public interface OnCaseActionListener {
         void onCaseClick(String reportId);
+
+        void onEditClick(String reportId);
+
+        void onDeleteClick(String reportId);
     }
 
-    public CaseHistoryAdapter(OnCaseClickListener listener) {
+    public CaseHistoryAdapter(OnCaseActionListener listener) {
         this.cases = new ArrayList<>();
         this.listener = listener;
     }
@@ -41,7 +45,7 @@ public class CaseHistoryAdapter extends RecyclerView.Adapter<CaseHistoryAdapter.
     @Override
     public CaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.item_case_history, parent, false);
+                .inflate(R.layout.item_case_history, parent, false);
         return new CaseViewHolder(view);
     }
 
@@ -59,6 +63,7 @@ public class CaseHistoryAdapter extends RecyclerView.Adapter<CaseHistoryAdapter.
     class CaseViewHolder extends RecyclerView.ViewHolder {
         private TextView tvDiseaseName;
         private Chip chipRiskLevel;
+        private android.widget.ImageButton btnMoreOptions;
         private TextView tvPatientInfo;
         private TextView tvLocation;
         private TextView tvReportDate;
@@ -68,6 +73,7 @@ public class CaseHistoryAdapter extends RecyclerView.Adapter<CaseHistoryAdapter.
             super(itemView);
             tvDiseaseName = itemView.findViewById(R.id.tv_disease_name);
             chipRiskLevel = itemView.findViewById(R.id.chip_risk_level);
+            btnMoreOptions = itemView.findViewById(R.id.btn_more_options);
             tvPatientInfo = itemView.findViewById(R.id.tv_patient_info);
             tvLocation = itemView.findViewById(R.id.tv_location);
             tvReportDate = itemView.findViewById(R.id.tv_report_date);
@@ -79,6 +85,27 @@ public class CaseHistoryAdapter extends RecyclerView.Adapter<CaseHistoryAdapter.
                     DiseaseReport report = cases.get(position);
                     if (report != null && report.getReportId() != null) {
                         listener.onCaseClick(report.getReportId());
+                    }
+                }
+            });
+
+            btnMoreOptions.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    DiseaseReport report = cases.get(position);
+                    if (report != null && report.getReportId() != null) {
+                        android.widget.PopupMenu popup = new android.widget.PopupMenu(v.getContext(), v);
+                        popup.getMenu().add("Edit");
+                        popup.getMenu().add("Delete");
+                        popup.setOnMenuItemClickListener(item -> {
+                            if (item.getTitle().equals("Edit")) {
+                                listener.onEditClick(report.getReportId());
+                            } else if (item.getTitle().equals("Delete")) {
+                                listener.onDeleteClick(report.getReportId());
+                            }
+                            return true;
+                        });
+                        popup.show();
                     }
                 }
             });
@@ -124,7 +151,8 @@ public class CaseHistoryAdapter extends RecyclerView.Adapter<CaseHistoryAdapter.
                     }
                 }
                 if (patient.getGender() != null) {
-                    if (info.length() > 0) info.append(", ");
+                    if (info.length() > 0)
+                        info.append(", ");
                     String gender = patient.getGender();
                     // Capitalize first letter
                     if (gender.length() > 0) {
@@ -166,19 +194,19 @@ public class CaseHistoryAdapter extends RecyclerView.Adapter<CaseHistoryAdapter.
             chipStatus.setText(status);
             if ("SYNCED".equals(status) || "COMPLETED".equals(status)) {
                 chipStatus.setChipBackgroundColor(android.content.res.ColorStateList.valueOf(
-                    android.graphics.Color.parseColor("#4CAF50")));
+                        android.graphics.Color.parseColor("#4CAF50")));
             } else {
                 chipStatus.setChipBackgroundColor(android.content.res.ColorStateList.valueOf(
-                    android.graphics.Color.parseColor("#FF9800")));
+                        android.graphics.Color.parseColor("#FF9800")));
             }
         }
 
         private int calculateAge(Date dateOfBirth) {
-            if (dateOfBirth == null) return 0;
+            if (dateOfBirth == null)
+                return 0;
             Date today = new Date();
             long diff = today.getTime() - dateOfBirth.getTime();
             return (int) (diff / (1000L * 60 * 60 * 24 * 365));
         }
     }
 }
-

@@ -69,7 +69,7 @@ public class DashboardFragment extends Fragment {
         }
 
         if (chipSyncPending != null) {
-            chipSyncPending.setOnClickListener(v -> navController.navigate(R.id.offlinePendingCasesFragment));
+            chipSyncPending.setOnClickListener(v -> navController.navigate(R.id.caseHistoryFragment));
         }
 
         View chipMediumRisk = view.findViewById(R.id.chip_medium_risk);
@@ -119,7 +119,7 @@ public class DashboardFragment extends Fragment {
         View cardLowRisk = view.findViewById(R.id.card_low_risk);
 
         if (cardPendingReports != null) {
-            cardPendingReports.setOnClickListener(v -> navController.navigate(R.id.offlinePendingCasesFragment));
+            cardPendingReports.setOnClickListener(v -> navController.navigate(R.id.caseHistoryFragment));
         }
 
         if (cardHighRisk != null) {
@@ -186,14 +186,46 @@ public class DashboardFragment extends Fragment {
     private void loadPendingReportsCount() {
         new Thread(() -> {
             try {
+                // Get current CHW ID
+                // Get current CHW ID
+                com.healthtracker.chw.utils.SessionManager sessionManager = new com.healthtracker.chw.utils.SessionManager(
+                        requireContext());
+                String currentChwId = sessionManager.getUserId();
+
                 com.healthtracker.chw.data.local.UnsyncedReportDao dao = com.healthtracker.chw.data.local.AppDatabase
                         .getDatabase(requireContext()).unsyncedReportDao();
-                int count = dao.getRecordCount();
 
+                int count = 0;
+                // Get current Email
+                String currentChwEmail = sessionManager.getUserEmail();
+
+                if (currentChwId != null || currentChwEmail != null) {
+                    String filterId = currentChwId != null ? currentChwId : "___dummy_id___";
+                    String filterEmail = currentChwEmail != null ? currentChwEmail : "___dummy_email___";
+                    // We need a count query that supports OR.
+                    // Since getCountByChwId only checked ID, let's fetch list size or add a new
+                    // count query.
+                    // For efficiency, let's use the list size of the new query or add a dedicated
+                    // count query.
+                    // Let's add getCountByChwIdOrEmail to DAO to be efficient.
+                    // Wait, I didn't add count query to DAO yet. Let's just use list size for now
+                    // or add it.
+                    // Actually, let's use list size for now as it's safer than modifying DAO again
+                    // and again.
+                    // Or better, let's modify DAO to add a count method.
+                    // But I can't modify DAO and this file in parallel safely if I want to use it
+                    // immediately.
+                    // I already added getReportsByChwIdOrEmail. I can use .size() on that.
+                    count = dao.getReportsByChwIdOrEmail(filterId, filterEmail).size();
+                }
+
+                // If no user ID, count remains 0 (or could show all, but isolation implies 0)
+
+                int finalCount = count;
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
                         if (tvPendingReports != null) {
-                            tvPendingReports.setText(String.valueOf(count));
+                            tvPendingReports.setText(String.valueOf(finalCount));
                         }
                     });
                 }
@@ -214,12 +246,34 @@ public class DashboardFragment extends Fragment {
                 // Use final array to allow modification inside lambda
                 final int[] riskCounts = { 0, 0, 0 }; // High, Medium, Low
 
+                // Get current CHW ID
+                // Get current CHW ID
+                com.healthtracker.chw.utils.SessionManager sessionManager = new com.healthtracker.chw.utils.SessionManager(
+                        requireContext());
+                String currentChwId = sessionManager.getUserId();
+
                 // Count Online Risks
                 if (bundle != null && bundle.getEntry() != null) {
                     for (com.healthtracker.chw.models.fhir.FHIRBundle.Entry entry : bundle.getEntry()) {
                         if (entry.getResource() instanceof com.healthtracker.chw.models.fhir.FHIRObservation) {
                             com.healthtracker.chw.models.fhir.FHIRObservation obs = (com.healthtracker.chw.models.fhir.FHIRObservation) entry
                                     .getResource();
+
+                            // Filter by Performer (CHW ID)
+                            if (currentChwId != null) {
+                                boolean isMyReport = false;
+                                if (obs.getPerformer() != null) {
+                                    for (com.healthtracker.chw.models.fhir.FHIRObservation.Reference ref : obs
+                                            .getPerformer()) {
+                                        if (ref.getReference() != null && ref.getReference().contains(currentChwId)) {
+                                            isMyReport = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!isMyReport)
+                                    continue;
+                            }
 
                             String severity = "";
                             if (obs.getValueCodeableConcept() != null
@@ -245,10 +299,22 @@ public class DashboardFragment extends Fragment {
                     try {
                         com.healthtracker.chw.data.local.UnsyncedReportDao dao = com.healthtracker.chw.data.local.AppDatabase
                                 .getDatabase(requireContext()).unsyncedReportDao();
-                        java.util.List<com.healthtracker.chw.data.local.UnsyncedReport> localReports = dao
-                                .getAllReports();
+                        java.util.List<com.healthtracker.chw.data.local.UnsyncedReport> localReports = new java.util.ArrayList<>();
+
+                        if (currentChwId != null || currentChwId == null) { // Logic above handles nulls but we need
+                                                                            // email here too
+                            SharedPreferences appPrefs = requireContext().getSharedPreferences("app_prefs",
+                                    android.content.Context.MODE_PRIVATE);
+                            String currentChwEmail = appPrefs.getString("user_email", null);
+
+                            String filterId = currentChwId != null ? currentChwId : "___dummy_id___";
+                            String filterEmail = currentChwEmail != null ? currentChwEmail : "___dummy_email___";
+                            localReports = dao.getReportsByChwIdOrEmail(filterId, filterEmail);
+                        }
 
                         for (com.healthtracker.chw.data.local.UnsyncedReport report : localReports) {
+                            // No manual filtering needed
+
                             if (report.severity != null) {
                                 String sev = report.severity.toLowerCase();
                                 if (sev.contains("severe") || sev.contains("high")) {
@@ -285,9 +351,15 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onError(String error) {
                 android.util.Log.e("DashboardFragment", "Error loading risk counts: " + error);
+
                 // Even if online fails, try to show local count
                 new Thread(() -> {
                     try {
+                        // Get current CHW ID
+                        SharedPreferences prefs = requireContext().getSharedPreferences("app_prefs",
+                                android.content.Context.MODE_PRIVATE);
+                        String currentChwId = prefs.getString("chw_id", null);
+
                         com.healthtracker.chw.data.local.UnsyncedReportDao dao = com.healthtracker.chw.data.local.AppDatabase
                                 .getDatabase(requireContext()).unsyncedReportDao();
                         java.util.List<com.healthtracker.chw.data.local.UnsyncedReport> localReports = dao
@@ -295,6 +367,11 @@ public class DashboardFragment extends Fragment {
 
                         int[] localRisks = { 0, 0, 0 };
                         for (com.healthtracker.chw.data.local.UnsyncedReport report : localReports) {
+                            // Filter local reports
+                            if (currentChwId != null && !currentChwId.equals(report.chwId)) {
+                                continue;
+                            }
+
                             if (report.severity != null) {
                                 String sev = report.severity.toLowerCase();
                                 if (sev.contains("severe") || sev.contains("high")) {

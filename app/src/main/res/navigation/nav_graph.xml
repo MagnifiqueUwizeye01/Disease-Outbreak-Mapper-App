@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_case_history_to_details"
             app:destination="@id/caseDetailsFragment" />
+        <action
+            android:id="@+id/action_case_history_to_report_case"
+            app:destination="@id/reportCaseFragment" />
     </fragment>
 
     <!-- Case Details Fragment -->
@@ -82,12 +85,7 @@
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 
-    <!-- Offline Pending Cases Fragment -->
-    <fragment
-        android:id="@+id/offlinePendingCasesFragment"
-        android:name="com.healthtracker.chw.fragments.OfflinePendingCasesFragment"
-        android:label="Offline Pending Cases"
-        tools:layout="@layout/fragment_offline_pending_cases" />
+
 
     <!-- Help & Support Fragment -->
     <fragment

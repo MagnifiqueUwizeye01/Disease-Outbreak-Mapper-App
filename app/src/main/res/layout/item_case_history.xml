@@ -1,32 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="12dp"
-    android:background="@android:color/white">
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/medical_green_light"
+    app:strokeWidth="1dp">
 
-    <TextView
-        android:id="@+id/tvCaseId"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Case ID"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvPatientName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Patient Name"
-        android:paddingTop="4dp" />
+        <!-- Header Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
 
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date Reported"
-        android:paddingTop="2dp"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp" />
-</LinearLayout>
+            <TextView
+                android:id="@+id/tv_disease_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Malaria"
+                android:textColor="@color/medical_green_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_risk_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HIGH"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                app:chipBackgroundColor="@color/error"
+                app:chipMinTouchTargetSize="0dp" />
+
+            <ImageButton
+                android:id="@+id/btn_more_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Options"
+                android:minWidth="32dp"
+                android:minHeight="32dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_more_vert"
+                app:tint="@color/text_secondary" />
+
+        </LinearLayout>
+
+        <!-- Patient Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_person_small"
+                app:tint="@color/text_secondary"
+                android:layout_marginEnd="4dp" />
+
+            <TextView
+                android:id="@+id/tv_patient_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="32y, Male"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="12dp"
+                android:background="@color/divider"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_location_small"
+                app:tint="@color/text_secondary"
+                android:layout_marginEnd="4dp" />
+
+            <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kigali"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <!-- Date & Status Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_report_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Today, 14:30"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SYNCED"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                app:chipBackgroundColor="@color/medical_green_primary"
+                app:chipMinTouchTargetSize="0dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
+

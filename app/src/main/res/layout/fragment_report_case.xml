@@ -2,13 +2,25 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:padding="24dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Report New Disease Case"
+            android:textColor="@color/medical_green_primary"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -18,34 +30,7 @@
             android:textSize="14sp"
             android:layout_marginBottom="24dp" />
 
-        <!-- Connection Mode Toggle -->
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/toggle_connection_mode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:singleSelection="true"
-            app:selectionRequired="true"
-            app:checkedButton="@id/btn_mode_online">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_mode_online"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Online Mode"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                app:icon="@drawable/ic_sync" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_mode_offline"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Offline Mode"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                app:icon="@drawable/ic_cloud_off" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <!-- Patient Information Card -->
         <com.google.android.material.card.MaterialCardView
@@ -500,20 +485,22 @@
                             android:id="@+id/radio_mild"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Mild - Minor symptoms, no hospitalization"
-                            android:textColor="@color/text_primary" />
+                            android:text="Mild - Minor symptoms, no hospitalization (Low Risk)"
+                            android:textColor="@color/black" />
 
                         <com.google.android.material.radiobutton.MaterialRadioButton
                             android:id="@+id/radio_moderate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Moderate - Requires medical attention"
-                            android:textColor="@color/text_primary" />
+                            android:text="Moderate - Requires medical attention (Medium Risk)"
+                            android:textColor="@color/black" />
 
                         <com.google.android.material.radiobutton.MaterialRadioButton
                             android:id="@+id/radio_severe"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:text="Severe - Emergency, hospitalization needed (High Risk)"
+                            android:textColor="@color/black" />
                             android:text="Severe - Emergency, hospitalization needed"
                             android:textColor="@color/text_primary" />
                     </RadioGroup>
@@ -710,8 +697,14 @@
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:paddingBottom="8dp" />
+            android:backgroundTint="@color/medical_green_primary"
+            android:textColor="@color/white"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_send"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconTint="@color/white" />
 
-        <!-- Add EditTexts, Buttons for reporting case -->
     </LinearLayout>
+
 </ScrollView>

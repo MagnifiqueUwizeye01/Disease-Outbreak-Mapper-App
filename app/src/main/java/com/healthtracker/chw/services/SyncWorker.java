@@ -69,7 +69,7 @@ public class SyncWorker extends Worker {
 
             fhirService.submitReportForSync(
                     report.patientName, report.gender, report.dateOfBirth, report.patientAge,
-                    report.chwName, report.chwId,
+                    report.chwName, report.chwId, report.chwEmail,
                     report.latitude, report.longitude, report.address,
                     report.encounterDate, report.encounterType,
                     report.diseaseType, symptoms, report.severity,

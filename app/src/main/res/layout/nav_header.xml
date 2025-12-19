@@ -70,45 +70,8 @@
     </LinearLayout>
 
     <!-- App Info -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CHW Disease Reporter"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:layout_marginBottom="4dp" />
+    <!-- App Info Removed -->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Geospatial Outbreak Mapper"
-        android:textSize="12sp"
-        android:textColor="@color/white"
-        android:alpha="0.8"
-        android:layout_marginBottom="12dp" />
-
-    <!-- Status -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/ic_sync"
-            app:tint="@color/medical_gold_primary"
-            android:layout_marginEnd="6dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3 reports pending sync"
-            android:textSize="12sp"
-            android:textColor="@color/white"
-            android:alpha="0.9" />
-    </LinearLayout>
+    <!-- Status Removed -->
 
 </LinearLayout>
