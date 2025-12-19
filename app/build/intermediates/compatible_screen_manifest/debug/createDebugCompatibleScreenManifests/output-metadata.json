@@ -4,7 +4,7 @@
     "type": "COMPATIBLE_SCREEN_MANIFEST",
     "kind": "Directory"
   },
-  "applicationId": "com.healthmapper.chwapp.debug",
+  "applicationId": "com.healthtracker.chw",
   "variantName": "debug",
   "elements": []
 }

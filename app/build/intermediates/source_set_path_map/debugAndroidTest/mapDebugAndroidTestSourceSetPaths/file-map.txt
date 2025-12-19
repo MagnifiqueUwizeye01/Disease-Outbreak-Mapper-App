@@ -1,6 +1,0 @@
-com.healthmapper.chwapp.test.app-jetified-annotation-experimental-1.3.0-0 C:\Users\HP\.gradle\caches\8.10.2\transforms\796eca3e6d486c341485e09baa19e842\transformed\jetified-annotation-experimental-1.3.0\res
-com.healthmapper.chwapp.test.app-jetified-core-1.5.0-1 C:\Users\HP\.gradle\caches\8.10.2\transforms\a869e11c6cf5fb5af87fd098d72d4b00\transformed\jetified-core-1.5.0\res
-com.healthmapper.chwapp.test.app-androidTest-2 C:\Users\HP\AndroidStudioProjects\final-project-group-bc\app\build\generated\res\resValues\androidTest\debug
-com.healthmapper.chwapp.test.app-mergeDebugAndroidTestResources-3 C:\Users\HP\AndroidStudioProjects\final-project-group-bc\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
-com.healthmapper.chwapp.test.app-mergeDebugAndroidTestResources-4 C:\Users\HP\AndroidStudioProjects\final-project-group-bc\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
-com.healthmapper.chwapp.test.app-debugAndroidTest-5 C:\Users\HP\AndroidStudioProjects\final-project-group-bc\app\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources

@@ -27,13 +27,15 @@ public final class UnsyncedReportDao_Impl implements UnsyncedReportDao {
 
   private final EntityDeletionOrUpdateAdapter<UnsyncedReport> __deletionAdapterOfUnsyncedReport;
 
+  private final EntityDeletionOrUpdateAdapter<UnsyncedReport> __updateAdapterOfUnsyncedReport;
+
   public UnsyncedReportDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfUnsyncedReport = new EntityInsertionAdapter<UnsyncedReport>(__db) {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `unsynced_reports` (`id`,`patientName`,`gender`,`dateOfBirth`,`patientAge`,`chwName`,`chwId`,`latitude`,`longitude`,`address`,`encounterDate`,`encounterType`,`diseaseType`,`symptomsJson`,`severity`,`observationDetails`,`notes`,`timestamp`) VALUES (nullif(?, 0),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        return "INSERT OR ABORT INTO `unsynced_reports` (`id`,`patientName`,`gender`,`dateOfBirth`,`patientAge`,`chwName`,`chwId`,`chwEmail`,`latitude`,`longitude`,`address`,`encounterDate`,`encounterType`,`diseaseType`,`symptomsJson`,`severity`,`observationDetails`,`notes`,`timestamp`) VALUES (nullif(?, 0),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -70,57 +72,62 @@ public final class UnsyncedReportDao_Impl implements UnsyncedReportDao {
         } else {
           statement.bindString(7, entity.chwId);
         }
-        if (entity.latitude == null) {
+        if (entity.chwEmail == null) {
           statement.bindNull(8);
         } else {
-          statement.bindDouble(8, entity.latitude);
+          statement.bindString(8, entity.chwEmail);
         }
-        if (entity.longitude == null) {
+        if (entity.latitude == null) {
           statement.bindNull(9);
         } else {
-          statement.bindDouble(9, entity.longitude);
+          statement.bindDouble(9, entity.latitude);
         }
-        if (entity.address == null) {
+        if (entity.longitude == null) {
           statement.bindNull(10);
         } else {
-          statement.bindString(10, entity.address);
+          statement.bindDouble(10, entity.longitude);
         }
-        if (entity.encounterDate == null) {
+        if (entity.address == null) {
           statement.bindNull(11);
         } else {
-          statement.bindString(11, entity.encounterDate);
+          statement.bindString(11, entity.address);
         }
-        if (entity.encounterType == null) {
+        if (entity.encounterDate == null) {
           statement.bindNull(12);
         } else {
-          statement.bindString(12, entity.encounterType);
+          statement.bindString(12, entity.encounterDate);
         }
-        if (entity.diseaseType == null) {
+        if (entity.encounterType == null) {
           statement.bindNull(13);
         } else {
-          statement.bindString(13, entity.diseaseType);
+          statement.bindString(13, entity.encounterType);
         }
-        if (entity.symptomsJson == null) {
+        if (entity.diseaseType == null) {
           statement.bindNull(14);
         } else {
-          statement.bindString(14, entity.symptomsJson);
+          statement.bindString(14, entity.diseaseType);
         }
-        if (entity.severity == null) {
+        if (entity.symptomsJson == null) {
           statement.bindNull(15);
         } else {
-          statement.bindString(15, entity.severity);
+          statement.bindString(15, entity.symptomsJson);
         }
-        if (entity.observationDetails == null) {
+        if (entity.severity == null) {
           statement.bindNull(16);
         } else {
-          statement.bindString(16, entity.observationDetails);
+          statement.bindString(16, entity.severity);
         }
-        if (entity.notes == null) {
+        if (entity.observationDetails == null) {
           statement.bindNull(17);
         } else {
-          statement.bindString(17, entity.notes);
+          statement.bindString(17, entity.observationDetails);
         }
-        statement.bindLong(18, entity.timestamp);
+        if (entity.notes == null) {
+          statement.bindNull(18);
+        } else {
+          statement.bindString(18, entity.notes);
+        }
+        statement.bindLong(19, entity.timestamp);
       }
     };
     this.__deletionAdapterOfUnsyncedReport = new EntityDeletionOrUpdateAdapter<UnsyncedReport>(__db) {
@@ -134,6 +141,106 @@ public final class UnsyncedReportDao_Impl implements UnsyncedReportDao {
       protected void bind(@NonNull final SupportSQLiteStatement statement,
           final UnsyncedReport entity) {
         statement.bindLong(1, entity.id);
+      }
+    };
+    this.__updateAdapterOfUnsyncedReport = new EntityDeletionOrUpdateAdapter<UnsyncedReport>(__db) {
+      @Override
+      @NonNull
+      protected String createQuery() {
+        return "UPDATE OR ABORT `unsynced_reports` SET `id` = ?,`patientName` = ?,`gender` = ?,`dateOfBirth` = ?,`patientAge` = ?,`chwName` = ?,`chwId` = ?,`chwEmail` = ?,`latitude` = ?,`longitude` = ?,`address` = ?,`encounterDate` = ?,`encounterType` = ?,`diseaseType` = ?,`symptomsJson` = ?,`severity` = ?,`observationDetails` = ?,`notes` = ?,`timestamp` = ? WHERE `id` = ?";
+      }
+
+      @Override
+      protected void bind(@NonNull final SupportSQLiteStatement statement,
+          final UnsyncedReport entity) {
+        statement.bindLong(1, entity.id);
+        if (entity.patientName == null) {
+          statement.bindNull(2);
+        } else {
+          statement.bindString(2, entity.patientName);
+        }
+        if (entity.gender == null) {
+          statement.bindNull(3);
+        } else {
+          statement.bindString(3, entity.gender);
+        }
+        if (entity.dateOfBirth == null) {
+          statement.bindNull(4);
+        } else {
+          statement.bindString(4, entity.dateOfBirth);
+        }
+        if (entity.patientAge == null) {
+          statement.bindNull(5);
+        } else {
+          statement.bindLong(5, entity.patientAge);
+        }
+        if (entity.chwName == null) {
+          statement.bindNull(6);
+        } else {
+          statement.bindString(6, entity.chwName);
+        }
+        if (entity.chwId == null) {
+          statement.bindNull(7);
+        } else {
+          statement.bindString(7, entity.chwId);
+        }
+        if (entity.chwEmail == null) {
+          statement.bindNull(8);
+        } else {
+          statement.bindString(8, entity.chwEmail);
+        }
+        if (entity.latitude == null) {
+          statement.bindNull(9);
+        } else {
+          statement.bindDouble(9, entity.latitude);
+        }
+        if (entity.longitude == null) {
+          statement.bindNull(10);
+        } else {
+          statement.bindDouble(10, entity.longitude);
+        }
+        if (entity.address == null) {
+          statement.bindNull(11);
+        } else {
+          statement.bindString(11, entity.address);
+        }
+        if (entity.encounterDate == null) {
+          statement.bindNull(12);
+        } else {
+          statement.bindString(12, entity.encounterDate);
+        }
+        if (entity.encounterType == null) {
+          statement.bindNull(13);
+        } else {
+          statement.bindString(13, entity.encounterType);
+        }
+        if (entity.diseaseType == null) {
+          statement.bindNull(14);
+        } else {
+          statement.bindString(14, entity.diseaseType);
+        }
+        if (entity.symptomsJson == null) {
+          statement.bindNull(15);
+        } else {
+          statement.bindString(15, entity.symptomsJson);
+        }
+        if (entity.severity == null) {
+          statement.bindNull(16);
+        } else {
+          statement.bindString(16, entity.severity);
+        }
+        if (entity.observationDetails == null) {
+          statement.bindNull(17);
+        } else {
+          statement.bindString(17, entity.observationDetails);
+        }
+        if (entity.notes == null) {
+          statement.bindNull(18);
+        } else {
+          statement.bindString(18, entity.notes);
+        }
+        statement.bindLong(19, entity.timestamp);
+        statement.bindLong(20, entity.id);
       }
     };
   }
@@ -163,6 +270,18 @@ public final class UnsyncedReportDao_Impl implements UnsyncedReportDao {
   }
 
   @Override
+  public void update(final UnsyncedReport report) {
+    __db.assertNotSuspendingTransaction();
+    __db.beginTransaction();
+    try {
+      __updateAdapterOfUnsyncedReport.handle(report);
+      __db.setTransactionSuccessful();
+    } finally {
+      __db.endTransaction();
+    }
+  }
+
+  @Override
   public List<UnsyncedReport> getAllReports() {
     final String _sql = "SELECT * FROM unsynced_reports ORDER BY timestamp ASC";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
@@ -176,6 +295,7 @@ public final class UnsyncedReportDao_Impl implements UnsyncedReportDao {
       final int _cursorIndexOfPatientAge = CursorUtil.getColumnIndexOrThrow(_cursor, "patientAge");
       final int _cursorIndexOfChwName = CursorUtil.getColumnIndexOrThrow(_cursor, "chwName");
       final int _cursorIndexOfChwId = CursorUtil.getColumnIndexOrThrow(_cursor, "chwId");
+      final int _cursorIndexOfChwEmail = CursorUtil.getColumnIndexOrThrow(_cursor, "chwEmail");
       final int _cursorIndexOfLatitude = CursorUtil.getColumnIndexOrThrow(_cursor, "latitude");
       final int _cursorIndexOfLongitude = CursorUtil.getColumnIndexOrThrow(_cursor, "longitude");
       final int _cursorIndexOfAddress = CursorUtil.getColumnIndexOrThrow(_cursor, "address");
@@ -221,6 +341,11 @@ public final class UnsyncedReportDao_Impl implements UnsyncedReportDao {
           _item.chwId = null;
         } else {
           _item.chwId = _cursor.getString(_cursorIndexOfChwId);
+        }
+        if (_cursor.isNull(_cursorIndexOfChwEmail)) {
+          _item.chwEmail = null;
+        } else {
+          _item.chwEmail = _cursor.getString(_cursorIndexOfChwEmail);
         }
         if (_cursor.isNull(_cursorIndexOfLatitude)) {
           _item.latitude = null;
@@ -316,6 +441,7 @@ public final class UnsyncedReportDao_Impl implements UnsyncedReportDao {
       final int _cursorIndexOfPatientAge = CursorUtil.getColumnIndexOrThrow(_cursor, "patientAge");
       final int _cursorIndexOfChwName = CursorUtil.getColumnIndexOrThrow(_cursor, "chwName");
       final int _cursorIndexOfChwId = CursorUtil.getColumnIndexOrThrow(_cursor, "chwId");
+      final int _cursorIndexOfChwEmail = CursorUtil.getColumnIndexOrThrow(_cursor, "chwEmail");
       final int _cursorIndexOfLatitude = CursorUtil.getColumnIndexOrThrow(_cursor, "latitude");
       final int _cursorIndexOfLongitude = CursorUtil.getColumnIndexOrThrow(_cursor, "longitude");
       final int _cursorIndexOfAddress = CursorUtil.getColumnIndexOrThrow(_cursor, "address");
@@ -360,6 +486,11 @@ public final class UnsyncedReportDao_Impl implements UnsyncedReportDao {
           _result.chwId = null;
         } else {
           _result.chwId = _cursor.getString(_cursorIndexOfChwId);
+        }
+        if (_cursor.isNull(_cursorIndexOfChwEmail)) {
+          _result.chwEmail = null;
+        } else {
+          _result.chwEmail = _cursor.getString(_cursorIndexOfChwEmail);
         }
         if (_cursor.isNull(_cursorIndexOfLatitude)) {
           _result.latitude = null;
@@ -414,6 +545,302 @@ public final class UnsyncedReportDao_Impl implements UnsyncedReportDao {
         _result.timestamp = _cursor.getLong(_cursorIndexOfTimestamp);
       } else {
         _result = null;
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public List<UnsyncedReport> getReportsByChwId(final String chwId) {
+    final String _sql = "SELECT * FROM unsynced_reports WHERE chwId = ? ORDER BY timestamp ASC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    if (chwId == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, chwId);
+    }
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+      final int _cursorIndexOfPatientName = CursorUtil.getColumnIndexOrThrow(_cursor, "patientName");
+      final int _cursorIndexOfGender = CursorUtil.getColumnIndexOrThrow(_cursor, "gender");
+      final int _cursorIndexOfDateOfBirth = CursorUtil.getColumnIndexOrThrow(_cursor, "dateOfBirth");
+      final int _cursorIndexOfPatientAge = CursorUtil.getColumnIndexOrThrow(_cursor, "patientAge");
+      final int _cursorIndexOfChwName = CursorUtil.getColumnIndexOrThrow(_cursor, "chwName");
+      final int _cursorIndexOfChwId = CursorUtil.getColumnIndexOrThrow(_cursor, "chwId");
+      final int _cursorIndexOfChwEmail = CursorUtil.getColumnIndexOrThrow(_cursor, "chwEmail");
+      final int _cursorIndexOfLatitude = CursorUtil.getColumnIndexOrThrow(_cursor, "latitude");
+      final int _cursorIndexOfLongitude = CursorUtil.getColumnIndexOrThrow(_cursor, "longitude");
+      final int _cursorIndexOfAddress = CursorUtil.getColumnIndexOrThrow(_cursor, "address");
+      final int _cursorIndexOfEncounterDate = CursorUtil.getColumnIndexOrThrow(_cursor, "encounterDate");
+      final int _cursorIndexOfEncounterType = CursorUtil.getColumnIndexOrThrow(_cursor, "encounterType");
+      final int _cursorIndexOfDiseaseType = CursorUtil.getColumnIndexOrThrow(_cursor, "diseaseType");
+      final int _cursorIndexOfSymptomsJson = CursorUtil.getColumnIndexOrThrow(_cursor, "symptomsJson");
+      final int _cursorIndexOfSeverity = CursorUtil.getColumnIndexOrThrow(_cursor, "severity");
+      final int _cursorIndexOfObservationDetails = CursorUtil.getColumnIndexOrThrow(_cursor, "observationDetails");
+      final int _cursorIndexOfNotes = CursorUtil.getColumnIndexOrThrow(_cursor, "notes");
+      final int _cursorIndexOfTimestamp = CursorUtil.getColumnIndexOrThrow(_cursor, "timestamp");
+      final List<UnsyncedReport> _result = new ArrayList<UnsyncedReport>(_cursor.getCount());
+      while (_cursor.moveToNext()) {
+        final UnsyncedReport _item;
+        _item = new UnsyncedReport();
+        _item.id = _cursor.getInt(_cursorIndexOfId);
+        if (_cursor.isNull(_cursorIndexOfPatientName)) {
+          _item.patientName = null;
+        } else {
+          _item.patientName = _cursor.getString(_cursorIndexOfPatientName);
+        }
+        if (_cursor.isNull(_cursorIndexOfGender)) {
+          _item.gender = null;
+        } else {
+          _item.gender = _cursor.getString(_cursorIndexOfGender);
+        }
+        if (_cursor.isNull(_cursorIndexOfDateOfBirth)) {
+          _item.dateOfBirth = null;
+        } else {
+          _item.dateOfBirth = _cursor.getString(_cursorIndexOfDateOfBirth);
+        }
+        if (_cursor.isNull(_cursorIndexOfPatientAge)) {
+          _item.patientAge = null;
+        } else {
+          _item.patientAge = _cursor.getInt(_cursorIndexOfPatientAge);
+        }
+        if (_cursor.isNull(_cursorIndexOfChwName)) {
+          _item.chwName = null;
+        } else {
+          _item.chwName = _cursor.getString(_cursorIndexOfChwName);
+        }
+        if (_cursor.isNull(_cursorIndexOfChwId)) {
+          _item.chwId = null;
+        } else {
+          _item.chwId = _cursor.getString(_cursorIndexOfChwId);
+        }
+        if (_cursor.isNull(_cursorIndexOfChwEmail)) {
+          _item.chwEmail = null;
+        } else {
+          _item.chwEmail = _cursor.getString(_cursorIndexOfChwEmail);
+        }
+        if (_cursor.isNull(_cursorIndexOfLatitude)) {
+          _item.latitude = null;
+        } else {
+          _item.latitude = _cursor.getDouble(_cursorIndexOfLatitude);
+        }
+        if (_cursor.isNull(_cursorIndexOfLongitude)) {
+          _item.longitude = null;
+        } else {
+          _item.longitude = _cursor.getDouble(_cursorIndexOfLongitude);
+        }
+        if (_cursor.isNull(_cursorIndexOfAddress)) {
+          _item.address = null;
+        } else {
+          _item.address = _cursor.getString(_cursorIndexOfAddress);
+        }
+        if (_cursor.isNull(_cursorIndexOfEncounterDate)) {
+          _item.encounterDate = null;
+        } else {
+          _item.encounterDate = _cursor.getString(_cursorIndexOfEncounterDate);
+        }
+        if (_cursor.isNull(_cursorIndexOfEncounterType)) {
+          _item.encounterType = null;
+        } else {
+          _item.encounterType = _cursor.getString(_cursorIndexOfEncounterType);
+        }
+        if (_cursor.isNull(_cursorIndexOfDiseaseType)) {
+          _item.diseaseType = null;
+        } else {
+          _item.diseaseType = _cursor.getString(_cursorIndexOfDiseaseType);
+        }
+        if (_cursor.isNull(_cursorIndexOfSymptomsJson)) {
+          _item.symptomsJson = null;
+        } else {
+          _item.symptomsJson = _cursor.getString(_cursorIndexOfSymptomsJson);
+        }
+        if (_cursor.isNull(_cursorIndexOfSeverity)) {
+          _item.severity = null;
+        } else {
+          _item.severity = _cursor.getString(_cursorIndexOfSeverity);
+        }
+        if (_cursor.isNull(_cursorIndexOfObservationDetails)) {
+          _item.observationDetails = null;
+        } else {
+          _item.observationDetails = _cursor.getString(_cursorIndexOfObservationDetails);
+        }
+        if (_cursor.isNull(_cursorIndexOfNotes)) {
+          _item.notes = null;
+        } else {
+          _item.notes = _cursor.getString(_cursorIndexOfNotes);
+        }
+        _item.timestamp = _cursor.getLong(_cursorIndexOfTimestamp);
+        _result.add(_item);
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public int getCountByChwId(final String chwId) {
+    final String _sql = "SELECT COUNT(*) FROM unsynced_reports WHERE chwId = ?";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    if (chwId == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, chwId);
+    }
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final int _result;
+      if (_cursor.moveToFirst()) {
+        _result = _cursor.getInt(0);
+      } else {
+        _result = 0;
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public List<UnsyncedReport> getReportsByChwIdOrEmail(final String chwId, final String chwEmail) {
+    final String _sql = "SELECT * FROM unsynced_reports WHERE chwId = ? OR chwEmail = ? ORDER BY timestamp ASC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 2);
+    int _argIndex = 1;
+    if (chwId == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, chwId);
+    }
+    _argIndex = 2;
+    if (chwEmail == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, chwEmail);
+    }
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+      final int _cursorIndexOfPatientName = CursorUtil.getColumnIndexOrThrow(_cursor, "patientName");
+      final int _cursorIndexOfGender = CursorUtil.getColumnIndexOrThrow(_cursor, "gender");
+      final int _cursorIndexOfDateOfBirth = CursorUtil.getColumnIndexOrThrow(_cursor, "dateOfBirth");
+      final int _cursorIndexOfPatientAge = CursorUtil.getColumnIndexOrThrow(_cursor, "patientAge");
+      final int _cursorIndexOfChwName = CursorUtil.getColumnIndexOrThrow(_cursor, "chwName");
+      final int _cursorIndexOfChwId = CursorUtil.getColumnIndexOrThrow(_cursor, "chwId");
+      final int _cursorIndexOfChwEmail = CursorUtil.getColumnIndexOrThrow(_cursor, "chwEmail");
+      final int _cursorIndexOfLatitude = CursorUtil.getColumnIndexOrThrow(_cursor, "latitude");
+      final int _cursorIndexOfLongitude = CursorUtil.getColumnIndexOrThrow(_cursor, "longitude");
+      final int _cursorIndexOfAddress = CursorUtil.getColumnIndexOrThrow(_cursor, "address");
+      final int _cursorIndexOfEncounterDate = CursorUtil.getColumnIndexOrThrow(_cursor, "encounterDate");
+      final int _cursorIndexOfEncounterType = CursorUtil.getColumnIndexOrThrow(_cursor, "encounterType");
+      final int _cursorIndexOfDiseaseType = CursorUtil.getColumnIndexOrThrow(_cursor, "diseaseType");
+      final int _cursorIndexOfSymptomsJson = CursorUtil.getColumnIndexOrThrow(_cursor, "symptomsJson");
+      final int _cursorIndexOfSeverity = CursorUtil.getColumnIndexOrThrow(_cursor, "severity");
+      final int _cursorIndexOfObservationDetails = CursorUtil.getColumnIndexOrThrow(_cursor, "observationDetails");
+      final int _cursorIndexOfNotes = CursorUtil.getColumnIndexOrThrow(_cursor, "notes");
+      final int _cursorIndexOfTimestamp = CursorUtil.getColumnIndexOrThrow(_cursor, "timestamp");
+      final List<UnsyncedReport> _result = new ArrayList<UnsyncedReport>(_cursor.getCount());
+      while (_cursor.moveToNext()) {
+        final UnsyncedReport _item;
+        _item = new UnsyncedReport();
+        _item.id = _cursor.getInt(_cursorIndexOfId);
+        if (_cursor.isNull(_cursorIndexOfPatientName)) {
+          _item.patientName = null;
+        } else {
+          _item.patientName = _cursor.getString(_cursorIndexOfPatientName);
+        }
+        if (_cursor.isNull(_cursorIndexOfGender)) {
+          _item.gender = null;
+        } else {
+          _item.gender = _cursor.getString(_cursorIndexOfGender);
+        }
+        if (_cursor.isNull(_cursorIndexOfDateOfBirth)) {
+          _item.dateOfBirth = null;
+        } else {
+          _item.dateOfBirth = _cursor.getString(_cursorIndexOfDateOfBirth);
+        }
+        if (_cursor.isNull(_cursorIndexOfPatientAge)) {
+          _item.patientAge = null;
+        } else {
+          _item.patientAge = _cursor.getInt(_cursorIndexOfPatientAge);
+        }
+        if (_cursor.isNull(_cursorIndexOfChwName)) {
+          _item.chwName = null;
+        } else {
+          _item.chwName = _cursor.getString(_cursorIndexOfChwName);
+        }
+        if (_cursor.isNull(_cursorIndexOfChwId)) {
+          _item.chwId = null;
+        } else {
+          _item.chwId = _cursor.getString(_cursorIndexOfChwId);
+        }
+        if (_cursor.isNull(_cursorIndexOfChwEmail)) {
+          _item.chwEmail = null;
+        } else {
+          _item.chwEmail = _cursor.getString(_cursorIndexOfChwEmail);
+        }
+        if (_cursor.isNull(_cursorIndexOfLatitude)) {
+          _item.latitude = null;
+        } else {
+          _item.latitude = _cursor.getDouble(_cursorIndexOfLatitude);
+        }
+        if (_cursor.isNull(_cursorIndexOfLongitude)) {
+          _item.longitude = null;
+        } else {
+          _item.longitude = _cursor.getDouble(_cursorIndexOfLongitude);
+        }
+        if (_cursor.isNull(_cursorIndexOfAddress)) {
+          _item.address = null;
+        } else {
+          _item.address = _cursor.getString(_cursorIndexOfAddress);
+        }
+        if (_cursor.isNull(_cursorIndexOfEncounterDate)) {
+          _item.encounterDate = null;
+        } else {
+          _item.encounterDate = _cursor.getString(_cursorIndexOfEncounterDate);
+        }
+        if (_cursor.isNull(_cursorIndexOfEncounterType)) {
+          _item.encounterType = null;
+        } else {
+          _item.encounterType = _cursor.getString(_cursorIndexOfEncounterType);
+        }
+        if (_cursor.isNull(_cursorIndexOfDiseaseType)) {
+          _item.diseaseType = null;
+        } else {
+          _item.diseaseType = _cursor.getString(_cursorIndexOfDiseaseType);
+        }
+        if (_cursor.isNull(_cursorIndexOfSymptomsJson)) {
+          _item.symptomsJson = null;
+        } else {
+          _item.symptomsJson = _cursor.getString(_cursorIndexOfSymptomsJson);
+        }
+        if (_cursor.isNull(_cursorIndexOfSeverity)) {
+          _item.severity = null;
+        } else {
+          _item.severity = _cursor.getString(_cursorIndexOfSeverity);
+        }
+        if (_cursor.isNull(_cursorIndexOfObservationDetails)) {
+          _item.observationDetails = null;
+        } else {
+          _item.observationDetails = _cursor.getString(_cursorIndexOfObservationDetails);
+        }
+        if (_cursor.isNull(_cursorIndexOfNotes)) {
+          _item.notes = null;
+        } else {
+          _item.notes = _cursor.getString(_cursorIndexOfNotes);
+        }
+        _item.timestamp = _cursor.getLong(_cursorIndexOfTimestamp);
+        _result.add(_item);
       }
       return _result;
     } finally {

@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.healthmapper.chwapp.debug",
+  "applicationId": "com.healthtracker.chw",
   "variantName": "debug",
   "elements": [
     {
@@ -12,10 +12,10 @@
       "filters": [],
       "attributes": [],
       "versionCode": 1,
-      "versionName": "1.0-debug",
+      "versionName": "1.0",
       "outputFile": "app-debug.apk"
     }
   ],
   "elementType": "File",
-  "minSdkVersionForDexing": 24
+  "minSdkVersionForDexing": 26
 }
