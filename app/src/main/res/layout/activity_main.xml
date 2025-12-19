@@ -30,7 +30,8 @@
                 android:elevation="4dp"
                 app:title="@string/app_name"
                 app:titleTextColor="@color/white"
-                app:navigationIconTint="@color/white" />
+                app:navigationIconTint="@color/white"
+                app:popupTheme="@style/ThemeOverlay.Material3.Light" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

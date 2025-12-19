@@ -30,6 +30,8 @@
             android:textSize="14sp"
             android:layout_marginBottom="24dp" />
 
+
+
         <!-- Patient Information Card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -483,20 +485,22 @@
                             android:id="@+id/radio_mild"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Mild - Minor symptoms, no hospitalization"
-                            android:textColor="@color/text_primary" />
+                            android:text="Mild - Minor symptoms, no hospitalization (Low Risk)"
+                            android:textColor="@color/black" />
 
                         <com.google.android.material.radiobutton.MaterialRadioButton
                             android:id="@+id/radio_moderate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Moderate - Requires medical attention"
-                            android:textColor="@color/text_primary" />
+                            android:text="Moderate - Requires medical attention (Medium Risk)"
+                            android:textColor="@color/black" />
 
                         <com.google.android.material.radiobutton.MaterialRadioButton
                             android:id="@+id/radio_severe"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:text="Severe - Emergency, hospitalization needed (High Risk)"
+                            android:textColor="@color/black" />
                             android:text="Severe - Emergency, hospitalization needed"
                             android:textColor="@color/text_primary" />
                     </RadioGroup>
@@ -627,8 +631,8 @@
                             app:tint="@color/medical_teal_primary" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
         <!-- Additional Notes Card -->
         <com.google.android.material.card.MaterialCardView

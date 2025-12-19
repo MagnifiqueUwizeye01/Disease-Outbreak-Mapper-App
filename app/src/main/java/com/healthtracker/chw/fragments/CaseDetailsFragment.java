@@ -18,17 +18,19 @@ import com.healthtracker.chw.models.Encounter;
 import com.healthtracker.chw.models.Patient;
 import com.healthtracker.chw.models.GPSLocation;
 import com.healthtracker.chw.models.RiskAssessment;
-import com.healthtracker.chw.services.SupabaseService;
+import com.healthtracker.chw.services.FHIRService;
+import com.healthtracker.chw.models.fhir.FHIRObservation;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class CaseDetailsFragment extends Fragment {
 
     private static final String ARG_CASE_ID = "case_id";
-    
-    private SupabaseService supabaseService;
-    
+
+    private FHIRService fhirService;
+
     // Views
     private TextView tvReportId;
     private TextView tvDiseaseType;
@@ -55,18 +57,19 @@ public class CaseDetailsFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_case_details, container, false);
-        
-        // Initialize Supabase service
-        supabaseService = new SupabaseService(requireContext());
-        
+
+        // Initialize FHIR service
+        fhirService = new FHIRService(requireContext());
+
         // Initialize views
         initializeViews(view);
-        
+
         // Load case data
         loadCaseData();
-        
+
         return view;
     }
 
@@ -90,7 +93,7 @@ public class CaseDetailsFragment extends Fragment {
     private void loadCaseData() {
         Bundle args = getArguments();
         String reportId = null;
-        
+
         if (args != null && args.containsKey(ARG_CASE_ID)) {
             reportId = args.getString(ARG_CASE_ID);
         } else if (args != null) {
@@ -100,29 +103,35 @@ public class CaseDetailsFragment extends Fragment {
                 reportId = args.getString("reportId");
             }
         }
-        
+
         if (reportId == null || reportId.isEmpty()) {
             showError("Case ID not provided");
             return;
         }
-        
+
         loadCaseById(reportId);
     }
 
     private void loadCaseById(String reportId) {
-        supabaseService.getDiseaseReportById(reportId, new SupabaseService.ReportCallback() {
+        // Fetch disease report using unified service method (handles both LOCAL and
+        // Online)
+        fhirService.getDiseaseReport(reportId, new FHIRService.DiseaseReportCallback() {
             @Override
             public void onSuccess(DiseaseReport report) {
-                requireActivity().runOnUiThread(() -> {
-                    displayCaseData(report);
-                });
+                if (isAdded() && getActivity() != null) {
+                    requireActivity().runOnUiThread(() -> {
+                        displayCaseData(report);
+                    });
+                }
             }
-            
+
             @Override
             public void onError(String error) {
-                requireActivity().runOnUiThread(() -> {
-                    showError("Case not found: " + error);
-                });
+                if (isAdded() && getActivity() != null) {
+                    requireActivity().runOnUiThread(() -> {
+                        showError("Error loading case: " + error);
+                    });
+                }
             }
         });
     }
@@ -130,42 +139,42 @@ public class CaseDetailsFragment extends Fragment {
     private void displayCaseData(DiseaseReport report) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-        
+
         // Get related data
         Encounter encounter = report.getEncounter();
         Patient patient = encounter != null ? encounter.getPatient() : null;
         GPSLocation location = encounter != null ? encounter.getGpsLocation() : null;
         RiskAssessment riskAssessment = report.getRiskAssessment();
-        
+
         // Report Information
         if (tvReportId != null) {
             tvReportId.setText(report.getReportId() != null ? report.getReportId() : "N/A");
         }
-        
+
         if (tvDiseaseType != null) {
             tvDiseaseType.setText(report.getDiseaseType() != null ? report.getDiseaseType() : "Unknown");
         }
-        
+
         if (tvReportDate != null) {
             tvReportDate.setText(report.getReportDate() != null ? dateFormat.format(report.getReportDate()) : "N/A");
         }
-        
+
         if (chipStatus != null) {
             chipStatus.setText(report.getStatus() != null ? report.getStatus() : "Pending");
         }
-        
+
         // Patient Information
         if (tvPatientId != null) {
             String patientId = patient != null && patient.getPatientId() != null ? patient.getPatientId() : "N/A";
             tvPatientId.setText(patientId);
         }
-        
+
         if (tvPatientDemographics != null) {
             String name = patient != null && patient.getName() != null ? patient.getName() : "Unknown";
             String gender = patient != null && patient.getGender() != null ? patient.getGender() : "Unknown";
             tvPatientDemographics.setText(String.format(Locale.getDefault(), "%s, %s", name, gender));
         }
-        
+
         if (tvDateOfBirth != null) {
             if (patient != null && patient.getDateOfBirth() != null) {
                 tvDateOfBirth.setText(dateFormat.format(patient.getDateOfBirth()));
@@ -173,22 +182,22 @@ public class CaseDetailsFragment extends Fragment {
                 tvDateOfBirth.setText("N/A");
             }
         }
-        
+
         // Location & Encounter
         if (tvGpsCoordinates != null) {
             if (location != null && location.getLatitude() != null && location.getLongitude() != null) {
-                tvGpsCoordinates.setText(String.format(Locale.getDefault(), "%.4f, %.4f", 
-                    location.getLatitude(), location.getLongitude()));
+                tvGpsCoordinates.setText(String.format(Locale.getDefault(), "%.4f, %.4f",
+                        location.getLatitude(), location.getLongitude()));
             } else {
                 tvGpsCoordinates.setText("N/A");
             }
         }
-        
+
         if (tvAddress != null) {
             String address = location != null && location.getAddress() != null ? location.getAddress() : "N/A";
             tvAddress.setText(address);
         }
-        
+
         if (tvEncounterDate != null) {
             if (encounter != null && encounter.getEncounterDate() != null) {
                 tvEncounterDate.setText(dateTimeFormat.format(encounter.getEncounterDate()));
@@ -196,18 +205,19 @@ public class CaseDetailsFragment extends Fragment {
                 tvEncounterDate.setText("N/A");
             }
         }
-        
+
         if (tvEncounterType != null) {
-            String encounterType = encounter != null && encounter.getEncounterType() != null ? 
-                encounter.getEncounterType() : "Home Visit";
+            String encounterType = encounter != null && encounter.getEncounterType() != null
+                    ? encounter.getEncounterType()
+                    : "Home Visit";
             tvEncounterType.setText(encounterType);
         }
-        
+
         // Risk Assessment
         if (chipRiskLevel != null) {
             String riskLevel = "LOW";
             int colorRes = R.color.medical_green_primary;
-            
+
             if (riskAssessment != null && riskAssessment.getLevel() != null) {
                 String level = riskAssessment.getLevel().toLowerCase();
                 if (level.contains("high") || level.contains("severe")) {
@@ -221,11 +231,11 @@ public class CaseDetailsFragment extends Fragment {
                     colorRes = R.color.medical_green_primary;
                 }
             }
-            
+
             chipRiskLevel.setText(riskLevel);
             chipRiskLevel.setChipBackgroundColorResource(colorRes);
         }
-        
+
         // Clinical Observations
         if (tvObservationDetails != null) {
             String observations = "No observations recorded";
@@ -233,7 +243,8 @@ public class CaseDetailsFragment extends Fragment {
                 StringBuilder obsText = new StringBuilder();
                 for (com.healthtracker.chw.models.Observation obs : encounter.getObservations()) {
                     if (obs.getDetails() != null && !obs.getDetails().isEmpty()) {
-                        if (obsText.length() > 0) obsText.append("\n");
+                        if (obsText.length() > 0)
+                            obsText.append("\n");
                         obsText.append(obs.getDetails());
                     }
                 }
@@ -243,7 +254,7 @@ public class CaseDetailsFragment extends Fragment {
             }
             tvObservationDetails.setText(observations);
         }
-        
+
         if (tvObservationTimestamp != null) {
             if (encounter != null && encounter.getObservations() != null && !encounter.getObservations().isEmpty()) {
                 com.healthtracker.chw.models.Observation firstObs = encounter.getObservations().get(0);

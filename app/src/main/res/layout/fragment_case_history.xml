@@ -1,123 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
-    app:strokeColor="@color/medical_green_light"
-    app:strokeWidth="1dp">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <!-- Header Row -->
+        <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp">
 
             <TextView
-                android:id="@+id/tv_disease_name"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Malaria"
+                android:text="Submission History"
                 android:textColor="@color/medical_green_primary"
-                android:textSize="16sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_risk_level"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="HIGH"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                app:chipBackgroundColor="@color/error"
-                app:chipMinTouchTargetSize="0dp" />
-
+                android:text="View all submitted disease reports"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <!-- Patient Info -->
+        <!-- Loading Indicator -->
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:visibility="gone" />
+
+        <!-- Empty State -->
         <LinearLayout
+            android:id="@+id/empty_state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="4dp">
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="40dp"
+            android:visibility="gone">
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_person_small"
-                app:tint="@color/text_secondary"
-                android:layout_marginEnd="4dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_history"
+                app:tint="@color/text_hint"
+                android:layout_marginBottom="16dp" />
 
             <TextView
-                android:id="@+id/tv_patient_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="32y, Male"
+                android:text="No Reports Yet"
                 android:textColor="@color/text_secondary"
-                android:textSize="12sp" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="12dp"
-                android:background="@color/divider"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp" />
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_location_small"
-                app:tint="@color/text_secondary"
-                android:layout_marginEnd="4dp" />
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
 
             <TextView
-                android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kigali"
-                android:textColor="@color/text_secondary"
-                android:textSize="12sp" />
-
+                android:text="Submit your first disease report to see it here"
+                android:textColor="@color/text_hint"
+                android:textSize="14sp"
+                android:gravity="center" />
         </LinearLayout>
 
-        <!-- Date & Status Row -->
-        <LinearLayout
+        <!-- Cases List -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_case_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/tv_report_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Today, 14:30"
-                android:textColor="@color/text_secondary"
-                android:textSize="12sp" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SYNCED"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                app:chipBackgroundColor="@color/medical_green_primary"
-                app:chipMinTouchTargetSize="0dp" />
-
-        </LinearLayout>
+            android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
-
-</com.google.android.material.card.MaterialCardView>
+</ScrollView>

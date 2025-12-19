@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_case_history_to_details"
             app:destination="@id/caseDetailsFragment" />
+        <action
+            android:id="@+id/action_case_history_to_report_case"
+            app:destination="@id/reportCaseFragment" />
     </fragment>
 
     <!-- Case Details Fragment -->
@@ -82,12 +85,7 @@
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 
-    <!-- Offline Pending Cases Fragment -->
-    <fragment
-        android:id="@+id/offlinePendingCasesFragment"
-        android:name="com.healthtracker.chw.fragments.OfflinePendingCasesFragment"
-        android:label="Offline Pending Cases"
-        tools:layout="@layout/fragment_offline_pending_cases" />
+
 
     <!-- Help & Support Fragment -->
     <fragment
@@ -115,5 +113,19 @@
             app:popUpTo="@id/loginScreenFragment"
             app:popUpToInclusive="true" />
     </fragment>
+
+    <!-- Update Account Info Fragment -->
+    <fragment
+        android:id="@+id/updateAccountInfoFragment"
+        android:name="com.healthtracker.chw.fragments.UpdateAccountInfoFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_update_account_info" />
+
+    <!-- Change Password Fragment -->
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.healthtracker.chw.fragments.ChangePasswordFragment"
+        android:label="Change Password"
+        tools:layout="@layout/fragment_change_password" />
 
 </navigation>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    
+    <!-- Background Circle with Gradient Effect -->
+    <path
+        android:pathData="M60,10C33.5,10 12,31.5 12,58C12,84.5 33.5,106 60,106C86.5,106 108,84.5 108,58C108,31.5 86.5,10 60,10Z"
+        android:fillColor="@color/medical_green_primary"/>
+    
+    <!-- Inner Circle for Depth -->
+    <path
+        android:pathData="M60,20C35.6,20 16,39.6 16,64C16,88.4 35.6,108 60,108C84.4,108 104,88.4 104,64C104,39.6 84.4,20 60,20Z"
+        android:fillColor="@color/medical_green_dark"/>
+    
+    <!-- Medical Cross (Plus Sign) - Main Symbol -->
+    <path
+        android:pathData="M60,45L60,35C60,32.8 58.2,31 56,31C53.8,31 52,32.8 52,35L52,45L42,45C39.8,45 38,46.8 38,49C38,51.2 39.8,53 42,53L52,53L52,63C52,65.2 53.8,67 56,67C58.2,67 60,65.2 60,63L60,53L70,53C72.2,53 74,51.2 74,49C74,46.8 72.2,45 70,45L60,45Z"
+        android:fillColor="@color/white"/>
+    
+    <!-- Location Pin Icon - Representing Geospatial Tracking -->
+    <path
+        android:pathData="M60,75C64.4,75 68,71.4 68,67C68,62.6 64.4,59 60,59C55.6,59 52,62.6 52,67C52,71.4 55.6,75 60,75Z"
+        android:fillColor="@color/white"/>
+    
+    <!-- Pin Point -->
+    <path
+        android:pathData="M60,85L60,75L56,75L60,85L64,75L60,75Z"
+        android:fillColor="@color/white"/>
+    
+    <!-- Small Pulse/Wave Lines - Representing Health Monitoring -->
+    <path
+        android:pathData="M30,50L35,50L35,48L30,48Z"
+        android:fillColor="@color/medical_green_light"
+        android:fillAlpha="0.8"/>
+    <path
+        android:pathData="M85,50L90,50L90,48L85,48Z"
+        android:fillColor="@color/medical_green_light"
+        android:fillAlpha="0.8"/>
+    <path
+        android:pathData="M30,66L35,66L35,64L30,64Z"
+        android:fillColor="@color/medical_green_light"
+        android:fillAlpha="0.8"/>
+    <path
+        android:pathData="M85,66L90,66L90,64L85,64Z"
+        android:fillColor="@color/medical_green_light"
+        android:fillAlpha="0.8"/>
+</vector>
+

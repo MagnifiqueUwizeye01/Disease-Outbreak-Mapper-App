@@ -15,6 +15,7 @@
 
         <!-- App Logo -->
         <ImageView
+            android:id="@+id/iv_app_logo"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:src="@drawable/ic_medical_logo"
@@ -248,6 +249,19 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
+                <!-- Check for Updates Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_check_updates"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Check for Updates"
+                    android:textAllCaps="false"
+                    android:layout_marginTop="16dp"
+                    app:cornerRadius="8dp"
+                    android:backgroundTint="@color/medical_teal_light"
+                    android:textColor="@color/medical_teal_primary"
+                    style="@style/Widget.MaterialComponents.Button.TextButton" />
+
                 <!-- Ministry Info -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -277,14 +291,50 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Legal Links -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tv_privacy_policy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Privacy Policy"
+                android:textColor="@color/medical_teal_primary"
+                android:textSize="14sp"
+                android:padding="8dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="12dp"
+                android:background="@color/text_hint" />
+
+            <TextView
+                android:id="@+id/tv_terms_of_use"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Terms of Use"
+                android:textColor="@color/medical_teal_primary"
+                android:textSize="14sp"
+                android:padding="8dp" />
+        </LinearLayout>
+
         <!-- Contact Info -->
         <TextView
+            android:id="@+id/tv_contact_support"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="For support contact: support@health.gov.rw"
             android:textColor="@color/text_hint"
             android:textSize="12sp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground" />
 
         <TextView
             android:layout_width="wrap_content"
