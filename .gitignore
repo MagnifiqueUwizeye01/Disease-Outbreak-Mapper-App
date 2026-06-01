@@ -10,6 +10,17 @@ build/
 local.properties
 /local.properties
 
+# Secrets / service-account files (never commit)
+# Use the *.template variants instead.
+app/google-services.json
+google-services.json
+**/google-services.json
+*.keystore
+*.jks
+secrets.properties
+keys.properties
+
+
 # macOS
 .DS_Store
 

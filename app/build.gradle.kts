@@ -1,7 +1,23 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
 }
+
+// Load secrets from local.properties (which is git-ignored).
+// Falls back to environment variables for CI builds.
+val localProperties = Properties().apply {
+    val localPropsFile = rootProject.file("local.properties")
+    if (localPropsFile.exists()) {
+        load(FileInputStream(localPropsFile))
+    }
+}
+fun secret(key: String, default: String = ""): String =
+    localProperties.getProperty(key)
+        ?: System.getenv(key)
+        ?: default
 
 android {
     namespace = "com.healthtracker.chw"
@@ -15,6 +31,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Inject the Maps API key into AndroidManifest.xml at build time.
+        // Configure the value in local.properties: MAPS_API_KEY=your_key
+        manifestPlaceholders["MAPS_API_KEY"] = secret("MAPS_API_KEY")
     }
 
     buildTypes {

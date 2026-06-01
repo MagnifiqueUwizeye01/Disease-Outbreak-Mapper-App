@@ -20,12 +20,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HealthTrack">
 
-        <!-- Google Maps API Key - Replace YOUR_API_KEY with your actual Google Maps API key -->
-        <!-- Get your API key from: https://console.cloud.google.com/google/maps-apis/credentials -->
-        <!-- Note: If you don't have a key, the map will not load but the app won't crash -->
+        <!--
+            Google Maps API Key.
+            The actual key is NEVER hard-coded here. It is injected at build time
+            from `local.properties` (MAPS_API_KEY=...) via a Gradle
+            manifestPlaceholder defined in app/build.gradle.kts.
+            See SECURITY.md for setup instructions.
+        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="REDACTED_MAPS_KEY" />
+            android:value="${MAPS_API_KEY}" />
 
         <!-- Set required="false" to allow installation on devices without Google Play Services -->
         <uses-library android:name="com.google.android.gms.maps" android:required="false" />

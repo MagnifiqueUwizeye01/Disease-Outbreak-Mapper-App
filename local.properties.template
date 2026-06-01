@@ -1,0 +1,11 @@
+# Copy this file to `local.properties` and fill in real values.
+# `local.properties` is git-ignored — never commit it.
+
+# Path to your local Android SDK
+sdk.dir=/absolute/path/to/Android/sdk
+
+# Google Maps API key — get one from:
+# https://console.cloud.google.com/google/maps-apis/credentials
+# Restrict it to the Android package `com.healthtracker.chw` and to
+# the "Maps SDK for Android" service.
+MAPS_API_KEY=your_google_maps_api_key_here
