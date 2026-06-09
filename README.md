@@ -5,7 +5,7 @@
 
 ---
 
-##  The Challenge & The FHIR Solution         
+##  The Challenge & The FHIR Solution           
 In global health, **speed is everything**. When infectious outbreaks occur in remote areas, delayed case reporting leads to delayed containment—resulting in preventable loss of life. Most community-level reporting tools store epidemiological data in proprietary, isolated database formats. This creates data silos that cannot talk to local clinics, national electronic medical records (EMRs), or global health agencies (such as the WHO).   
 
 Our project bridges this gap by being **fully native to the HL7 FHIR (Fast Healthcare Interoperability Resources) R4 standard**. Every suspected outbreak report submitted by a Community Health Worker (CHW) in the field is dynamically decomposed and mapped to standardized, interconnected clinical resources. This makes our data instantly compatible with global healthcare IT ecosystems.          
