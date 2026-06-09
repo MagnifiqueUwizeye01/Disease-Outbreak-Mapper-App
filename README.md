@@ -26,7 +26,7 @@ Our project bridges this gap by being **fully native to the HL7 FHIR (Fast Healt
   * Automatic capture of high-accuracy GPS coordinates during report entry.
   * Real-time rendering of color-coded risk markers (Red for Severe/High Risk, Orange for Moderate/Medium Risk, Yellow for Mild/Low Risk) by querying FHIR Location bundles.
 *  Analytics Dashboard
-  * View pending sync counts, trends, and regional threat levels at a glance.       
+  * View pending sync counts, trends, and regional threat levels at a glance.      
 
 ---
 
