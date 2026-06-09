@@ -50,7 +50,7 @@ Our project bridges this gap by being **fully native to the HL7 FHIR (Fast Healt
     </tr>
     <tr>
       <td align="center">
-        <img src="Screenshots/ReportScreen.jpg" width="250"/><br/>
+        <img src="Screenshots/ReportScreen.jpg" width="250"/><br/> 
         <b>Report Form</b>
       </td>  
       <td align="center">
