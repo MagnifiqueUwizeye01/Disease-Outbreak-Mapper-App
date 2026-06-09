@@ -21,7 +21,7 @@ Our project bridges this gap by being **fully native to the HL7 FHIR (Fast Healt
   Standardized clinical terminology mappings for diseases, symptoms, and severities.
 *  Offline-First Resilience (Room + WorkManager)  
   * Fully operational in remote field areas with zero cellular connectivity.    
-  * Automatic caching and network-aware background synchronization.
+  * Automatic caching and network-aware background synchronization. 
 *  Automated Geospatial Mapping
   * Automatic capture of high-accuracy GPS coordinates during report entry.
   * Real-time rendering of color-coded risk markers (Red for Severe/High Risk, Orange for Moderate/Medium Risk, Yellow for Mild/Low Risk) by querying FHIR Location bundles.
